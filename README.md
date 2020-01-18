@@ -1,2 +1,19 @@
-# ApiCloud-VueCLI3-Webpark4-to-build-a-project-template
-ApiCloud+VueCLI3+Webpark4 快速构建apicloud APP 
+# apicloud_vuecli3_project
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
