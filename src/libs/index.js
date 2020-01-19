@@ -219,7 +219,7 @@ export default function () {
 		openWin(pageOpt, option) {
 			let opt = option || {}
 			let param = pageOpt.pageParam || { pageName: pageOpt.name }
-			let headerName = pageOpt.headerName ? pageOpt.headerName : 'header'
+			let headerName = pageOpt.headerName ? pageOpt.headerName : 'page_header'
 			param.pageName = pageOpt.name
 			let wins = api.windows()
 			for (let i = 0; i < wins.length; i++) {

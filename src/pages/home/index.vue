@@ -72,7 +72,7 @@
         <div class="btn" @click="dynamicPermissionsCase()">打开相机</div>
       </div>
       <!-- 图片编辑、裁剪示例 -->
-      <div class="btn-group">
+      <div class="btn-group line-spt-bott">
         <div class="area-row">
           图片编辑、裁剪示例<br> 使用模块 FNImageClip 裁剪图片
         </div>
@@ -80,6 +80,14 @@
         <div class="area-row">
           <img :src="editResult" v-if="editResult" alt="">
           <span v-else>请选择图片进行编辑</span>
+        </div>
+      </div>
+       <!-- 图片 路径 -->
+       <div class="btn-group">
+        <div class="area-row">
+          当你在 JavaScript、CSS 或 *.vue 文件中使用相对路径 (必须以 . 开头) 引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 &lt;img src="...">、background: url(...) 和 CSS @import 的资源 URL 都会被解析为一个模块依赖。
+          <br>
+          因此此类资源请放在assets文件夹内，在publish下的文件只是简单的复制，请使用编译后的文件关系引用
         </div>
       </div>
     </div>

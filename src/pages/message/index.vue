@@ -5,7 +5,7 @@
         <div class="left-avatar">
           <div
             class="avatar-inner"
-            :style="{backgroundImage: 'url(../image/slide'+ (index%3 + 1) +'.jpg)'}"
+            :style="{backgroundImage: 'url(./image/pic'+ (index%3 + 1) +'.jpg)'}"
           ></div>
         </div>
         <div class="list-right-info">

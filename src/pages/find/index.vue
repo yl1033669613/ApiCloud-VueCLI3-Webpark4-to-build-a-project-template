@@ -11,7 +11,7 @@
             </div>
             <span class="time">{{item.time}}</span>
           </div>
-          <div class="right" :style="{backgroundImage: 'url(../image/slide'+ (index%3 + 1) +'.jpg)'}"></div>
+          <div class="right" :style="{backgroundImage: 'url(./image/pic'+ (index%3 + 1) +'.jpg)'}"></div>
         </li>
         <!-- list type 2 -->
         <li class="list list-bottom-tri line-spt-bott full-width" v-if="item.type == 1">
@@ -19,13 +19,13 @@
             <div class="title list-ellipsis-2">{{item.title}}</div>
             <div class="img-wrap">
               <div class="list-col-xs-4">
-                <div class="img" style="background-image: url(../image/pic1.jpg)"></div>
+                <div class="img" style="background-image: url(./image/pic1.jpg)"></div>
               </div>
               <div class="list-col-xs-4">
-                <div class="img" style="background-image: url(../image/pic2.jpg)"></div>
+                <div class="img" style="background-image: url(./image/pic2.jpg)"></div>
               </div>
               <div class="list-col-xs-4">
-                <div class="img" style="background-image: url(../image/pic3.jpg)"></div>
+                <div class="img" style="background-image: url(./image/pic3.jpg)"></div>
               </div>
             </div>
           </div>

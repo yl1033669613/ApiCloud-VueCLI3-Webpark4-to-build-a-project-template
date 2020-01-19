@@ -8,7 +8,7 @@
           <div class="search-inner__input">
             <input type="text" placeholder="首页搜索输入框">
             <span class="search-ico">
-              <img src="/publish/image/search_cio.png" alt="">
+              <img src="@/assets/search_cio.png" alt="">
             </span>
           </div>
         </div>

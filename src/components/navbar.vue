@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'header',
+  name: 'page_header',
   props: {
     title: {
       type: String
@@ -78,7 +78,7 @@ header .back {
   top: 0;
   width: 28px;
   height: 50px;
-  background: url(/publish/image/back_white.png) no-repeat center center;
+  background: url(../assets/back_white.png) no-repeat center center;
   background-size: 8px 14px;
 }
 </style>
