@@ -1,23 +1,23 @@
 <template>
-  <div class="container" v-cloak>
+<div class="container" v-cloak>
     <p class="txt">frame group 我的</p>
-  </div>
+</div>
 </template>
 
 <script>
 export default {
-  name: 'profile'
+    name: 'profile'
 }
 </script>
 
 <style lang="scss">
 .container {
-  text-align: center;
+    text-align: center;
 }
 
 .txt {
-  font-size: 0.3rem;
-  font-weight: bold;
-  padding: 1rem 0;
+    font-size: 0.3rem;
+    font-weight: bold;
+    padding: 1rem 0;
 }
 </style>

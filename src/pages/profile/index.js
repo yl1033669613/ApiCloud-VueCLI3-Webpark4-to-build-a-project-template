@@ -18,6 +18,7 @@ if(window.navigator.userAgent.toLowerCase().indexOf('APICloud')) {
 			vm.$appPageReady()
 		})
 
+		// 将页面组件vue实例挂载在window对象上方便使用api.execScript()
 		window.$vm = vm.$children[0]
 	} 
 } else {
