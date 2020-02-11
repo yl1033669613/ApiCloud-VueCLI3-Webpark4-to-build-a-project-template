@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <p class="txt">frame group 我的</p>
 </div>
 </template>
@@ -13,11 +13,10 @@ export default {
 <style lang="scss">
 .container {
     text-align: center;
-}
-
-.txt {
-    font-size: 0.3rem;
-    font-weight: bold;
-    padding: 1rem 0;
+    .txt {
+        font-size: 0.3rem;
+        font-weight: bold;
+        padding: 1rem 0;
+    }
 }
 </style>

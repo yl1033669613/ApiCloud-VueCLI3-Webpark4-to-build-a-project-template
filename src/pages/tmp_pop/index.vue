@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <div class="pop-body-fillinfo">
         <div class="pop-head">
             <p class='title'>提示</p>
@@ -31,7 +31,7 @@ export default {
     },
     mounted() {
         let param = api.pageParam
-        self.txt = param.title
+        this.txt = param.title
     },
     methods: {
         confirmHandle() {

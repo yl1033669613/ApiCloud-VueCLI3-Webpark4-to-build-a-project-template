@@ -1,5 +1,5 @@
 <template>
-<div id="container" v-cloak>
+<div class="container">
     <navbar :title="title" :back="back"></navbar>
 </div>
 </template>

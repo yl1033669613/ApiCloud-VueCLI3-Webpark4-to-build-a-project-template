@@ -7,22 +7,22 @@ Common() // 初始化公共库
 Vue.config.productionTip = false
 
 // 判断是否为 app 环境
-if(window.navigator.userAgent.toLowerCase().indexOf('APICloud')) {
-	window.apiready = function () {
-		const vm = new Vue({
-			render: h => h(App),
+const isApp = window.navigator.userAgent.toLowerCase().indexOf('apicloud') !== -1
+let vm = null
+if (isApp) {
+	window.apiready = () => {
+		vm = new Vue({
+			render: h => h(App)
 		}).$mount('#app')
-
-		// 页面渲染完成时 执行一次app Page Ready
 		vm.$nextTick(() => {
+			// 页面渲染完成时 执行一次app Page Ready
 			vm.$appPageReady()
 		})
-
-		// 将页面组件vue实例挂载在window对象上方便使用api.execScript()
+		// 将页面组件vue实例挂载在window对象上方便使用 api.execScript({name:'winName', script: '$vm.someVueMethods()'})
 		window.$vm = vm.$children[0]
-	} 
+	}
 } else {
-	const vm = new Vue({
-		render: h => h(App),
+	vm = new Vue({
+		render: h => h(App)
 	}).$mount('#app')
 }

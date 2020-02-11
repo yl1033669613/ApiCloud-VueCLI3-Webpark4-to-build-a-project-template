@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <div class="date-selset-container" @touchstart="handleStart" @touchend="handleEnd">
         <div class="row-year-txt">
             <span class="arrow" @click="cutMonth('prev')"><img src="@/assets/prev.png" alt=""></span>
@@ -70,7 +70,7 @@ export default {
     },
     computed: {
         currM () {
-            return (typeof this.currMonth == 'number') ? this.supZero(this.currMonth + 1) : ''
+            return (typeof this.currMonth == 'number') ? this.$comm.superZero(this.currMonth + 1) : ''
         }
     },
     methods: {
@@ -78,7 +78,7 @@ export default {
             this.currYear = this.nowDate.year
             this.currMonth = this.nowDate.month
             if (!this.isRangDate) { //如果不是日期范围选择 则设置默认选择为当天
-                this.selectStart = this.nowDate.year + '-' + this.supZero(this.nowDate.month + 1) + '-' + this.supZero(this.nowDate.date)
+                this.selectStart = this.nowDate.year + '-' + this.$comm.superZero(this.nowDate.month + 1) + '-' + this.$comm.superZero(this.nowDate.date)
             }
             this.getDateList()
         },
@@ -94,7 +94,7 @@ export default {
                 let currDayJs = dayJs.date(i)
                 let obj = {
                     // 日期显示文字 type String
-                    dateTxt: this.supZero(i),
+                    dateTxt: this.$comm.superZero(i),
                     // 是否为选中状态
                     isSelected: (this.selectStart && this.selectEnd) ?
                         (currDayJs.isAfter(dayjs(this.selectStart), 'date') && currDayJs.isBefore(dayjs(this.selectEnd), 'date')) : false,
@@ -135,7 +135,7 @@ export default {
             for (let i = 1; i < 7 - lastDayWeekIndex; i++) { //可能需要显示的下一月的开头日期对象
                 let dayJsNext = dayjs().year(this.currMonth == 11 ? this.currYear + 1 : this.currYear).month(this.currMonth == 11 ? 0 : this.currMonth + 1).date(i)
                 let obj = {
-                    dateTxt: this.supZero(i),
+                    dateTxt: this.$comm.superZero(i),
                     isSelected: (this.selectStart && this.selectEnd) ?
                         (dayJsNext.isAfter(dayjs(this.selectStart), 'date') && dayJsNext.isBefore(dayjs(this.selectEnd), 'date')) : false,
                     isStartOrEnd: (this.selectStart ? dayJsNext.isSame(dayjs(this.selectStart), 'date') : false) ||
@@ -177,7 +177,7 @@ export default {
         },
         // 选择方法
         handleSelect (item) {
-            let currDateStr = item.year + '-' + this.supZero(item.month + 1) + '-' + this.supZero(item.date)
+            let currDateStr = item.year + '-' + this.$comm.superZero(item.month + 1) + '-' + this.$comm.superZero(item.date)
             let dayJsNow = dayjs().year(this.nowDate.year).month(this.nowDate.month).date(this.nowDate.date)
             if (this.isDisabledDate && item.disabled && dayjs(currDateStr).isBefore(dayJsNow, 'date')) return //点击 disabled 的情况
             if (!this.isRangDate) { //非日期范围选择
@@ -270,9 +270,6 @@ export default {
                 }
             })
             api.closeWin()
-        },
-        supZero (num) {
-            return num < 10 ? ('0' + num) : ('' + num)
         }
     }
 }

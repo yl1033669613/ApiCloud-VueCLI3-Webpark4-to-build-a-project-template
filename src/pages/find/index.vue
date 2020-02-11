@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <ul class="news">
         <!-- list type 1 -->
         <div v-for="(item, index) in list" :key="index">

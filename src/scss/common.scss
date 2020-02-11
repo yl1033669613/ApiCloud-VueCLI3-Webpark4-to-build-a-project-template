@@ -224,7 +224,6 @@ label>* {
 
 /*渐变*/
 .c-linear-gradient {
-  background: linear-gradient(to right, #7d8971, #dacab1);
-  background: -webkit-linear-gradient(to right, #7d8971, #dacab1);
+  background-image: linear-gradient(90deg, #7d8971, #dacab1);
   background-blend-mode: normal, normal;
 }

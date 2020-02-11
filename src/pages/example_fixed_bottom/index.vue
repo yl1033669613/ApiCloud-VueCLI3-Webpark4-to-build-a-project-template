@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <p class="txt">这是一个含有绝定位底部视图的示例</p>
     <input type="text" class="input-row" placeholder="测试输入框">
     <div class="content"></div>

@@ -3,7 +3,7 @@ import FastClick from './fastclick.min'
 import { storage } from './utils'
 
 const BASE_API_URL = 'http://localhost:8080' //接口 base url
-const RESOURCE_URL = 'http://localhost:8080/resource'; //资源 base url
+const RESOURCE_URL = 'http://localhost:8080/resource' //资源 base url
 
 export default function () {
 	// css rem
@@ -49,13 +49,6 @@ export default function () {
 					obj[p] = o[p]
 			}
 			return obj
-		},
-		//判断是否是空对象
-		isEmptyObject(e) {
-			let t
-			for (t in e)
-				return false
-			return true
 		},
 		/**
 		 * 判断权限并发起授权请求 只有同意授权才会执行回调
@@ -122,7 +115,7 @@ export default function () {
 					api.requestPermission({
 						list: permsNoGranted,
 						code: 100001
-					}, function (ret, err) {
+					}, (ret, err) => {
 						if (ret) {
 							for (var i = 0; i < ret.list.length; i++) {
 								if (!ret.list[i].granted) {
@@ -156,7 +149,7 @@ export default function () {
 				w: api.winWidth,
 				h: 0
 			}
-			window.addEventListener("resize", function () {
+			window.addEventListener("resize", () => {
 				switch (type) {
 					case 0:
 						rect.y = window.document.querySelector('header').offsetHeight
@@ -169,12 +162,12 @@ export default function () {
 						rect.y = window.document.querySelector('header').offsetHeight
 						rect.h = api.winHeight - window.document.querySelector('header').offsetHeight
 						break
-				};
+				}
 				if (type == 0) {
 					api.setFrameGroupAttr({
 						name: name,
 						rect: rect
-					});
+					})
 				} else {
 					api.setFrameAttr({
 						name: name,
@@ -193,7 +186,7 @@ export default function () {
 			if (api.systemType === 'ios' && currEle) {
 				api.addEventListener({
 					name: 'keyboardshow'
-				}, function (ret, err) {
+				}, (ret, err) => {
 					// 判断内容高度大于frame窗口高度
 					if (window.document.querySelector('body').offsetHeight > api.frameHeight) {
 						currEle.style.position = 'static'
@@ -203,7 +196,7 @@ export default function () {
 				})
 				api.addEventListener({
 					name: 'keyboardhide'
-				}, function (ret, err) {
+				}, (ret, err) => {
 					currEle.style.position = 'fixed'
 					currEle.style.marginTop = '0'
 				})

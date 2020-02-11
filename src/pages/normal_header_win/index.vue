@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <swiper class="slide-ctn" :options="swiperOption" ref="mySwiper">
         <!-- slides -->
         <swiper-slide class="slide-itm">

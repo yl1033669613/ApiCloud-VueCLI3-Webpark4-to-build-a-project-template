@@ -50,16 +50,16 @@ export default {
                     active: './image/tabbar/2_ac.png'
                 },
                 {
-                    page: 'message',
-                    name: '消息',
-                    normal: './image/tabbar/3.png',
-                    active: './image/tabbar/3_ac.png'
-                },
-                {
                     page: 'watching_focus',
                     name: '看点',
                     normal: './image/tabbar/4.png',
                     active: './image/tabbar/4_ac.png'
+                },
+                {
+                    page: 'message',
+                    name: '消息',
+                    normal: './image/tabbar/3.png',
+                    active: './image/tabbar/3_ac.png'
                 },
                 {
                     page: 'profile',
@@ -82,21 +82,20 @@ export default {
         const self = this
         // 初始监听app 退出
         self.ExitApp()
-        self.$nextTick(() => {
-            // 初始判断登陆状态
-            self.checkLoginState((state) => {
-                if (state) {
-                    self.tokenInvalid = false
-                    api.setStatusBarStyle({
-                        style: 'light'
-                    })
-                    setTimeout(() => {
-                        self.initGroup()
-                    }, 0)
-                } else {
-                    self.openLoginRegFrame('login')
-                }
-            })
+        // 初始判断登陆状态
+        self.checkLoginState((state) => {
+            if (state) {
+                self.tokenInvalid = false
+                api.setStatusBarStyle({
+                    style: 'light'
+                })
+                //通过setTimeout将js放到最后执行 保证能获取到header高度
+                setTimeout(() => {
+                    self.initGroup()
+                }, 0)
+            } else {
+                self.openLoginRegFrame('login')
+            }
         })
     },
     methods: {
@@ -186,8 +185,8 @@ export default {
                     index: this.active,
                     frames: frames
                 },
-                function (ret, err) {}
-            );
+                (ret, err) => {}
+            )
         },
         // root 页底部nav 切换
         switchTab(index) {
@@ -295,56 +294,20 @@ header {
     min-height: 50px;
     height: auto;
     line-height: 50px;
-}
+    
+    .inner {
+        position: relative;
+        height: 50px;
+    }
 
-header:after {
-    content: "";
-    width: 100%;
-    height: 1px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    transform: scale(0, 0.7);
-    background: rgba(0, 0, 0, 0.04);
-}
-
-header .inner {
-    position: relative;
-    height: 50px;
-}
-
-header .title {
-    display: inline-block;
-    vertical-align: top;
-    text-align: center;
-    font-size: 19px;
-    color: #fff;
-    height: 50px;
-}
-
-header .title-img {
-    display: block;
-    padding: 15px 0;
-    height: 20px;
-    text-align: center;
-    box-sizing: content-box;
-}
-
-header .title-img img {
-    display: block;
-    margin: 0 auto;
-    height: 100%;
-}
-
-header .back {
-    position: absolute;
-    left: 0;
-    padding-left: 0.9rem;
-    top: 0;
-    width: 28px;
-    height: 50px;
-    background: url(/publish/image/back_white.png) no-repeat center center;
-    background-size: 8px 14px;
+    .title {
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+        font-size: 19px;
+        color: #fff;
+        height: 50px;
+    }
 }
 
 html,
@@ -392,68 +355,67 @@ body,
 #footer {
     background-color: #f7f7f7;
     font-size: 0.2rem;
-    padding: 0.2rem 0 0 0;
+    padding: 0.1rem 0 0 0;
     box-sizing: border-box;
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-}
 
-#footer ul {
-    padding-bottom: 0.2rem;
-}
+    ul {
+        padding-bottom: 0.1rem;
 
-#footer ul li {
-    position: relative;
-    padding-top: 0.5rem;
-    text-align: center;
-    font-size: 0.2rem;
-    color: #bec0bf;
-}
+        li {
+            position: relative;
+            padding-top: 0.5rem;
+            text-align: center;
+            font-size: 0.2rem;
+            color: #bec0bf;
 
-#footer ul li span {
-    width: 100%;
-    height: 0.5rem;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: url(/publish/image/placeH_pic.png) no-repeat center 2px;
-    background-size: auto 0.4rem;
-}
+            &.active {
+                color: #7d8971;
+            }
 
-#footer ul li.active {
-    color: #7d8971;
+            span {
+                width: 100%;
+                height: 0.5rem;
+                position: absolute;
+                left: 0;
+                top: 0;
+                background: url(../../assets/placeH_pic.png) no-repeat center 2px;
+                background-size: auto 0.4rem;
+            }
+        }
+    }
 }
-
 /*footer end*/
 /*样例 特殊首页header*/
 .home-header-inside {
     padding: 0.1rem 0.3rem;
     padding-bottom: 0.2rem;
     box-sizing: border-box;
-}
 
-.home-header-inside__title {
-    color: #fff;
-    text-align: left;
-    line-height: 0.7rem;
-    font-size: 0.24rem;
-    position: relative;
-    padding-left: 0.2rem;
-}
+    .home-header-inside__title {
+        color: #fff;
+        text-align: left;
+        line-height: 0.7rem;
+        font-size: 0.24rem;
+        position: relative;
+        padding-left: 0.2rem;
 
-.home-header-inside__title::before {
-    content: '';
-    position: absolute;
-    left: 0.1rem;
-    top: 0;
-    bottom: 0;
-    margin: auto 0;
-    height: 40%;
-    width: 2px;
-    background: #fff;
-    border-radius: 2px;
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0.1rem;
+            top: 0;
+            bottom: 0;
+            margin: auto 0;
+            height: 40%;
+            width: 2px;
+            background: #fff;
+            border-radius: 2px;
+        }
+    }
 }
 
 .row-search {
@@ -462,51 +424,51 @@ body,
     flex-flow: row;
     justify-content: space-between;
     height: 0.7rem;
-}
 
-.search-inner__input {
-    height: 100%;
-    background: rgba(0, 0, 0, 0.1);
-    width: 100%;
-    border-radius: 0.7rem;
-    box-sizing: border-box;
-    padding: 0.18rem 0.7rem 0.18rem 0.2rem;
-    position: relative;
-}
+    .search-inner__input {
+        height: 100%;
+        background: rgba(0, 0, 0, 0.1);
+        width: 100%;
+        border-radius: 0.7rem;
+        box-sizing: border-box;
+        padding: 0.18rem 0.7rem 0.18rem 0.2rem;
+        position: relative;
+    }
 
-.search-inner__input input {
-    height: 0.34rem;
-    width: 100%;
-    display: block;
-    background: transparent;
-    border: 0;
-    outline: none;
-    font-size: 0.24rem;
-    color: #fff;
-}
+    .search-inner__input input {
+        height: 0.34rem;
+        width: 100%;
+        display: block;
+        background: transparent;
+        border: 0;
+        outline: none;
+        font-size: 0.24rem;
+        color: #fff;
+    }
 
-.search-inner__input input::-webkit-input-placeholder {
-    color: #ccc;
-    font-size: 0.24rem;
-}
+    .search-inner__input input::-webkit-input-placeholder {
+        color: #ccc;
+        font-size: 0.24rem;
+    }
 
-.search-inner__input .search-ico {
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 0.6rem;
-    height: 100%;
-}
+    .search-inner__input .search-ico {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 0.6rem;
+        height: 100%;
+    }
 
-.search-inner__input img {
-    display: block;
-    height: 0.32rem;
-    width: 0.32rem;
-    position: absolute;
-    top: 0;
-    right: 0.18rem;
-    bottom: 0;
-    margin: auto 0;
+    .search-inner__input img {
+        display: block;
+        height: 0.32rem;
+        width: 0.32rem;
+        position: absolute;
+        top: 0;
+        right: 0.18rem;
+        bottom: 0;
+        margin: auto 0;
+    }
 }
 </style>

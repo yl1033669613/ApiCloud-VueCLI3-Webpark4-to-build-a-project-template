@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <ul class="list">
         <li class="list-item line-spt-bott" v-for="(item, index) in list" :key="index">
             <div class="left-avatar">

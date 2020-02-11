@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <div class="clip-handle-bar" :style="{paddingTop: paddBott + 'px'}">
         <div class="btn" @click="getPic">重新选择</div>
         <div class="btn" @click="save">确定</div>
@@ -70,7 +70,8 @@ export default {
                 title: '',
                 cancelTitle: '取消',
                 style: {
-                    fontNormalColor: '#97a38d'
+                    fontNormalColor: '#97a38d',
+                    fontPressColor: '#97a38d'
                 },
                 buttons: ['相机', '图片库']
             }, (ret, err) => {

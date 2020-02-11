@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <div class="login-content">
         <p class="login-title">登录 模板</p>
         <p class="txt-note">登录窗口从 root 页面以frame的形式打开</p>

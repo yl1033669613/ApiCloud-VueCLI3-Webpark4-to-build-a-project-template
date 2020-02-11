@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <!-- apicloud里瀑布流布局 方案 -->
     <div class="declare">图片均来自https://unsplash.com/</div>
     <!-- 瀑布流 -->

@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <navbar :title="title" :back="back">
         <div class="right-btn">按钮</div>
         <!-- 一个tabbar例子 -->

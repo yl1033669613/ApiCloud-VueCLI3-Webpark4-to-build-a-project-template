@@ -1,5 +1,5 @@
 <template>
-<div class="container" v-cloak>
+<div class="container">
     <div class="home-slider" ref="homeSlider"></div>
     <div class="home-content">
         <div class="btn-group line-spt-bott">
@@ -54,7 +54,7 @@
             <div class="area-row">
                 瀑布流布局
             </div>
-            <div class="btn" @click="switchTab(3)">查看示例</div>
+            <div class="btn" @click="switchTab(2)">查看示例</div>
         </div>
         <!-- 瀑布流布局实例 -->
         <div class="btn-group line-spt-bott">
@@ -85,9 +85,11 @@
         <!-- 图片 路径 -->
         <div class="btn-group">
             <div class="area-row">
-                当你在 JavaScript、CSS 或 *.vue 文件中使用相对路径 (必须以 . 开头) 引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 &lt;img src="...">、background: url(...) 和 CSS @import 的资源 URL 都会被解析为一个模块依赖。
+                开发环境下资源引用方式
                 <br>
-                因此此类资源请放在assets文件夹内，在publish下的文件只是简单的复制，请使用编译后的文件关系引用
+                当你在 JavaScript、CSS 或 *.vue 文件中使用相对路径 (必须以 . 开头) 引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 &lt;img src="...">、css内的background: url(...) 和 CSS @import 的资源 URL 都会被解析为一个模块依赖。
+                <br>
+                因此此类资源请放在assets文件夹内，在publish下的文件只是简单的复制，请使用编译后的文件关系引用(即实际app内文件引用方式)
             </div>
         </div>
     </div>
@@ -265,7 +267,7 @@ export default {
             const self = this
             api.addEventListener({
                 name: 'dateselect'
-            }, function (ret, err) {
+            }, (ret, err) => {
                 if (ret) {
                     self[ret.value.strKey] = ret.value.start + ' ~ ' + ret.value.end
                 }
@@ -277,7 +279,7 @@ export default {
             self.$comm.openActionSelect({
                 datas: 'widget://res/city.json',
                 col: 3
-            }, function (ret) {
+            }, (ret) => {
                 // console.log(JSON.stringify(ret))
                 if (ret.eventType == 'ok') {
                     self.area = ret.level1 + '/' + ret.level2 + '/' + ret.level3
@@ -301,7 +303,7 @@ export default {
             let photoBrowser = this.$comm.openPhotoBrowser({
                 images: imgArr,
                 activeIndex: idx
-            }, function (obj, ret) {
+            }, (obj, ret) => {
                 // console.log(JSON.stringify(ret))
                 if (ret.eventType === 'click') {
                     obj.close()
@@ -314,7 +316,7 @@ export default {
                 title: '提示',
                 msg: '是否清除缓存？',
                 buttons: ['确定', '取消']
-            }, function (ret, err) {
+            }, (ret, err) => {
                 if (ret.buttonIndex === 1) {
                     api.clearCache(() => {
                         api.toast({
@@ -329,7 +331,7 @@ export default {
             const self = this
             let perm = 'camera'
             self.$comm.testAndReqPermission(perm, (res) => {
-                console.log(JSON.stringify(res))
+                alert('已允许打开相机，请前往 设置>应用>权限管理 关闭关闭后重试')
                 api.getPicture({
                     sourceType: 'camera',
                     encodingType: 'jpg',
@@ -351,7 +353,8 @@ export default {
                 title: '',
                 cancelTitle: '取消',
                 style: {
-                    fontNormalColor: '#97a38d'
+                    fontNormalColor: '#97a38d',
+                    fontPressColor: '#97a38d'
                 },
                 buttons: ['相机', '图片库']
             }, (ret, err) => {
@@ -417,24 +420,26 @@ export default {
     flex-wrap: wrap;
     margin: .2rem 0;
     padding: 0 .3rem;
-}
 
-.btn {
-    height: .6rem;
-    line-height: .6rem;
-    font-size: .24rem;
-    color: #b7c1b6;
-    border-radius: .1rem;
-    border: 1px solid #b7c1b6;
-    padding: 0 .4rem;
-    text-align: center;
-    transition: all .3s;
-    margin-right: .1rem;
-    margin-bottom: .2rem;
-}
+    .btn {
+        height: .6rem;
+        line-height: .6rem;
+        font-size: .24rem;
+        color: #b7c1b6;
+        border-radius: .1rem;
+        border: 1px solid #b7c1b6;
+        padding: 0 .4rem;
+        text-align: center;
+        transition: all .3s;
+        margin-right: .1rem;
+        margin-bottom: .2rem;
+    }
 
-.btn:active {
-    background: #e0e5df;
+    .btn:active {
+        color: #6c8a69;
+        border-color: #6c8a69;
+        background: rgba(0, 0, 0, .05   );
+    }
 }
 
 .date-row {
