@@ -32,7 +32,9 @@ export default {
         self.clipH = param.clipH || 120 // 裁剪图片高度 默认100
         self.clipW = param.clipW || 120 // 裁剪图片宽度 默认100
         self.$nextTick(() => {
-            self.openClip()
+            setTimeout(() => {
+                self.openClip()
+            }, 300)
         })
     },
     methods: {

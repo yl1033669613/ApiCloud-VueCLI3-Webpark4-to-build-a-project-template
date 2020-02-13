@@ -201,19 +201,21 @@ export default {
         //首页requset
         getHomeData() {
             const self = this
-            // self.$comm.ajax({url: 'xxx', data: {values: {}}, success: function(res) {}})
-            self.hideProgress();
-            var slideData = ['./image/slide1.png', './image/slide2.png', './image/slide3.png']
-            api.refreshHeaderLoadDone()
-            if (self.slideObj) {
-                self.slideObj.reloadData({
-                    data: {
-                        paths: slideData
-                    }
-                })
-            } else {
-                self.slideObj = self.initHomeSlide(slideData)
-            }
+            // self.$comm.ajax({url: 'xxx', data: {values: {}}}).then().catch()
+            setTimeout(() => {
+                self.hideProgress();
+                var slideData = ['./image/slide1.png', './image/slide2.png', './image/slide3.png']
+                api.refreshHeaderLoadDone()
+                if (self.slideObj) {
+                    self.slideObj.reloadData({
+                        data: {
+                            paths: slideData
+                        }
+                    })
+                } else {
+                    self.slideObj = self.initHomeSlide(slideData)
+                }
+            }, 800)
         },
         // 退出登录
         logOut() {
@@ -330,7 +332,7 @@ export default {
         dynamicPermissionsCase() {
             const self = this
             let perm = 'camera'
-            self.$comm.testAndReqPermission(perm, (res) => {
+            self.$comm.testAndReqPermission(perm).then(res => {
                 alert('已允许打开相机，请前往 设置>应用>权限管理 关闭关闭后重试')
                 api.getPicture({
                     sourceType: 'camera',
@@ -364,7 +366,7 @@ export default {
                     if (ret.buttonIndex === 2) {
                         type = 'library'
                     }
-                    self.$comm.testAndReqPermission(type === 'camera' ? 'camera' : 'photos', (res) => {
+                    self.$comm.testAndReqPermission(type === 'camera' ? 'camera' : 'photos').then((res) => {
                         api.getPicture({
                             sourceType: type,
                             encodingType: 'jpg',

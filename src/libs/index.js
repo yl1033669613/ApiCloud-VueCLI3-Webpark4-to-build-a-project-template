@@ -41,21 +41,12 @@ export default function () {
 	const Comm = {
 		baseApiUrl: BASE_API_URL,
 		resourceUrl: RESOURCE_URL,
-		// 合并对象
-		extend(o, n) {
-			var obj = n
-			for (var p in o) {
-				if (!n.hasOwnProperty(p) && (o.hasOwnProperty(p)))
-					obj[p] = o[p]
-			}
-			return obj
-		},
 		/**
 		 * 判断权限并发起授权请求 只有同意授权才会执行回调
 		 * @param {String || Array} perm 需要授权的权限名可以传字符串或数组
 		 * @param {Function} callback 授权成功回调
 		 */
-		testAndReqPermission(perm, callback) {
+		testAndReqPermission(perm) {
 			const totalPerms = [
 				'camera',
 				'contacts',
@@ -82,60 +73,59 @@ export default function () {
 				'storage-r',
 				'storage-w'
 			]
-			let perms = []
-			// 首先验证授权项是否存在
-			let permIsValid = true
-			if (typeof perm === 'string') {
-				permIsValid = totalPerms.indexOf(perm) !== -1;
-				perms.push(perm)
-			} else if (Array.isArray(perm) && perm.length) {
-				for (let i = 0; i < perm.length; i++) {
-					perms.push(perm[i])
-					if (totalPerms.indexOf(perm[i]) === -1) {
-						permIsValid = false
+			return new Promise((resolve, reject) => {
+				let perms = []
+				// 首先验证授权项是否存在
+				let permIsValid = true
+				if (typeof perm === 'string') {
+					permIsValid = totalPerms.indexOf(perm) !== -1
+					perms.push(perm)
+				} else if (Array.isArray(perm) && perm.length) {
+					for (let i = 0; i < perm.length; i++) {
+						perms.push(perm[i])
+						if (totalPerms.indexOf(perm[i]) === -1) {
+							permIsValid = false
+						}
 					}
+				} else {
+					return reject({errMsg: '权限参数异常'})
 				}
-			} else {
-				return
-			}
-			if (permIsValid) {
-				let rets = api.hasPermission({
-					list: perms
-				})
-				let permsNoGranted = []
-				let permsGranted = []
-				for (let i = 0; i < rets.length; i++) {
-					if (rets[i].granted) {
-						permsGranted.push(rets[i])
-					} else {
-						permsNoGranted.push(rets[i].name)
-					}
-				};
-				if (permsNoGranted.length) {
-					api.requestPermission({
-						list: permsNoGranted,
-						code: 100001
-					}, (ret, err) => {
-						if (ret) {
-							for (var i = 0; i < ret.list.length; i++) {
-								if (!ret.list[i].granted) {
-									return
-								}
-							};
-							// 只有当全部权限都授权完成时才能回调
-							callback && callback(ret)
+				if (permIsValid) {
+					let rets = api.hasPermission({
+						list: perms
+					})
+					let permsNoGranted = []
+					let permsGranted = []
+					rets.forEach((a) => {
+						if (a.granted) {
+							permsGranted.push(a)
 						} else {
-							console.log(JSON.stringify(err))
+							permsNoGranted.push(a.name)
 						}
 					})
+					if (permsNoGranted.length) {
+						api.requestPermission({
+							list: permsNoGranted,
+							code: 100001
+						}, (ret, err) => {
+							if (ret) {
+								// 只有当全部权限都授权完成时才能回调
+								if (ret.list.every((a) => a.granted)) {
+									resolve(ret)
+								}
+							} else {
+								reject(err)
+							}
+						})
+					} else {
+						resolve({
+							list: permsGranted
+						})
+					}
 				} else {
-					callback && callback({
-						list: permsGranted
-					})
+					reject({errMsg: '存在无效授权项'})
 				}
-			} else {
-				console.log('存在无效授权项')
-			}
+			})
 		},
 		/**
 		 * 监听屏幕可显示范围变化导致布局变化 调整framegroup 和frame 布局, 该方法通常用于解决安卓键盘弹出时布局异常
@@ -244,15 +234,6 @@ export default function () {
 				scrollEnabled: false
 			})
 		},
-		//关闭窗口
-		closeWin(name) {
-			api.closeWin({
-				name: name,
-				animation: 'push',
-				subType: 'from_left',
-				duration: 300
-			})
-		},
 		/**
 		 * 打开新 frame
 		 * @param {String} name 打开打开新frame名及对应url，url与文件名对应
@@ -330,76 +311,75 @@ export default function () {
 				}
 			}
 			let _options = {}
-			_options = self.extend(_default, options)
-			if (!_options.data) {
-				_options.data = {}
-			}
-			if (!_options.data.files && !_options.data.body) {
-				_options.headers = self.extend(_options.headers, {
-					'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-				})
-			}
-			if (_options.url.lastIndexOf('.json') > -1) {
-				_options.type = 'get';
-			}
+			_options = Object.assign(_options, _default, options)
 			if (!_options.url) {
 				api.alert({
 					msg: '数据地址不正确'
 				})
+				return false
+			}
+			if (_options.url.lastIndexOf('.json') > -1) {
+				_options.type = 'get'
 			}
 			if (!_options.url.match(/^(?:http|ftp|https):\/\//)) {
-				//如果传的url含有 http://说明是个绝对路径，就不用拼了
 				_options.url = self.baseApiUrl + _options.url
 			}
-			let token = storage.set('token')
+			if (!_options.data) {
+				_options.data = {}
+			}
+			if (!_options.data.files && !_options.data.body) {
+				_options.headers = Object.assign(_options.headers, {
+					'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+				})
+			}
+			let token = storage.get('token')
 			if (token && !_options.disableToken) {
-				_options.headers = self.extend(_options.headers, {
+				_options.headers = Object.assign(_options.headers, {
 					'token': token
 				})
 			}
-			api.ajax({
-				url: _options.url,
-				data: _options.data,
-				method: _options.method,
-				dataType: _options.dataType,
-				headers: _options.headers,
-				timeout: _options.timeout
-			}, function (ret, err) {
-				// console.log(JSON.stringify(ret))
-				if (ret) {
-					if (ret.code == 200) { //接口返回判断 成功 具体判断请依据具体接口返回处理
-						_options.success(ret)
+			return new Promise((resolve, reject) => {
+				api.ajax({
+					url: _options.url,
+					data: _options.data,
+					method: _options.method,
+					dataType: _options.dataType,
+					headers: _options.headers,
+					timeout: _options.timeout
+				}, function (ret, err) {
+					if (ret) {
+						if (ret.code == 200) { //接口返回判断 成功 具体判断请依据具体接口返回处理
+							resolve(ret)
+						} else {
+							_hideProgress()
+							api.refreshHeaderLoadDone()
+							if (ret.code == 401) { //接口 授权判断  具体判断请依据具体接口返回处理
+								_toast('登录已过期，请重新登录')
+								//未授权则跳回首页并打开登录页
+								setTimeout(() => {
+									api.closeToWin({
+										name: 'root',
+										animation: {
+											type: 'none',
+											duration: 0
+										}
+									})
+									api.execScript({
+										name: 'root',
+										script: '$vm.openLoginWhenTokenInvalid()'
+									})
+								}, 700)
+								return reject({errMsg: '登录已过期，请重新登录'})
+							}
+							reject(ret)
+						}
 					} else {
 						_hideProgress()
 						api.refreshHeaderLoadDone()
-						if (ret.code == 401) { //接口 授权判断  具体判断请依据具体接口返回处理
-							_toast('登录已过期，请重新登录')
-							//未授权则跳回首页并打开登录页
-							setTimeout(function () {
-								api.closeToWin({
-									name: 'root',
-									animation: {
-										type: 'none',
-										duration: 0
-									}
-								})
-								api.execScript({
-									name: 'root',
-									script: '$vm.openLoginWhenTokenInvalid()'
-								})
-							}, 700)
-							return
-						}
-						if (_options.error && typeof (_options.error) === 'function') {
-							_options.error(ret)
-						}
+						_toast('请求失败')
+						reject(err)
 					}
-				} else {
-					_hideProgress()
-					api.refreshHeaderLoadDone()
-					console.log(JSON.stringify(err))
-					_toast('请求失败')
-				}
+				})
 			})
 		},
 		// 上拉加载
