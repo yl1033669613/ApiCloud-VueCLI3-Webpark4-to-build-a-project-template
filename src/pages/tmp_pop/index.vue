@@ -68,61 +68,61 @@ html {
     border-radius: 0.2rem;
     box-sizing: border-box;
     padding-bottom: 1.2rem;
-}
 
-.pop-head {
-    border-radius: 0.2rem;
-    height: 1.5rem;
-    background-size: 100% 100%;
-    background-color: #fff;
-    background-position: center center;
-}
+    .pop-head {
+        border-radius: 0.2rem;
+        height: 1.5rem;
+        background-size: 100% 100%;
+        background-color: #fff;
+        background-position: center center;
+    }
 
-.pop-head .title {
-    text-align: center;
-    font-size: 0.4rem;
-    color: #333;
-    line-height: 1.5rem;
-    letter-spacing: 2px;
-}
+    .pop-head .title {
+        text-align: center;
+        font-size: 0.4rem;
+        color: #333;
+        line-height: 1.5rem;
+        letter-spacing: 2px;
+    }
 
-.content {
-    padding: 0 0.5rem 0.2rem 0.5rem;
-    text-align: center;
-    font-size: 0.28rem;
-}
+    .content {
+        padding: 0 0.5rem 0.2rem 0.5rem;
+        text-align: center;
+        font-size: 0.28rem;
+    }
 
-.content p {
-    word-break: break-all;
-}
+    .content p {
+        word-break: break-all;
+    }
 
-.btn-confirm-row {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    display: flex;
-    display: -webkit-flex;
-    border-top: 1px solid #e5e5e5;
-    height: 1rem;
-}
+    .btn-confirm-row {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        display: -webkit-flex;
+        border-top: 1px solid #e5e5e5;
+        height: 1rem;
+    }
 
-.btn-confirm-row .btn-item {
-    width: 100%;
-    text-align: center;
-    line-height: 1rem;
-    font-size: 0.32rem;
-}
+    .btn-confirm-row .btn-item {
+        width: 100%;
+        text-align: center;
+        line-height: 1rem;
+        font-size: 0.32rem;
+    }
 
-.btn-confirm-row .btn-item.cancel {
-    color: #999999;
-    border-right: 1px solid #e5e5e5;
-}
+    .btn-confirm-row .btn-item.cancel {
+        color: #999999;
+        border-right: 1px solid #e5e5e5;
+    }
 
-.btn-confirm-row .btn-item.confirm {
-    color: #b7c1b6;
-}
+    .btn-confirm-row .btn-item.confirm {
+        color: #b7c1b6;
+    }
 
-.btn-confirm-row .btn-item:active {
-    background: rgba(0, 0, 0, 0.03);
+    .btn-confirm-row .btn-item:active {
+        background: rgba(0, 0, 0, 0.03);
+    }
 }
 </style>

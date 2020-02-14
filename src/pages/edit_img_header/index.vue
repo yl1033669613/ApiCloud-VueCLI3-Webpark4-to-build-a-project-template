@@ -25,15 +25,7 @@ export default {
         self.pageName = pageParam.pageName
         self.title = pageParam.title
         setTimeout(() => {
-            self.$comm.openFrame(pageParam.pageName, pageParam, {
-                rect: {
-                    x: 0,
-                    y: document.querySelector('header').offsetHeight || 0,
-                    w: api.winWidth,
-                    h: api.winHeight - document.querySelector('header').offsetHeight || 0
-                },
-                bgColor: '#ffffff'
-            })
+            self.$comm.openFrame(pageParam.pageName, pageParam)
             self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
     }

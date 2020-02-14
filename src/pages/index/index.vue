@@ -1,18 +1,19 @@
 <template>
 <!-- 这是app启动的root页面 必须命名为index -->
 <div id="wrap" class="flex-wrap flex-vertical" @touchmove="handleRootPageScoll($event)">
-    <header class="c-linear-gradient" ref="header" :class="[active == 0 ? 'home-header' : '']">
-        <span class="title" v-show="active != 0">{{title}}</span>
-        <div class="home-header-inside" v-show="active == 0">
-            <p class="home-header-inside__title">特殊 首页 header</p>
-            <div class="row-search">
-                <div class="search-inner__input">
-                    <input type="text" placeholder="首页搜索输入框">
-                    <span class="search-ico">
-                        <img src="@/assets/search_cio.png" alt="">
-                    </span>
+    <header class="c-linear-gradient" ref="header">
+        <transition name="fade">
+            <div class="home-header-inside" v-show="active === 0">
+                <p class="home-header-inside__title">特殊 首页 header</p>
+                <div class="search-btn">
+                    <img src="@/assets/search_cio.png" alt="">
                 </div>
             </div>
+        </transition>
+        <div class="title-ctn">
+            <transition-group name="fade">
+                <span class="title" v-for="(item, idx) in tabs" :key="idx" v-show="idx!== 0 && active === idx">{{item.name}}</span>
+            </transition-group>
         </div>
     </header>
     <div id="main" class="flex-con"></div>
@@ -52,14 +53,14 @@ export default {
                 {
                     page: 'watching_focus',
                     name: '看点',
-                    normal: './image/tabbar/4.png',
-                    active: './image/tabbar/4_ac.png'
+                    normal: './image/tabbar/3.png',
+                    active: './image/tabbar/3_ac.png'
                 },
                 {
                     page: 'message',
                     name: '消息',
-                    normal: './image/tabbar/3.png',
-                    active: './image/tabbar/3_ac.png'
+                    normal: './image/tabbar/4.png',
+                    active: './image/tabbar/4_ac.png'
                 },
                 {
                     page: 'profile',
@@ -110,32 +111,31 @@ export default {
             let timer = null
             let time1, time2
             api.addEventListener({
-                    name: 'keyback'
-                },
-                (ret, err) => {
-                    if (ci == 0) {
-                        time1 = new Date().getTime()
-                        ci = 1
-                        timer = setTimeout(() => {
-                            ci = 0
-                            clearTimeout(timer)
-                        }, 2000)
-                        self.toast('再次操作退出')
-                    } else if (ci == 1) {
-                        time2 = new Date().getTime()
-                        if (time2 - time1 < 2000) {
-                            clearTimeout(timer)
-                            api.closeWidget({
-                                id: api.appId,
-                                retData: {
-                                    name: 'closeWidget'
-                                },
-                                silent: true
-                            })
-                        }
+                name: 'keyback'
+            },(ret, err) => {
+                if (!self.$comm.keyBackToClosePop()) return
+                if (ci == 0) {
+                    time1 = new Date().getTime()
+                    ci = 1
+                    timer = setTimeout(() => {
+                        ci = 0
+                        clearTimeout(timer)
+                    }, 2000)
+                    self.toast('再次操作退出')
+                } else if (ci == 1) {
+                    time2 = new Date().getTime()
+                    if (time2 - time1 < 2000) {
+                        clearTimeout(timer)
+                        api.closeWidget({
+                            id: api.appId,
+                            retData: {
+                                name: 'closeWidget'
+                            },
+                            silent: true
+                        })
                     }
                 }
-            )
+            })
         },
         // 登录成功重新加载首页
         loginDone() {
@@ -151,11 +151,12 @@ export default {
         },
         // 初始化 framegroup
         initGroup() {
+            const self = this
             api.closeFrameGroup({
                 name: 'group'
             })
-            let frames = [],
-                tabs = this.tabs;
+            let frames = []
+            let tabs = self.tabs
             for (let i = 0, len = tabs.length; i < len; i++) {
                 frames.push({
                     name: tabs[i].page,
@@ -170,22 +171,27 @@ export default {
             }
             let rect = {
                 x: 0,
-                y: this.$refs.header.offsetHeight,
+                y: self.$refs.header.offsetHeight,
                 w: api.winWidth,
                 h: api.winHeight -
-                    this.$refs.header.offsetHeight -
-                    this.$refs.footer.offsetHeight
+                    self.$refs.header.offsetHeight -
+                    self.$refs.footer.offsetHeight
             }
-            this.$comm.resizeFrame('group', 0)
+            self.$comm.resizeFrame('group', 0)
             api.openFrameGroup({
                     name: 'group',
-                    scrollEnabled: false,
+                    scrollEnabled: true,
                     preload: 0,
                     rect: rect,
-                    index: this.active,
+                    index: self.active,
                     frames: frames
-                },
-                (ret, err) => {}
+                },(ret, err) => {
+                    if (this.active != ret.index) {
+                        this.active = ret.index
+                        this.title = this.tabs[ret.index].name
+                        this.resetFrameRect()
+                    }
+                }
             )
         },
         // root 页底部nav 切换
@@ -287,29 +293,6 @@ export default {
 </script>
 
 <style lang="scss">
-header {
-    text-align: center;
-    background: #b7c1b6;
-    position: relative;
-    min-height: 50px;
-    height: auto;
-    line-height: 50px;
-    
-    .inner {
-        position: relative;
-        height: 50px;
-    }
-
-    .title {
-        display: inline-block;
-        vertical-align: top;
-        text-align: center;
-        font-size: 19px;
-        color: #fff;
-        height: 50px;
-    }
-}
-
 html,
 body,
 #wrap {
@@ -339,17 +322,6 @@ body,
     overflow: auto;
 }
 
-.dot {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    margin-left: 0.35rem;
-    width: 6px;
-    height: 6px;
-    border-radius: 100%;
-    background: #fe4040;
-}
-
 /*footer*/
 
 #footer {
@@ -371,9 +343,10 @@ body,
             text-align: center;
             font-size: 0.2rem;
             color: #bec0bf;
+            transition: all .2s;
 
             &.active {
-                color: #7d8971;
+                color: #748f5a;
             }
 
             span {
@@ -389,24 +362,58 @@ body,
     }
 }
 /*footer end*/
+
 /*样例 特殊首页header*/
+header {
+    text-align: center;
+    background: #b7c1b6;
+    position: relative;
+    height: auto;
+    min-height: 44px;
+    line-height: 44px;
+
+    .title-ctn {
+        height: 44px;
+        position: relative;
+    }
+    
+    .title {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+        font-size: 19px;
+        color: #fff;
+        height: 100%;
+        z-index: 10;
+    }
+}
+
 .home-header-inside {
-    padding: 0.1rem 0.3rem;
-    padding-bottom: 0.2rem;
+    height: 44px;
+    padding: 0 .2rem;
     box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
 
     .home-header-inside__title {
         color: #fff;
         text-align: left;
-        line-height: 0.7rem;
-        font-size: 0.24rem;
+        font-size: .26rem;
         position: relative;
-        padding-left: 0.2rem;
+        padding-left: .2rem;
+        padding-right: 44px;
 
         &::before {
             content: '';
             position: absolute;
-            left: 0.1rem;
+            left: .1rem;
             top: 0;
             bottom: 0;
             margin: auto 0;
@@ -416,59 +423,30 @@ body,
             border-radius: 2px;
         }
     }
-}
 
-.row-search {
-    display: flex;
-    display: -webkit-flex;
-    flex-flow: row;
-    justify-content: space-between;
-    height: 0.7rem;
-
-    .search-inner__input {
-        height: 100%;
-        background: rgba(0, 0, 0, 0.1);
-        width: 100%;
-        border-radius: 0.7rem;
-        box-sizing: border-box;
-        padding: 0.18rem 0.7rem 0.18rem 0.2rem;
-        position: relative;
-    }
-
-    .search-inner__input input {
-        height: 0.34rem;
-        width: 100%;
-        display: block;
-        background: transparent;
-        border: 0;
-        outline: none;
-        font-size: 0.24rem;
-        color: #fff;
-    }
-
-    .search-inner__input input::-webkit-input-placeholder {
-        color: #ccc;
-        font-size: 0.24rem;
-    }
-
-    .search-inner__input .search-ico {
-        display: block;
+    .search-btn {
         position: absolute;
         right: 0;
         top: 0;
-        width: 0.6rem;
+        width: 50px;
         height: 100%;
-    }
+        transition: all .2s;
 
-    .search-inner__input img {
-        display: block;
-        height: 0.32rem;
-        width: 0.32rem;
-        position: absolute;
-        top: 0;
-        right: 0.18rem;
-        bottom: 0;
-        margin: auto 0;
+        &:active {
+            background: rgba(0, 0, 0, .08)
+        }
+
+        img {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            display: block;
+            margin: auto;
+        }
     }
 }
 </style>

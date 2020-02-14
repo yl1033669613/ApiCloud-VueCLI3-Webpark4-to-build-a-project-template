@@ -17,6 +17,8 @@
     <p class="txt">这是一个使用普通header 的 window</p>
     <p>使用的是公共header页</p>
     <input type="text" class="input-row" placeholder="请输入内容">
+    <p>当页面有frame弹窗时先关闭frame弹窗再关闭页面</p>
+    <div class="open-popframe" @click="openFramePop">打开frame弹窗</div>
 </div>
 </template>
 
@@ -39,6 +41,13 @@ export default {
                 }
             }
         }
+    },
+    methods: {
+        openFramePop() {
+            this.$comm.openPopFrame('tmp_pop', {
+                title: 'frame 弹窗'
+            })
+        },
     }
 }
 </script>
@@ -94,5 +103,17 @@ p {
             height: 100%;
         }
     }
+}
+
+.open-popframe {
+    width: 4rem;
+    height: 1rem;
+    border-radius: 5px;
+    margin: .3rem auto;
+    text-align: center;
+    line-height: 1rem;
+    font-size: .3rem;
+    color: #fff;
+    background: #748f5a;
 }
 </style>

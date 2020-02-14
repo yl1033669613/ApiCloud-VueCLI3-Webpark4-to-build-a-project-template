@@ -120,7 +120,7 @@ export default {
                 title: '“程序员，谁让坐这把椅子的？你被开除了！”',
                 content: '昨天，一张截图刷爆了小七的朋友圈、微信群。 一位人事，发现程序员的工位前摆着老板椅，以为是公司的椅子，为了拍马屁，专门把椅子搬到了老板办公室',
                 time: '2019-10-25 10:35'
-            }];
+            }]
             self.isLoading = true
             setTimeout(() => {
                 self.isLoading = false
@@ -152,7 +152,7 @@ export default {
     display: flex;
     display: -webkit-flex;
     padding: 10px 5px 5px;
-    margin: 0 15px;
+    margin: 0 10px;
     transition: all 0.3s;
     position: relative;
 }

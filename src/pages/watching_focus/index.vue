@@ -1,7 +1,9 @@
 <template>
 <div class="container">
+    <div class="banner" style="background-image: url(https://unsplash.it/900/380/?random)"></div>
     <!-- apicloud里瀑布流布局 方案 -->
     <div class="declare">图片均来自https://unsplash.com/</div>
+    <div class="declare small">使用api.imageCache实现图片缓存</div>
     <!-- 瀑布流 -->
     <div class="water-fall-ctn" :style="{height: (leftH >= rightH ? leftH : rightH) + 'px' }">
         <div class="item" hover-class="btn-scale-hover" v-for="(item, i) in list" :key="i" :class="[item.isLeft ? 'isleft' : 'isright', item.finish ? 'isShow' : '']" :style="{height: (item.imgHeight + 60) + 'px', top: item.top + 'px'}">
@@ -134,12 +136,15 @@ export default {
                     self.$comm.fnImageCache({
                         datas: list,
                         imgKey: 'picUrl',
-                        timeout: 30000
-                    }, function (ret) {
-                        self.isLoading = false;
+                        timeout: 20000
+                    }).then(ret => {
+                        self.isLoading = false
                         for (let v = 0; v < ret.length; v++) {
                             self.list.push(ret[v])
                         }
+                    }).catch(err => {
+                        self.isLoading = false
+                        console.log(JSON.stringify(err))
                     })
                     self.page++
                 } else {
@@ -155,6 +160,9 @@ export default {
 </script>
 
 <style lang="scss">
+.container {
+    padding-top: .2rem;
+}
 /*瀑布流*/
 .water-fall-ctn {
     position: relative;
@@ -233,8 +241,24 @@ export default {
 /*瀑布流结束*/
 
 .declare {
-    padding: 0.3rem;
-    font-size: 0.28rem;
+    padding: .3rem;
+    font-size: .28rem;
     font-weight: bold;
+
+    &.small {
+        padding: 0 .3rem .3rem .3rem;
+        font-size: .2rem;
+        color: #666;
+    }
+}
+
+.banner {
+    margin: 0 .2rem;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 3rem;
+    border-radius: .2rem;
+    background-color: #eacdd2;
 }
 </style>

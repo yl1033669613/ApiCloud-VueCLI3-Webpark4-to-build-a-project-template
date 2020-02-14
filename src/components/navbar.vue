@@ -33,13 +33,13 @@ header {
     text-align: center;
     background: #b7c1b6;
     position: relative;
-    min-height: 50px;
+    min-height: 44px;
     height: auto;
-	line-height: 50px;
+	line-height: 44px;
 	
 	.inner {
 		position: relative;
-		height: 50px;
+		height: 44px;
 	}
 
 	.title {
@@ -48,12 +48,12 @@ header {
 		text-align: center;
 		font-size: 19px;
 		color: #fff;
-		height: 50px;
+		height: 100%;
 	}
 
 	.title-img {
 		display: block;
-		padding: 15px 0;
+		padding: 12px 0;
 		height: 20px;
 		text-align: center;
 		box-sizing: content-box;
@@ -71,7 +71,7 @@ header {
 		padding-left: 0.9rem;
 		top: 0;
 		width: 28px;
-		height: 50px;
+		height: 44px;
 		background: url(../assets/back_white.png) no-repeat center center;
 		background-size: 8px 14px;
 	}

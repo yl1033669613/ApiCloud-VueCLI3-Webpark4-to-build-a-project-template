@@ -5,14 +5,16 @@ import { storage } from './utils'
 const BASE_API_URL = 'http://localhost:8080' //接口 base url
 const RESOURCE_URL = 'http://localhost:8080/resource' //资源 base url
 
+const winDoc = window.document
+
 export default function () {
 	// css rem
-	! function () {
+	! function (win) {
 		function a() {
-			window.document.documentElement.style.fontSize = window.document.documentElement.clientWidth / 7.5 + 'px'
+			win.document.documentElement.style.fontSize = win.document.documentElement.clientWidth / 7.5 + 'px'
 		}
 		var b = null
-		window.addEventListener('resize', function () {
+		win.addEventListener('resize', function () {
 			clearTimeout(b), b = setTimeout(a, 10)
 		}, !1), a()
 	}(window)
@@ -44,7 +46,6 @@ export default function () {
 		/**
 		 * 判断权限并发起授权请求 只有同意授权才会执行回调
 		 * @param {String || Array} perm 需要授权的权限名可以传字符串或数组
-		 * @param {Function} callback 授权成功回调
 		 */
 		testAndReqPermission(perm) {
 			const totalPerms = [
@@ -88,7 +89,7 @@ export default function () {
 						}
 					}
 				} else {
-					return reject({errMsg: '权限参数异常'})
+					return reject({ errMsg: '权限参数异常' })
 				}
 				if (permIsValid) {
 					let rets = api.hasPermission({
@@ -123,7 +124,7 @@ export default function () {
 						})
 					}
 				} else {
-					reject({errMsg: '存在无效授权项'})
+					reject({ errMsg: '存在无效授权项' })
 				}
 			})
 		},
@@ -142,15 +143,15 @@ export default function () {
 			window.addEventListener("resize", () => {
 				switch (type) {
 					case 0:
-						rect.y = window.document.querySelector('header').offsetHeight
-						rect.h = api.winHeight - window.document.querySelector('header').offsetHeight - (window.document.querySelector('#footer') ? window.document.querySelector('#footer').offsetHeight : 0)
+						rect.y = winDoc.querySelector('header').offsetHeight
+						rect.h = api.winHeight - winDoc.querySelector('header').offsetHeight - (winDoc.querySelector('#footer') ? winDoc.querySelector('#footer').offsetHeight : 0)
 						break
 					case 1:
 						rect.h = api.winHeight
 						break
 					case 2:
-						rect.y = window.document.querySelector('header').offsetHeight
-						rect.h = api.winHeight - window.document.querySelector('header').offsetHeight
+						rect.y = winDoc.querySelector('header').offsetHeight
+						rect.h = api.winHeight - winDoc.querySelector('header').offsetHeight
 						break
 				}
 				if (type == 0) {
@@ -172,13 +173,13 @@ export default function () {
 		 * @param {String} height 固定在底部的元素高度 css高度 需要带单位 例如'10px','-1.1rem'等 取负值
 		 */
 		fixIosBottomViewWhenKeyBoardShow(eleSelector, height) {
-			let currEle = window.document.querySelector(eleSelector)
+			let currEle = winDoc.querySelector(eleSelector)
 			if (api.systemType === 'ios' && currEle) {
 				api.addEventListener({
 					name: 'keyboardshow'
 				}, (ret, err) => {
 					// 判断内容高度大于frame窗口高度
-					if (window.document.querySelector('body').offsetHeight > api.frameHeight) {
+					if (winDoc.querySelector('body').offsetHeight > api.frameHeight) {
 						currEle.style.position = 'static'
 						// 需要统一的底部绝对定位元素高度
 						currEle.style.marginTop = height
@@ -243,12 +244,12 @@ export default function () {
 		openFrame(name, pageParam, opt) {
 			let option = opt || {}
 			let y = 0
-			let header = window.document.querySelector('header')
+			let header = winDoc.querySelector('header')
 			if (header) {
 				y = header.offsetHeight
 			}
 			api.openFrame({
-				name: name + '_frame',
+				name: `${name}_frame`,
 				url: 'widget://' + name + '.html',
 				pageParam: pageParam,
 				rect: option.rect || {
@@ -257,6 +258,7 @@ export default function () {
 					w: api.winWidth,
 					h: 'auto'
 				},
+				bgColor: option.bgColor || '#ffffff',
 				animation: option.animation || {
 					type: 'none', //动画类型（详见动画类型常量）
 					subType: 'from_right', //动画子类型（详见动画子类型常量）
@@ -283,7 +285,7 @@ export default function () {
 				h: api.winHeight
 			}
 			api.openFrame({
-				name: name,
+				name: `${name}_POPWIN`,
 				url: 'widget://' + name + '.html',
 				pageParam: pageParam,
 				rect: rect,
@@ -294,6 +296,20 @@ export default function () {
 				reload: true
 			})
 			this.resizeFrame(name, 1)
+		},
+		/**
+		 * 操作系统返回时，先检查是否有frame弹窗并关闭之后再关闭页面 
+		 */
+		keyBackToClosePop () {
+			const frames = api.frames()
+			let popFrames = frames.filter(a => /_POPWIN/.test(a.name))
+			if (popFrames.length) {
+				let revArr = popFrames.reverse()
+				api.closeFrame({name: revArr[0].name})
+				return false
+			} else {
+				return true
+			}
 		},
 		/**
 		 * 封装api.ajax
@@ -346,7 +362,7 @@ export default function () {
 					dataType: _options.dataType,
 					headers: _options.headers,
 					timeout: _options.timeout
-				}, function (ret, err) {
+				}, (ret, err) => {
 					if (ret) {
 						if (ret.code == 200) { //接口返回判断 成功 具体判断请依据具体接口返回处理
 							resolve(ret)
@@ -369,7 +385,7 @@ export default function () {
 										script: '$vm.openLoginWhenTokenInvalid()'
 									})
 								}, 700)
-								return reject({errMsg: '登录已过期，请重新登录'})
+								return reject({ errMsg: '登录已过期，请重新登录' })
 							}
 							reject(ret)
 						}
@@ -386,7 +402,7 @@ export default function () {
 		pullUp(callBack) {
 			api.addEventListener({
 				name: 'scrolltobottom'
-			}, function (ret, err) {
+			}, (ret, err) => {
 				callBack()
 			})
 		},
@@ -402,7 +418,7 @@ export default function () {
 					load: ["widget://res/refresh/1.png", "widget://res/refresh/2.png", "widget://res/refresh/3.png", "widget://res/refresh/4.png", "widget://res/refresh/5.png", "widget://res/refresh/6.png", "widget://res/refresh/7.png", "widget://res/refresh/8.png", "widget://res/refresh/9.png", "widget://res/refresh/10.png", "widget://res/refresh/11.png", "widget://res/refresh/12.png", "widget://res/refresh/13.png", "widget://res/refresh/14.png", "widget://res/refresh/15.png", "widget://res/refresh/16.png", "widget://res/refresh/17.png", "widget://res/refresh/18.png", "widget://res/refresh/19.png", "widget://res/refresh/20.png", "widget://res/refresh/21.png", "widget://res/refresh/22.png", "widget://res/refresh/23.png", "widget://res/refresh/24.png", "widget://res/refresh/25.png", "widget://res/refresh/26.png", "widget://res/refresh/27.png", "widget://res/refresh/28.png", "widget://res/refresh/29.png", "widget://res/refresh/30.png", "widget://res/refresh/31.png", "widget://res/refresh/32.png", "widget://res/refresh/33.png", "widget://res/refresh/34.png", "widget://res/refresh/35.png", "widget://res/refresh/36.png", "widget://res/refresh/37.png", "widget://res/refresh/38.png", "widget://res/refresh/39.png", "widget://res/refresh/40.png", "widget://res/refresh/41.png", "widget://res/refresh/42.png", "widget://res/refresh/43.png", "widget://res/refresh/44.png"]
 				},
 				isScale: false
-			}, function () {
+			}, () => {
 				callBack()
 			})
 		},
@@ -459,9 +475,10 @@ export default function () {
 				lineColor: '#ccc'
 			}, (ret, err) => {
 				if (ret) {
-					cb && cb(ret)
+					cb && cb(ret, UIActionSelector)
 				}
 			})
+			return UIActionSelector
 		},
 		// 打开一个图片查看器
 		openPhotoBrowser(opt, cb) {
@@ -473,9 +490,73 @@ export default function () {
 				activeIndex: opt.activeIndex || 0,
 				atime: 0.3
 			}, (ret, err) => {
-				cb && cb(photoBrowser, ret)
-			});
+				cb && cb(ret, photoBrowser)
+			})
 			return photoBrowser
+		},
+		/**
+		 * 批量缓存图片
+		 * @param {Array} opt.datas 图片数组 支持传对象数组
+		 * @param {String} opt.imgKey 该字段为对象数组时指定图片对应的key
+		 * @param {String} opt.timeout 缓存图片超时时间
+		 */
+		fnImageCache(opt) {
+			const self = this
+			let currArr = opt.datas
+			let key = opt.imgKey
+			let count = 0
+			let timeout = opt.timeout || 30000
+			return new Promise((resolve, reject) => {
+				let loadDone = () => { // 缓存完成执行
+					if (count === currArr.length) {
+						resolve(currArr)
+					}
+				}
+				if (currArr && currArr.length) {
+					currArr.forEach((a) => {
+						let currUrl = ''
+						let itemType = typeof a
+						if (itemType === 'string') {
+							currUrl = self.setBaseUrl(a)
+						} else {
+							if (key) currUrl = self.setBaseUrl(a[key])
+						}
+						if (currUrl) {
+							// 缓存超时的情况 缓存超时为30000ms
+							let timer = setTimeout(() => {
+								clearTimeout(timer)
+								timer = null
+								count++
+								loadDone()
+							}, timeout)
+							api.imageCache({
+								url: currUrl,
+								thumbnail: api.systemType === 'ios' ? false : true // ios关闭缩略图否则会影响ios 滚动性能
+							}, (ret, err) => {
+								// 如果缓存超时则不执行缓存超时之后的回调
+								if (timer) {
+									clearTimeout(timer)
+									timer = null
+									if (ret.url) {
+										if (itemType === 'string') {
+											a = ret.url
+										} else {
+											a[key] = ret.url
+										}
+									};
+									count++
+									loadDone()
+								}
+							})
+						} else {
+							count++
+							loadDone()
+						}
+					})
+				} else {
+					reject({errMsg: '缓存图片为空', opt: opt})
+				}
+			})
 		},
 		// 个位数补零
 		superZero(num) {
@@ -499,71 +580,6 @@ export default function () {
 				}
 			} else {
 				return ''
-			}
-		},
-		/**
-		 * 批量缓存图片
-		 * @param {Array} opt.datas 图片数组 支持传对象数组
-		 * @param {String} opt.imgKey 该字段为对象数组时指定图片对应的key
-		 * @param {String} opt.timeout 缓存图片超时时间
-		 * @param {Function} cb 缓存完成回调
-		 */
-		fnImageCache(opt, cb) {
-			const self = this
-			let currArr = opt.datas
-			let key = opt.imgKey
-			let count = 0
-			let timeout = opt.timeout || 60000
-			let loadDone = () => {
-				if (count === currArr.length) {
-					cb && cb(currArr)
-				}
-			}
-			if (currArr && currArr.length) {
-				for (let i = 0; i < currArr.length; i++) {
-					(function (i) {
-						let currUrl = ''
-						let itemType = typeof currArr[i]
-						if (itemType === 'string') {
-							currUrl = self.setBaseUrl(currArr[i])
-						} else {
-							if (key) currUrl = self.setBaseUrl(currArr[i][key])
-						}
-						if (currUrl) {
-							// 缓存超时的情况 缓存超时为60000ms
-							var timer = setTimeout(function () {
-								clearTimeout(timer)
-								timer = null
-								count++
-								loadDone()
-							}, timeout)
-							api.imageCache({
-								url: currUrl,
-								thumbnail: api.systemType === 'ios' ? false : true // ios关闭缩略图否则会影响ios 滚动性能
-							}, function (ret, err) {
-								// 如果缓存超时则不执行缓存超时之后的回调
-								if (timer) {
-									clearTimeout(timer)
-									timer = null
-									if (ret.url) {
-										if (itemType === 'string') {
-											currArr[i] = ret.url
-										} else {
-											currArr[i][key] = ret.url
-										}
-									};
-									count++
-									loadDone()
-								}
-							})
-						} else {
-							count++
-							loadDone()
-						}
-					}(i))
-				}
-			} else {
-				cb && cb(opt)
 			}
 		},
 		/**
@@ -692,7 +708,7 @@ export default function () {
 			return (r1 / r2) * Math.pow(10, t2 - t1)
 		},
 		/**
-		 * 简单的表单验证验证表单
+		 * 简单的表单验证
 		 * @param {Object} formObj 表单对象
 		 * @param {Object} formRule 表单验证规则 {required : Boolean, validFunc : function(formObjItem, callFunc), message : String}
 		 */
@@ -820,21 +836,21 @@ export default function () {
 	function _initFastClick() {
 		// 仅为ios时有效
 		if (api.systemType === 'ios' && typeof (FastClick) !== 'undefined') {
-			FastClick.attach(window.document.body)
+			FastClick.attach(winDoc.body)
 		}
 	}
 
 	// 沉浸式状态栏配置
 	function _immersiveStatusBar() {
 		api.parseTapmode()
-		var eleHeader = window.document.querySelector('header')
+		let eleHeader = winDoc.querySelector('header')
 		if (eleHeader) {
 			eleHeader.style.paddingTop = api.safeArea.top + 'px'
 		}
 	}
 
 	// app 环境时调用页面 ready
-	Vue.prototype.$appPageReady = function (callback) {
+	Vue.prototype.$appPageReady = (callback) => {
 		if (api) {
 			// 沉浸式状态栏
 			_immersiveStatusBar()

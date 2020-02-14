@@ -25,18 +25,20 @@ export default {
         self.back = pageParam.back || true
         self.pageName = pageParam.pageName
         setTimeout(() => {
-            self.$comm.openFrame(pageParam.pageName, pageParam, {
-                rect: {
-                    x: 0,
-                    y: document.querySelector('header').offsetHeight || 0,
-                    w: api.winWidth,
-                    h: api.winHeight - document.querySelector('header').offsetHeight || 0
-                },
-                bgColor: '#ffffff'
-            })
+            self.$comm.openFrame(pageParam.pageName, pageParam)
             // 窗口尺寸变化是调整frame布局
             self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
+        // 当页面有frame弹窗时先关闭frame弹窗再关闭页面
+        api.addEventListener({
+            name: 'keyback'
+        }, () => {
+            if (!self.$comm.keyBackToClosePop()) return
+            api.removeEventListener({
+                name: 'keyback'
+            })
+            api.closeWin()
+        })
     }
 }
 </script>

@@ -36,15 +36,7 @@ export default {
         self.back = pageParam.back || true
         self.pageName = pageParam.pageName
         setTimeout(() => {
-            self.$comm.openFrame(pageParam.pageName, pageParam, {
-                rect: {
-                    x: 0,
-                    y: document.querySelector('header').offsetHeight || 0,
-                    w: api.winWidth,
-                    h: api.winHeight - document.querySelector('header').offsetHeight || 0
-                },
-                bgColor: '#ffffff'
-            })
+            self.$comm.openFrame(pageParam.pageName, pageParam)
             // 窗口尺寸变化是调整frame布局
             self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
@@ -70,7 +62,7 @@ export default {
     right: 0;
     bottom: 1rem;
     width: 70px;
-    height: 50px;
+    height: 44px;
     color: #fff;
     font-size: 0.28rem;
 }

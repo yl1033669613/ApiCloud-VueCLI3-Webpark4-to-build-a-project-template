@@ -16,15 +16,27 @@
         <transition :name="slideAnimate" tag="div">
             <div class="dates-sec clear" :key="isShowing">
                 <div class="row-item">
-                    <div class="row-inner-date" v-for="(item, index) in dateList" :key="index" :class="{startendactive: item.isStartOrEnd, active: item.isSelected, notcurrmonth: !item.isCurrMonthDay, disabled: item.disabled}">
+                    <div 
+                        class="row-inner-date" 
+                        v-for="(item, index) in dateList" 
+                        :key="index" 
+                        :class="{
+                            startendactive: item.isStartOrEnd, 
+                            active: item.isSelected, 
+                            notcurrmonth: !item.isCurrMonthDay, 
+                            disabled: item.disabled,
+                            onlystart: item.isStartOrEnd && selectStart && !selectEnd,
+                            hasenddate: item.isStartOrEnd && selectStart && selectEnd,
+                            endblockr: item.isStartOrEnd && selectEnd === (`${item.year}-${$comm.superZero(item.month + 1)}-${item.dateTxt}`)
+                        }">
                         <span @click="handleSelect(item)">{{item.dateTxt}}</span>
                     </div>
                 </div>
                 <div class="curr-select-date">所选日期：{{isRangDate ? selectStart + ' ~ ' + selectEnd : (selectStart ? selectStart : '--')}}</div>
             </div>
         </transition>
-        <div class="btn-sub" @click="dateSelected">
-            确认
+        <div class="btn-sub" @click="dateSelected" :style="{paddingBottom: safeAreaBott + 'px'}">
+            <span>确认</span>
         </div>
     </div>
 </div>
@@ -71,6 +83,9 @@ export default {
     computed: {
         currM () {
             return (typeof this.currMonth == 'number') ? this.$comm.superZero(this.currMonth + 1) : ''
+        },
+        safeAreaBott() {
+            return api.safeArea.bottom || 0
         }
     },
     methods: {
@@ -78,7 +93,14 @@ export default {
             this.currYear = this.nowDate.year
             this.currMonth = this.nowDate.month
             if (!this.isRangDate) { //如果不是日期范围选择 则设置默认选择为当天
-                this.selectStart = this.nowDate.year + '-' + this.$comm.superZero(this.nowDate.month + 1) + '-' + this.$comm.superZero(this.nowDate.date)
+                this.selectStart = `${this.nowDate.year}-${this.$comm.superZero(this.nowDate.month + 1)}-${this.$comm.superZero(this.nowDate.date)}`
+            } else {
+                if (this.selectStart) {
+                    this.currYear = dayjs(this.selectStart).year()
+                    this.currMonth = dayjs(this.selectStart).month()
+                } else {
+                    this.selectEnd = ''
+                }
             }
             this.getDateList()
         },
@@ -177,7 +199,7 @@ export default {
         },
         // 选择方法
         handleSelect (item) {
-            let currDateStr = item.year + '-' + this.$comm.superZero(item.month + 1) + '-' + this.$comm.superZero(item.date)
+            let currDateStr = `${item.year}-${this.$comm.superZero(item.month + 1)}-${this.$comm.superZero(item.date)}`
             let dayJsNow = dayjs().year(this.nowDate.year).month(this.nowDate.month).date(this.nowDate.date)
             if (this.isDisabledDate && item.disabled && dayjs(currDateStr).isBefore(dayJsNow, 'date')) return //点击 disabled 的情况
             if (!this.isRangDate) { //非日期范围选择
@@ -214,6 +236,7 @@ export default {
                         this.selectStart = currDateStr
                     } else {
                         this.selectEnd = currDateStr
+                        console.log(this.selectEnd)
                     }
                 }
             }
@@ -264,6 +287,7 @@ export default {
             api.sendEvent({
                 name: 'dateselect',
                 extra: {
+                    isRang: this.isRangDate,
                     strKey: this.strKey,
                     start: this.selectStart,
                     end: this.selectEnd
@@ -357,6 +381,18 @@ export default {
     width: 100%;
 }
 
+.onlystart span {
+    border-radius: .15rem;
+}
+
+.hasenddate span {
+    border-radius: .15rem 0 0 .15rem;
+}
+
+.endblockr span {
+    border-radius: 0 .15rem .15rem 0 !important;
+}
+
 .weeks {
     padding-bottom: 0;
 }
@@ -367,7 +403,7 @@ export default {
 }
 
 .notcurrmonth span {
-    color: #aaa;
+    color: #b9b9b9;
 }
 
 .active span {
@@ -385,7 +421,7 @@ export default {
 }
 
 .weekend {
-    color: #985157;
+    color: #ce4f5a;
 }
 
 /*/过渡 css */
@@ -459,20 +495,21 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 1rem;
-    box-sizing: border-box;
-    display: inline-block;
-    border: 1px solid #b7c1b6;
     color: #fff;
-    background: #b7c1b6;
     text-align: center;
-    line-height: .98rem;
+    line-height: 1rem;
     font-size: .3rem;
-    margin: 0 auto;
+    transition: all .2s;
+
+    span {
+        display: block;
+        background: #b7c1b6;
+        height: 1rem;
+    }
 }
 
 .btn-sub:active {
-    opacity: .8rem;
+    opacity: .8;
 }
 
 .curr-select-date {
