@@ -18,16 +18,9 @@ html {
 }
 
 .container {
-    text-align: center;
-}
-
-p {
-    font-size: 0.28rem;
-}
-
-.txt {
     font-size: 0.3rem;
     font-weight: bold;
     padding: 1rem 0;
+    text-align: center;
 }
 </style>

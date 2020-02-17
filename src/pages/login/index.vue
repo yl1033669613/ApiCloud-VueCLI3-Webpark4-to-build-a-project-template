@@ -4,7 +4,6 @@
         <p class="login-title">登录 模板</p>
         <p class="txt-note">登录窗口从 root 页面以frame的形式打开</p>
         <div class="btn-block" @click="loginHandle">登录</div>
-        <p class="auth">author: yl1033669613</p>
     </div>
 </div>
 </template>
@@ -83,17 +82,6 @@ export default {
     background: #b7c1b6;
     width: 1rem;
     margin: 0 auto;
-}
-
-.auth {
-    text-align: left;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    flex-basis: .18rem;
-    line-height: .8rem;
-    color: #ccc;
-    font-size: .2rem;
 }
 
 .txt-note {

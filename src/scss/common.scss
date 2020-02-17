@@ -176,46 +176,9 @@ label>* {
     background-repeat: no-repeat;
 }
 
-/*分隔线*/
-
-.line-spt-bott:before {
-    content: '';
-    height: 1px;
-    transform: scale(1, 0.5);
-    -webkit-transform: scale(1, 0.5);
-    background: rgba(0, 0, 0, .1);
-    position: absolute;
-    left: .2rem;
-    bottom: 0;
-    right: 0;
-}
-
-.line-spt-top:after {
-    content: '';
-    height: 1px;
-    transform: scale(1, 0.5);
-    -webkit-transform: scale(1, 0.5);
-    background: rgba(0, 0, 0, .1);
-    position: absolute;
-    left: .2rem;
-    top: 0;
-    right: 0;
-}
-
-.line-spt-bott.full-width:before,
-.line-spt-top.full-width:after {
-    left: 0;
-}
-
-/*渐变*/
-.c-linear-gradient {
-    background-image: linear-gradient(90deg, #7d8971, #dacab1);
-    background-blend-mode: normal, normal;
-}
-
 .fade-enter-active, .fade-leave-active {
     transition: opacity .15s;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
-  }
+}

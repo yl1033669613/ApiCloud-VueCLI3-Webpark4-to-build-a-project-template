@@ -1,19 +1,9 @@
 <template>
 <!-- 这是app启动的root页面 必须命名为index -->
 <div id="wrap" class="flex-wrap flex-vertical" @touchmove="handleRootPageScoll($event)">
-    <header class="c-linear-gradient" ref="header">
-        <transition name="fade">
-            <div class="home-header-inside" v-show="active === 0">
-                <p class="home-header-inside__title">特殊 首页 header</p>
-                <div class="search-btn">
-                    <img src="@/assets/search_cio.png" alt="">
-                </div>
-            </div>
-        </transition>
+    <header ref="header">
         <div class="title-ctn">
-            <transition-group name="fade">
-                <span class="title" v-for="(item, idx) in tabs" :key="idx" v-show="idx!== 0 && active === idx">{{item.name}}</span>
-            </transition-group>
+            <span class="title" v-for="(item, idx) in tabs" :key="idx" v-show="active === idx">{{item.name}}</span>
         </div>
     </header>
     <div id="main" class="flex-con"></div>
@@ -43,24 +33,6 @@ export default {
                     name: '首页',
                     normal: './image/tabbar/1.png',
                     active: './image/tabbar/1_ac.png'
-                },
-                {
-                    page: 'find',
-                    name: '发现',
-                    normal: './image/tabbar/2.png',
-                    active: './image/tabbar/2_ac.png'
-                },
-                {
-                    page: 'watching_focus',
-                    name: '看点',
-                    normal: './image/tabbar/3.png',
-                    active: './image/tabbar/3_ac.png'
-                },
-                {
-                    page: 'message',
-                    name: '消息',
-                    normal: './image/tabbar/4.png',
-                    active: './image/tabbar/4_ac.png'
                 },
                 {
                     page: 'profile',
@@ -112,7 +84,8 @@ export default {
             let time1, time2
             api.addEventListener({
                 name: 'keyback'
-            },(ret, err) => {
+            }, (ret, err) => {
+                // 当页面有frame弹窗时先关闭frame弹窗再关闭页面
                 if (!self.$comm.keyBackToClosePop()) return
                 if (ci == 0) {
                     time1 = new Date().getTime()
@@ -160,7 +133,7 @@ export default {
             for (let i = 0, len = tabs.length; i < len; i++) {
                 frames.push({
                     name: tabs[i].page,
-                    url: './' + tabs[i].page + '.html',
+                    url: `widget://${tabs[i].page}.html`,
                     bgColor: '#ffffff',
                     bounces: true,
                     vScrollBarEnabled: false,
@@ -179,43 +152,26 @@ export default {
             }
             self.$comm.resizeFrame('group', 0)
             api.openFrameGroup({
-                    name: 'group',
-                    scrollEnabled: true,
-                    preload: 0,
-                    rect: rect,
-                    index: self.active,
-                    frames: frames
-                },(ret, err) => {
-                    if (this.active != ret.index) {
-                        this.active = ret.index
-                        this.title = this.tabs[ret.index].name
-                        this.resetFrameRect()
-                    }
-                }
-            )
+                name: 'group',
+                scrollEnabled: false,
+                preload: 0,
+                rect: rect,
+                index: self.active,
+                frames: frames
+            })
         },
         // root 页底部nav 切换
         switchTab(index) {
-            if (this.active != index) {
-                this.active = index
-                this.title = this.tabs[index].name
+            let idx = parseInt(index)
+            if (this.active != idx) {
+                this.active = idx
+                this.title = this.tabs[idx].name
                 api.setFrameGroupIndex({
                     name: 'group',
-                    index: index
+                    index: idx
                 })
                 this.resetFrameRect()
             }
-        },
-        // 设置底部bav bar index
-        setTabIndex(index) {
-            var idx = parseInt(index)
-            api.setFrameGroupIndex({
-                name: 'group',
-                index: idx
-            })
-            this.active = idx
-            this.title = this.tabs[idx].name
-            this.resetFrameRect()
         },
         //重新设置frame rect
         resetFrameRect() {
@@ -250,22 +206,18 @@ export default {
             api.setStatusBarStyle({
                 style: 'dark'
             })
-            api.openFrame({
-                name: name + '_frame',
-                url: './' + name + '.html',
-                ract: {
+            this.$comm.openFrame(name, null, {
+                rect: {
                     x: 0,
                     y: 0,
                     w: api.winWidth,
                     h: api.winHeight
                 },
-                bgColor: '#ffffff',
                 animation: {
-                    type: 'movein',
-                    subType: 'from_right',
-                    duration: 300
-                },
-                reload: true
+					type: 'movein',
+					subType: 'from_right',
+					duration: 300
+				}
             })
         },
         // token失效的情况弹出登陆窗口
@@ -273,7 +225,7 @@ export default {
             const self = this
             if (!self.tokenInvalid) {
                 self.tokenInvalid = true
-                setTimeout(function () {
+                setTimeout(() => {
                     self.active = 0
                     self.title = self.tabs[self.active].name
                     // 退出登录 则关闭framegroup
@@ -283,10 +235,6 @@ export default {
                     self.openLoginRegFrame('login')
                 }, 0)
             }
-        },
-        // root 页获取用户信息
-        getProfile() {
-            // 这里获取用户信息1212121
         }
     }
 }
@@ -361,9 +309,10 @@ body,
         }
     }
 }
+
 /*footer end*/
 
-/*样例 特殊首页header*/
+// root header
 header {
     text-align: center;
     background: #b7c1b6;
@@ -376,7 +325,7 @@ header {
         height: 44px;
         position: relative;
     }
-    
+
     .title {
         position: absolute;
         left: 0;
@@ -389,64 +338,6 @@ header {
         color: #fff;
         height: 100%;
         z-index: 10;
-    }
-}
-
-.home-header-inside {
-    height: 44px;
-    padding: 0 .2rem;
-    box-sizing: border-box;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    z-index: 10;
-
-    .home-header-inside__title {
-        color: #fff;
-        text-align: left;
-        font-size: .26rem;
-        position: relative;
-        padding-left: .2rem;
-        padding-right: 44px;
-
-        &::before {
-            content: '';
-            position: absolute;
-            left: .1rem;
-            top: 0;
-            bottom: 0;
-            margin: auto 0;
-            height: 40%;
-            width: 2px;
-            background: #fff;
-            border-radius: 2px;
-        }
-    }
-
-    .search-btn {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 50px;
-        height: 100%;
-        transition: all .2s;
-
-        &:active {
-            background: rgba(0, 0, 0, .08)
-        }
-
-        img {
-            width: 20px;
-            height: 20px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            display: block;
-            margin: auto;
-        }
     }
 }
 </style>
