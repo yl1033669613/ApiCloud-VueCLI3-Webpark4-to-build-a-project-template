@@ -2,6 +2,7 @@
 
 ## 目录
 
+```
 ├─dist
 ├─node_modules
 ├─public
@@ -24,6 +25,7 @@
     │  ├─special_header_win
     │  └─tmp_pop
     └─scss
+```
 
 ## 简介
 
