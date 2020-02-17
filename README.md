@@ -44,12 +44,12 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 ## demo截图
 
-![图片1](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/1.jpg)
-![图片2](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/2.jpg)
-![图片3](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/3.jpg)
-![图片4](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/4.jpg)
-![图片5](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/5.jpg)
-![图片6](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/6.jpg)
-![图片7](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/7.jpg)
-![图片8](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/8.jpg)
-![图片9](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/9.jpg)
+![图片1](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/1.jpg)
+![图片2](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/2.jpg)
+![图片3](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/3.jpg)
+![图片4](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/4.jpg)
+![图片5](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/5.jpg)
+![图片6](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/6.jpg)
+![图片7](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/7.jpg)
+![图片8](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/8.jpg)
+![图片9](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/9.jpg)
