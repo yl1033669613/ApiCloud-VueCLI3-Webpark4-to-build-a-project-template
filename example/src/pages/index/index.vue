@@ -12,7 +12,7 @@
         </transition>
         <div class="title-ctn">
             <transition-group name="fade">
-                <span class="title" v-for="(item, idx) in tabs" :key="idx" v-show="idx!== 0 && active === idx">{{item.name}}</span>
+                <span class="title" v-for="(item, idx) in tabs" :key="`${idx}_fade`" v-show="idx!== 0 && active === idx">{{item.name}}</span>
             </transition-group>
         </div>
     </header>

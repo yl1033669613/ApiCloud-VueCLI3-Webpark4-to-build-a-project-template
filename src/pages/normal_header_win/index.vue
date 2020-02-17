@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import 'swiper/dist/css/swiper.css'
 export default {
     name: 'normal_header_win',
     data () {

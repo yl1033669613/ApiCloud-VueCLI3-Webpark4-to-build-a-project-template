@@ -20,7 +20,7 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 7. npm run build 输出编译代码到dist 将编译代码上传APICloud
 
-8. 请为您的项目添加下拉刷新模块 UIPullRefreshFlash
+8. 请为您的项目添加以下模块 UIPullRefreshFlash(必须)、UIActionSelector(非必须)、photoBrowser(非必须)
 
 ## css 预编译
 
@@ -30,7 +30,7 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 未使用移动端框架，如有需求可自行npm安装使用
 
-## ESlint 
+## ESlint
 
 本项目未安装ESlint如有需求请参考[VueCLI3插件](https://cli.vuejs.org/zh/guide/plugins-and-presets.html#%E6%8F%92%E4%BB%B6)
 
@@ -43,3 +43,13 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 [demo](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example)
 
 ## demo截图
+
+![图片1](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/1.jpg)
+![图片2](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/2.jpg)
+![图片3](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/3.jpg)
+![图片4](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/4.jpg)
+![图片5](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/5.jpg)
+![图片6](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/6.jpg)
+![图片7](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/7.jpg)
+![图片8](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/8.jpg)
+![图片9](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example/example_pic/9.jpg)
