@@ -48,7 +48,11 @@ export default {
     computed: {
         //判断底部是否存在安全区域如果有则留出安全区域 适配iphone x等机型
         safeAreaBott() {
-            return api.safeArea.bottom || 0
+            let bottH = 0
+            if (typeof api === 'object') {
+                bottH = api.safeArea.bottom
+            }
+            return bottH
         }
     },
     mounted() {

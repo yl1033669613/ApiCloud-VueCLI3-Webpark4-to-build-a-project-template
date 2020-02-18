@@ -12,30 +12,34 @@
 │      └─refresh // 下拉刷新贞动画图片
 └─src
     ├─assets
-    ├─components // 组件
-    ├─libs // js库
-    ├─pages // 页面文件夹所在位置
-    │  ├─home // 包含一个页面入口文件index.js 和一个index.vue
-    │  ├─index
-    │  ├─login
+    ├─components // vue组件
+    ├─libs // 存放一些不能通过npm依赖的js文件
+    ├─pages // 页面都放在这里
+    │  ├─home // 每个页面都包含一个页面入口文件`index.js`和一个`index.vue`
+    │  ├─index // `root`页
+    │  ├─login // 登录页
     │  ├─normal_header_win
-    │  ├─page_header
+    │  ├─page_header // 公共页面头部
     │  ├─profile
-    │  ├─special_header
+    │  ├─special_header // 特殊页面头部
     │  ├─special_header_win
-    │  └─tmp_pop
-    └─scss
+    │  └─tmp_pop // 一个页面级的弹窗
+    └─scss // 样式
 ```
 
 ## 简介
 
-APICloud+VueCLI3 完美结合的开发框架，快速构建apicloud APP。
+APICloud+VueCLI3 完美结合的开发框架，快速构建apicloud APP
 
 使用rem适配移动端各种设备
 
 每个页面单独编译
 
-common.js 封装了许多针对apicloud app 的方法，包括ajax、图片缓存、窗口打开、模块使用等(具体使用请参考example)
+更多页面调试方式，助力快速开发APICloud 应用
+
+common.js 封装了一些针对apicloud app的方法，包括ajax、图片缓存、窗口打开关闭、模块使用等(具体请参考example)
+
+项目初始包含登录逻辑，以及初始页面构成（普通页面， 特殊页面），节约开发时间
 
 ## 技术栈
 
@@ -43,21 +47,23 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 ## 如何使用
 
-1. 创建APICloud项目
+1. 创建APICloud项目（获取appId）
 
 2. 从 https://github.com/yl1033669613/apicloud_vuecli3_project 克隆或下载项目到本地
 
-3. 请将项目中publish文件夹下config.xml文件里的appID改为您项目的appID(重要)
+3. 请将项目中publish文件夹下config.xml文件里的appId改为您项目的appId(重要)
 
 4. npm install （安装依赖）
 
 5. npm run serve （运行开发模式同样会输出编译代码到dist）
 
     可以在浏览器中调试（模块，app接口除外）
+
     Local: `http://localhost:8080/your_pages.html`
+
     Network: `http://192.168.0.1:8080/your_pages.html`
 
-6. 同步手机，
+6. 同步手机
 
     首先 npm run wifi-start 初始wifi连接
 
@@ -70,6 +76,8 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 7. npm run build 输出编译代码到dist 将编译代码上传APICloud，即可打包编译APICloud APP
 
 8. 请为您的项目添加以下模块 UIPullRefreshFlash(必须)、UIActionSelector(非必须)、photoBrowser(非必须)
+
+9. app 必须包含根页面（root）作为初始页，默认root页为index，请在编程时确保index页存在，页面名字不可修改
 
 ## css 预编译
 
@@ -97,7 +105,16 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 ## 最佳实践
 
-[demo](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example)
+示例[https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example)
+
+## 注意事项
+
+
+
+## 相关链接
+
+[APICloud](https://www.apicloud.com/)
+[vueJS](https://cn.vuejs.org/)
 
 ## demo截图
 
@@ -110,3 +127,7 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 ![图片7](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/7.jpg)
 ![图片8](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/8.jpg)
 ![图片9](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/example/example_pic/9.jpg)
+
+## LICENSE
+
+[MIT](https://github.com/yl1033669613/apicloud_vuecli3_project/blob/master/LICENSE)

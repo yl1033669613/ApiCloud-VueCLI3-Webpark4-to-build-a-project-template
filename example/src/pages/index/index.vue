@@ -76,7 +76,11 @@ export default {
     computed: {
         //判断底部是否存在安全区域如果有则留出安全区域 适配iphone x等机型
         safeAreaBott() {
-            return api.safeArea.bottom || 0
+            let bottH = 0
+            if (typeof api === 'object') {
+                bottH = api.safeArea.bottom
+            }
+            return bottH
         }
     },
     mounted() {
@@ -113,6 +117,7 @@ export default {
             api.addEventListener({
                 name: 'keyback'
             },(ret, err) => {
+                // 当root页面有frame弹窗时先关闭frame弹窗再关闭页面
                 if (!self.$comm.keyBackToClosePop()) return
                 if (ci == 0) {
                     time1 = new Date().getTime()
