@@ -36,10 +36,11 @@
             <div class="area-row">
                 5. 一个选择日期的例子
             </div>
-            <div class="btn" @click="openDateSelect('date', true)">日期选择</div>
-            <div class="btn" @click="openDateSelect('date', true, '2019-12-12')">有初始日期的日期选择</div>
-            <div class="btn" @click="openDateSelect('date', true, '2019-12-12', '2019-12-22')">有初始日期和结束日期的日期选择</div>
-            <div class="btn" @click="openDateSelect('date', false)">单个日期选择</div>
+            <div class="btn" @click="openDateSelect('date', true, false)">日期选择</div>
+            <div class="btn" @click="openDateSelect('date', true, false, '2019-12-12')">有初始日期的日期选择</div>
+            <div class="btn" @click="openDateSelect('date', true, false, '2019-12-12', '2019-12-22')">有初始日期和结束日期的日期选择</div>
+            <div class="btn" @click="openDateSelect('date', false, false, currDate)">单个日期选择</div>
+            <div class="btn" @click="openDateSelect('date', false, true)">禁用日期</div>
             <div class="date-row">Date: {{date || '--'}}</div>
         </div>
         <!-- 一个选择省市区的例子 使用 UIActionSelector -->
@@ -134,6 +135,11 @@ export default {
             area: '',
 
             editResult: ''
+        }
+    },
+    computed: {
+        currDate() {
+            return new Date().format('yyyy-MM-dd')
         }
     },
     mounted() {
@@ -277,13 +283,15 @@ export default {
             })
         },
         //日期选择 参数一 选择日期的标识， 参数二 是否选择日期区间
-        openDateSelect(strKey, isRangDate, start, end) {
+        openDateSelect(strKey, isRangDate, isDisabled, start, end) {
             this.$comm.openWin({
                 name: 'choose_date',
                 pageParam: {
                     title: '日期选择',
                     strKey: strKey,
-                    isDisabledDate: false,
+                    isDisabledDate: isDisabled, // 禁用日期 disabledDateBefore、disabledDateAfter 不传默认禁用当天之前的日期
+                    disabledDateBefore: '',
+                    disabledDateAfter: '',
                     isRangDate: isRangDate,
                     // 可设置初始范围
                     start: start || '',

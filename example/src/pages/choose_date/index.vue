@@ -14,16 +14,16 @@
             </div>
         </div>
         <transition :name="slideAnimate" tag="div">
-            <div class="dates-sec clear" :key="isShowing">
-                <div class="row-item">
+            <div class="dates-sec" :key="isShowing">
+                <div class="row-item dates-items-ctn">
                     <div class="row-inner-date" v-for="(item, index) in dateList" :key="index" :class="{
-                            startendactive: item.isStartOrEnd, 
+                            startendactive: item.isStart || item.isEnd, 
                             active: item.isSelected, 
                             notcurrmonth: !item.isCurrMonthDay, 
                             disabled: item.disabled,
-                            onlystart: item.isStartOrEnd && selectStart && !selectEnd,
-                            hasenddate: item.isStartOrEnd && selectStart && selectEnd,
-                            endblockr: item.isStartOrEnd && selectEnd === (`${item.year}-${$comm.superZero(item.month + 1)}-${item.dateTxt}`)
+                            onlystart: item.isStart && !selectEnd,
+                            hasenddate: item.isStart && selectEnd,
+                            endblockr: item.isEnd
                         }">
                         <span @click="handleSelect(item)">{{item.dateTxt}}</span>
                     </div>
@@ -44,8 +44,10 @@ export default {
     name: 'choose_date',
     data() {
         return {
-            isRangDate: false, //是否是日期范围选择
-            isDisabledDate: true, //是否禁用日期 默认禁用当前日期之前的日期
+            isRangDate: false, // 是否是日期范围选择
+            isDisabledDate: true, // 是否禁用日期 默认禁用当前日期之前的日期
+            disabledDateBefore: '', // 如果存在则禁用此日期之前的日期
+            disabledDateAfter: '', // 如果存在则禁用此日期之后的日期
             strKey: '', // 标识用于区分字段
 
             isShowing: false,
@@ -68,35 +70,40 @@ export default {
         }
     },
     created() {
-        let param = api.pageParam;
+        let param = {}
+        if (typeof api === 'object') {
+            param = api.pageParam
+        }
         this.isRangDate = !!param.isRangDate
-        this.isDisabledDate = typeof param.isDisabledDate === 'boolean' ? param.isDisabledDate : true
+        this.isDisabledDate = !!param.isDisabledDate
+        this.disabledDateBefore = param.disabledDateBefore || ''
+        this.disabledDateAfter = param.disabledDateAfter || ''
         this.strKey = param.strKey
-        this.selectStart = api.pageParam.start || ''
-        this.selectEnd = api.pageParam.end || ''
+        this.selectStart = param.start || ''
+        this.selectEnd = param.end || ''
         this.init()
     },
     computed: {
         currM() {
-            return (typeof this.currMonth == 'number') ? this.$comm.superZero(this.currMonth + 1) : ''
+            return (typeof this.currMonth === 'number') ? this.$comm.superZero(this.currMonth + 1) : ''
         },
         safeAreaBott() {
-            return api.safeArea.bottom || 0
+            let bottH = 0
+            if (typeof api === 'object') {
+                bottH = api.safeArea.bottom
+            }
+            return bottH
         }
     },
     methods: {
         init() {
             this.currYear = this.nowDate.year
             this.currMonth = this.nowDate.month
-            if (!this.isRangDate) { //如果不是日期范围选择 则设置默认选择为当天
-                this.selectStart = `${this.nowDate.year}-${this.$comm.superZero(this.nowDate.month + 1)}-${this.$comm.superZero(this.nowDate.date)}`
+            if (this.selectStart) {
+                this.currYear = dayjs(this.selectStart).year()
+                this.currMonth = dayjs(this.selectStart).month()
             } else {
-                if (this.selectStart) {
-                    this.currYear = dayjs(this.selectStart).year()
-                    this.currMonth = dayjs(this.selectStart).month()
-                } else {
-                    this.selectEnd = ''
-                }
+                this.selectEnd = ''
             }
             this.getDateList()
         },
@@ -107,6 +114,46 @@ export default {
             let lastDayWeekIndex = dayJs.date(monthDayNum).day() //当前月最后一天 星期 0为周末
             let prevMonthDayNum = dayJs.year(this.currMonth == 0 ? this.currYear - 1 : this.currYear).month(this.currMonth == 0 ? 11 : this.currMonth - 1).daysInMonth() //上一个月总天数
             let dayjsNowDate = dayjs().year(this.nowDate.year).month(this.nowDate.month).date(this.nowDate.date)
+            // 判断是否为禁用状态
+            let checkIsDisabled = (currDate) => {
+                if (this.isDisabledDate) {
+                    if (this.disabledDateBefore && currDate.isBefore(this.disabledDateBefore, 'date')) {
+                        return true
+                    }
+                    if (this.disabledDateAfter && currDate.isAfter(this.disabledDateAfter, 'date')) {
+                        return true
+                    }
+                    if (!this.disabledDateBefore && !this.disabledDateAfter && currDate.isBefore(dayjsNowDate, 'date')) {
+                        return true
+                    }
+                } else {
+                    return false
+                }
+            }
+            // 判断是否为选择值
+            let checkIsSelected = (currDate) => {
+                if (this.selectStart && this.selectEnd) {
+                    return currDate.isAfter(this.selectStart, 'date') && currDate.isBefore(this.selectEnd, 'date')
+                } else {
+                    return false
+                }
+            }
+            // 判断是否为起始日期
+            let checkIsStart = (currDate) => {
+                if (this.selectStart) {
+                    return currDate.isSame(this.selectStart, 'date')
+                } else {
+                    return false
+                }
+            }
+            // 判断是否为结束日期
+            let checkIsEnd = (currDate) => {
+                if (this.selectEnd) {
+                    return currDate.isSame(this.selectEnd, 'date')
+                } else {
+                    return false
+                }
+            }
             this.dateList = [] // 首先清空之前列表
             for (let i = 1; i < monthDayNum + 1; i++) { //生成当前月份日期对象
                 let currDayJs = dayJs.date(i)
@@ -114,14 +161,13 @@ export default {
                     // 日期显示文字 type String
                     dateTxt: this.$comm.superZero(i),
                     // 是否为选中状态
-                    isSelected: (this.selectStart && this.selectEnd) ?
-                        (currDayJs.isAfter(dayjs(this.selectStart), 'date') && currDayJs.isBefore(dayjs(this.selectEnd), 'date')) : false,
-                    // 范围选择时是否是起始或者结束日期
-                    isStartOrEnd: (this.selectStart ? currDayJs.isSame(dayjs(this.selectStart), 'date') : false) ||
-                        (this.selectEnd ? currDayJs.isSame(dayjs(this.selectEnd), 'date') : false),
+                    isSelected: checkIsSelected(currDayJs),
+                    // 是否为起始日期
+                    isStart: checkIsStart(currDayJs),
+                    // 是否为结束日期
+                    isEnd: checkIsEnd(currDayJs),
                     // 是否是禁用日期
-                    disabled: this.isDisabledDate ?
-                        currDayJs.isBefore(dayjsNowDate, 'date') : false,
+                    disabled: checkIsDisabled(currDayJs),
                     // 是否是当前月份的日期
                     isCurrMonthDay: true,
                     // 日期数字 type Number
@@ -137,12 +183,10 @@ export default {
                 let dayJsPrev = dayjs().year(this.currMonth == 0 ? this.currYear - 1 : this.currYear).month(this.currMonth == 0 ? 11 : this.currMonth - 1).date(prevMonthDayNum - i)
                 let obj = {
                     dateTxt: prevMonthDayNum - i,
-                    isSelected: (this.selectStart && this.selectEnd) ?
-                        (dayJsPrev.isAfter(dayjs(this.selectStart), 'date') && dayJsPrev.isBefore(dayjs(this.selectEnd), 'date')) : false,
-                    isStartOrEnd: (this.selectStart ? dayJsPrev.isSame(dayjs(this.selectStart), 'date') : false) ||
-                        (this.selectEnd ? dayJsPrev.isSame(dayjs(this.selectEnd), 'date') : false),
-                    disabled: this.isDisabledDate ?
-                        dayJsPrev.isBefore(dayjsNowDate, 'date') : false,
+                    isSelected: checkIsSelected(dayJsPrev),
+                    isStart: checkIsStart(dayJsPrev),
+                    isEnd: checkIsEnd(dayJsPrev),
+                    disabled: checkIsDisabled(dayJsPrev),
                     isCurrMonthDay: false,
                     date: prevMonthDayNum - i,
                     month: dayJsPrev.month(),
@@ -154,12 +198,10 @@ export default {
                 let dayJsNext = dayjs().year(this.currMonth == 11 ? this.currYear + 1 : this.currYear).month(this.currMonth == 11 ? 0 : this.currMonth + 1).date(i)
                 let obj = {
                     dateTxt: this.$comm.superZero(i),
-                    isSelected: (this.selectStart && this.selectEnd) ?
-                        (dayJsNext.isAfter(dayjs(this.selectStart), 'date') && dayJsNext.isBefore(dayjs(this.selectEnd), 'date')) : false,
-                    isStartOrEnd: (this.selectStart ? dayJsNext.isSame(dayjs(this.selectStart), 'date') : false) ||
-                        (this.selectEnd ? dayJsNext.isSame(dayjs(this.selectEnd), 'date') : false),
-                    disabled: this.isDisabledDate ?
-                        dayJsNext.isBefore(dayjsNowDate, 'date') : false,
+                    isSelected: checkIsSelected(dayJsNext),
+                    isStart: checkIsStart(dayJsNext),
+                    isEnd: checkIsEnd(dayJsNext),
+                    disabled: checkIsDisabled(dayJsNext),
                     isCurrMonthDay: false,
                     date: i,
                     month: dayJsNext.month(),
@@ -197,7 +239,7 @@ export default {
         handleSelect(item) {
             let currDateStr = `${item.year}-${this.$comm.superZero(item.month + 1)}-${this.$comm.superZero(item.date)}`
             let dayJsNow = dayjs().year(this.nowDate.year).month(this.nowDate.month).date(this.nowDate.date)
-            if (this.isDisabledDate && item.disabled && dayjs(currDateStr).isBefore(dayJsNow, 'date')) return //点击 disabled 的情况
+            if (item.disabled) return //点击 disabled 的情况
             if (!this.isRangDate) { //非日期范围选择
                 if (this.selectStart != currDateStr) {
                     this.selectStart = currDateStr
@@ -232,7 +274,6 @@ export default {
                         this.selectStart = currDateStr
                     } else {
                         this.selectEnd = currDateStr
-                        console.log(this.selectEnd)
                     }
                 }
             }
@@ -245,7 +286,7 @@ export default {
         handleEnd(e) {
             let endX = e.changedTouches[0].clientX
             let endY = e.changedTouches[0].clientY
-            if (Math.abs(endY - this.slideY) < 30) {
+            if (Math.abs(endY - this.slideY) < 50) {
                 if (endX - this.slideX > 10) {
                     this.cutMonth('prev')
                 };
@@ -304,120 +345,128 @@ export default {
     position: relative;
     width: 100%;
     height: 100vh;
-}
 
-.dates-sec {
-    position: absolute;
-    left: 0;
-    top: 2.06rem;
-    width: 100%;
-}
+    .dates-sec {
+        position: absolute;
+        left: 0;
+        top: 1.8rem;
+        width: 100%;
+    }
 
-.date-selset-container .row-year-txt {
-    height: 1rem;
-    background: #f9f9f9;
-    font-size: .4rem;
-    line-height: 1rem;
-    text-align: center;
-    display: flex;
-    display: -webkit-flex;
-    flex-flow: row;
-    justify-content: space-between;
-}
+    .row-year-txt {
+        height: 1rem;
+        background: #f9f9f9;
+        font-size: .36rem;
+        font-weight: bold;
+        line-height: 1rem;
+        text-align: center;
+        display: flex;
+        display: -webkit-flex;
+        flex-flow: row;
+        justify-content: space-between;
 
-.date-selset-container .row-year-txt .arrow {
-    display: block;
-    width: 1rem;
-    height: 100%;
-    position: relative;
-}
+        .arrow {
+            display: block;
+            width: 1rem;
+            height: 100%;
+            position: relative;
+        }
 
-.date-selset-container .row-year-txt .arrow:active {
-    background: rgba(0, 0, 0, .05)
-}
+        .arrow:active {
+            background: rgba(0, 0, 0, .05)
+        }
 
-.date-selset-container .row-year-txt .arrow img {
-    width: .12rem;
-    height: .25rem;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto;
-}
+        .arrow img {
+            width: .12rem;
+            height: .25rem;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+        }
 
-.date-selset-container .row-year-txt .arrow.year-swt img {
-    width: .24rem;
-}
+        .arrow.year-swt img {
+            width: .24rem;
+        }
+    }
 
-.date-selset-container .row-item {
-    display: flex;
-    display: -webkit-flex;
-    flex-flow: row;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    width: 100%;
-}
+    .row-item {
+        display: flex;
+        display: -webkit-flex;
+        flex-wrap: wrap;
+        width: 100%;
+        box-sizing: border-box;
+    }
 
-.row-inner-date {
-    width: 14.2857%;
-    text-align: center;
-    font-size: .31rem;
-    line-height: .96rem;
-    vertical-align: top;
-    padding: .1rem 0;
-    box-sizing: border-box;
-    height: 100%;
-}
+    .row-inner-date {
+        position: relative;
+        width: 14.2857%;
+        text-align: center;
+        font-size: .31rem;
+        padding-top: 14.2857%;
 
-.row-inner-date span {
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-}
+        span {
+            position: absolute;
+            left: 0;
+            top: 0.05rem;
+            bottom: 0.05rem;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
+        }
+    }
 
-.onlystart span {
-    border-radius: .15rem;
-}
+    .onlystart span {
+        border-radius: 4px;
+    }
 
-.hasenddate span {
-    border-radius: .15rem 0 0 .15rem;
-}
+    .hasenddate span {
+        border-radius: 4px 0 0 4px;
+    }
 
-.endblockr span {
-    border-radius: 0 .15rem .15rem 0 !important;
-}
+    .endblockr span {
+        border-radius: 0 4px 4px 0 !important;
+    }
 
-.weeks {
-    padding-bottom: 0;
-}
+    .weeks {
+        height: .8rem;
 
-.weeks .row-inner-date span {
-    padding: 0;
-    font-size: .36rem;
-}
+        .row-inner-date {
+            height: 100%;
+            padding-top: 0;
+        }
+    }
 
-.notcurrmonth span {
-    color: #b9b9b9;
-}
+    .weeks .row-inner-date span {
+        font-size: .32rem;
+        font-weight: bold;
+    }
 
-.active span {
-    background: #e0e5df;
-}
+    .notcurrmonth span {
+        color: #b9b9b9;
+    }
 
-.startendactive span {
-    background: #b7c1b6;
-    color: #fff;
-}
+    .active span {
+        background: #e0e5df;
+    }
 
-.disabled span {
-    background: #e8e8e8;
-    opacity: .4;
-}
+    .startendactive span {
+        background: #b7c1b6;
+        color: #fff;
+    }
 
-.weekend {
-    color: #ce4f5a;
+    .disabled span {
+        background: #e8e8e8;
+        opacity: .4;
+    }
+
+    .weekend {
+        color: #ce4f5a;
+    }
 }
 
 /*/过渡 css */
@@ -494,13 +543,17 @@ export default {
     color: #fff;
     text-align: center;
     line-height: 1rem;
-    font-size: .3rem;
-    transition: all .2s;
+    font-size: .32rem;
+    font-weight: bold;
+    transition: all .1s;
+    border-radius: 4px 4px 0 0;
 
     span {
+        border-radius: 4px 4px 0 0;
         display: block;
         background: #b7c1b6;
         height: 1rem;
+        letter-spacing: 2px;
     }
 }
 
@@ -509,10 +562,15 @@ export default {
 }
 
 .curr-select-date {
-    line-height: .8rem;
+    line-height: .72rem;
     background: #f9f9f9;
     font-size: .24rem;
-    padding: 0 .3rem;
+    padding: 0 .2rem;
     color: #959595;
+    margin-top: .05rem;
+}
+
+.dates-items-ctn {
+    padding: 0 .1rem;
 }
 </style>

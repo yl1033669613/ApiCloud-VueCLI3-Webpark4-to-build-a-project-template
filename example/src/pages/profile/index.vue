@@ -25,27 +25,34 @@
         </div>
         <div class="spt">· 简介 ·</div>
         <div class="card bg-grd-1">
-            <p class="title">ApiCloud+VueCLI3 快速构建apicloud APP</p>
+            <p class="title">APICloud+VueCLI3 完美结合的模块化开发框架，快速构建apicloud APP</p>
         </div>
         <div class="card bg-grd-2">
             <p class="title">技术栈</p>
             apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(css预编译)、nodejs、npm
         </div>
         <div class="card bg-grd-3">
-            <p class="title">使用</p>
-            1. 创建APICloud项目<br>
-            2. 从 https://github.com/yl1033669613/apicloud_vuecli3_project 克隆项目到本地<br>
-            3. 请将项目中publish文件夹下config.xml文件里的appID改为您项目的appID<br>
-            4. npm install <br>
-            5. npm run serve （运行开发模式同样会输出编译代码到dist）<br>
-            6. 同步手机 npm run wifi-start 初始wifi连接，npm run wifi-sync wifi同步手机， npm run wifi-log wifi同步输出log信息。
-            开发模式下仍然编译代码到dist，所以可以用APICloud Studio 连接手机<br>
-            7. npm run build 输出编译代码到dist 将编译代码上传APICloud<br>
-            8. 请为您的项目添加下拉刷新模块 UIPullRefreshFlash
+            <p class="title">如何使用</p>
+            <p class="padd-l"><span>1.</span>创建APICloud项目（获取appId）</p>
+            <p class="padd-l"><span>2.</span>从 https://github.com/yl1033669613/apicloud_vuecli3_project 克隆或下载项目到本地</p>
+            <p class="padd-l"><span>3.</span>请将项目中publish文件夹下config.xml文件里的appId改为您项目的appId(重要)</p>
+            <p class="padd-l"><span>4.</span>npm install （安装依赖）</p>
+            <p class="padd-l"><span>5.</span>npm run serve （运行开发模式同样会输出编译代码到dist）</p>
+            <p class="padd-l"><i>可以在浏览器中调试（模块，app接口除外）</i></p>
+            <p class="padd-l"><i>Local: http://localhost:8080/your_pages.html</i></p>
+            <p class="padd-l"><i>Network: http://192.168.0.1:8080/your_pages.html</i></p>
+            <p class="padd-l"><span>6.</span>同步手机</p>
+            <p class="padd-l"><i>首先 npm run wifi-start 初始wifi连接</i></p>
+            <p class="padd-l"><i>npm run wifi-sync wifi同步手机</i></p>
+            <p class="padd-l"><i>npm run wifi-log wifi同步输出log信息。</i></p>
+            <p class="padd-l"><i>开发模式下仍然编译代码到dist，所以可以用APICloud Studio 连接手机</i></p>
+            <p class="padd-l"><span>7.</span>npm run build 输出编译代码到dist将编译代码上传APICloud，即可打包编译APICloud APP</p>
+            <p class="padd-l"><span>8.</span>请为您的项目添加以下模块 UIPullRefreshFlash(必须)、UIActionSelector(非必须)、photoBrowser(非必须)</p>
+            <p class="padd-l"><span>9.</span>app 必须包含根页面（root）作为初始页，默认root页为index，请在编程时确保index页存在，页面名字不可修改</p>
         </div>
         <div class="card bg-grd-1">
-            <p class="title">app 最佳示例</p>
-            项目下example文件夹。
+            <p class="title">app 最佳实例</p>
+            项目下example文件夹
         </div>
     </div>
 </div>
@@ -162,6 +169,17 @@ export default {
     .title {
         font-size: .28rem;
         font-weight: bold;
+    }
+
+    .padd-l {
+        padding-left: .34rem;
+        position: relative;
+
+        span {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
     }
 }
 </style>
