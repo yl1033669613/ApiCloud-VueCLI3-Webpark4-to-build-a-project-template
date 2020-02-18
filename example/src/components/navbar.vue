@@ -35,45 +35,45 @@ header {
     position: relative;
     min-height: 44px;
     height: auto;
-	line-height: 44px;
-	
-	.inner {
-		position: relative;
-		height: 44px;
-	}
+    line-height: 44px;
 
-	.title {
-		display: inline-block;
-		vertical-align: top;
-		text-align: center;
-		font-size: 19px;
-		color: #fff;
-		height: 100%;
-	}
+    .inner {
+        position: relative;
+        height: 44px;
+    }
 
-	.title-img {
-		display: block;
-		padding: 12px 0;
-		height: 20px;
-		text-align: center;
-		box-sizing: content-box;
-	}
+    .title {
+        display: inline-block;
+        vertical-align: top;
+        text-align: center;
+        font-size: 19px;
+        color: #fff;
+        height: 100%;
+    }
 
-	.title-img img {
-		display: block;
-		margin: 0 auto;
-		height: 100%;
-	}
+    .title-img {
+        display: block;
+        padding: 12px 0;
+        height: 20px;
+        text-align: center;
+        box-sizing: content-box;
+    }
 
-	.back {
-		position: absolute;
-		left: 0;
-		padding-left: 0.9rem;
-		top: 0;
-		width: 28px;
-		height: 44px;
-		background: url(../assets/back_white.png) no-repeat center center;
-		background-size: 8px 14px;
-	}
+    .title-img img {
+        display: block;
+        margin: 0 auto;
+        height: 100%;
+    }
+
+    .back {
+        position: absolute;
+        left: 0;
+        padding-left: 0.9rem;
+        top: 0;
+        width: 28px;
+        height: 44px;
+        background: url(../assets/back_white.png) no-repeat center center;
+        background-size: 8px 14px;
+    }
 }
 </style>

@@ -53,10 +53,18 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 5. npm run serve （运行开发模式同样会输出编译代码到dist）
 
+    可以在浏览器中调试（模块，app接口除外）
+    Local: `http://localhost:8080/your_pages.html`
+    Network: `http://192.168.0.1:8080/your_pages.html`
+
 6. 同步手机，
+
     首先 npm run wifi-start 初始wifi连接
+
     npm run wifi-sync wifi同步手机
+
     npm run wifi-log wifi同步输出log信息。
+
     开发模式下仍然编译代码到dist，所以也可以用APICloud Studio 连接手机同步
 
 7. npm run build 输出编译代码到dist 将编译代码上传APICloud，即可打包编译APICloud APP
