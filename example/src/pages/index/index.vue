@@ -116,7 +116,7 @@ export default {
             let time1, time2
             api.addEventListener({
                 name: 'keyback'
-            },(ret, err) => {
+            }, (ret, err) => {
                 // 当root页面有frame弹窗时先关闭frame弹窗再关闭页面
                 if (!self.$comm.keyBackToClosePop()) return
                 if (ci == 0) {
@@ -184,20 +184,19 @@ export default {
             }
             self.$comm.resizeFrame('group', 0)
             api.openFrameGroup({
-                    name: 'group',
-                    scrollEnabled: true,
-                    preload: 0,
-                    rect: rect,
-                    index: self.active,
-                    frames: frames
-                },(ret, err) => {
-                    if (this.active != ret.index) {
-                        this.active = ret.index
-                        this.title = this.tabs[ret.index].name
-                        this.resetFrameRect()
-                    }
+                name: 'group',
+                scrollEnabled: true,
+                preload: 0,
+                rect: rect,
+                index: self.active,
+                frames: frames
+            }, (ret, err) => {
+                if (this.active != ret.index) {
+                    this.active = ret.index
+                    this.title = this.tabs[ret.index].name
+                    this.resetFrameRect()
                 }
-            )
+            })
         },
         // root 页底部nav 切换
         switchTab(index) {
@@ -253,10 +252,10 @@ export default {
                     h: api.winHeight
                 },
                 animation: {
-					type: 'movein',
-					subType: 'from_right',
-					duration: 300
-				}
+                    type: 'movein',
+                    subType: 'from_right',
+                    duration: 300
+                }
             })
         },
         // token失效的情况弹出登陆窗口
@@ -309,10 +308,6 @@ body,
     flex: 1;
 }
 
-.flex-con {
-    overflow: auto;
-}
-
 /*footer*/
 
 #footer {
@@ -352,6 +347,7 @@ body,
         }
     }
 }
+
 /*footer end*/
 
 /*样例 特殊首页header*/
@@ -367,7 +363,7 @@ header {
         height: 44px;
         position: relative;
     }
-    
+
     .title {
         position: absolute;
         left: 0;

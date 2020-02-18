@@ -12,7 +12,7 @@
             <div class="img-view" style="background-image: url(./image/slide3.png)"></div>
         </swiper-slide>
         <!-- Optional controls -->
-        <div class="swiper-pagination"  slot="pagination"></div>
+        <div class="swiper-pagination" slot="pagination"></div>
     </swiper>
     <p class="txt">这是一个使用普通header 的 window</p>
     <p>使用的是公共header页</p>
@@ -24,14 +24,17 @@
 
 <script>
 import 'swiper/dist/css/swiper.css'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import {
+    swiper,
+    swiperSlide
+} from 'vue-awesome-swiper'
 export default {
     name: 'normal_header_win',
     components: {
         swiper,
         swiperSlide
     },
-    data () {
+    data() {
         return {
             swiperOption: {
                 observer: true,
@@ -86,6 +89,7 @@ p {
         .swiper-pagination-bullet {
             background: #fff;
         }
+
         .swiper-pagination-bullet-active {
             background: #fff;
         }

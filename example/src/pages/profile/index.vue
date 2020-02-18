@@ -39,7 +39,7 @@
             4. npm install <br>
             5. npm run serve （运行开发模式同样会输出编译代码到dist）<br>
             6. 同步手机 npm run wifi-start 初始wifi连接，npm run wifi-sync wifi同步手机， npm run wifi-log wifi同步输出log信息。
-               开发模式下仍然编译代码到dist，所以可以用APICloud Studio 连接手机<br>
+            开发模式下仍然编译代码到dist，所以可以用APICloud Studio 连接手机<br>
             7. npm run build 输出编译代码到dist 将编译代码上传APICloud<br>
             8. 请为您的项目添加下拉刷新模块 UIPullRefreshFlash
         </div>
@@ -54,7 +54,7 @@
 <script>
 export default {
     name: 'profile',
-    mounted () {
+    mounted() {
         const self = this
         self.$comm.pullDown(() => {
             self.showProgress('请稍候...')
@@ -100,7 +100,7 @@ export default {
             line-height: 1rem;
             box-sizing: border-box;
             text-align: center;
-            
+
             p {
                 color: #fff;
                 font-size: .3rem;

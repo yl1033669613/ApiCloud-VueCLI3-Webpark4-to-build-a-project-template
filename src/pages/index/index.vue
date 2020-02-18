@@ -2,7 +2,7 @@
 <!-- 这是app启动的root页面 必须命名为index -->
 <div id="wrap" class="flex-wrap flex-vertical" @touchmove="handleRootPageScoll($event)">
     <header ref="header">
-        <div class="title-ctn">
+        <div class="inner">
             <span class="title" v-for="(item, idx) in tabs" :key="idx" v-show="active === idx">{{item.name}}</span>
         </div>
     </header>
@@ -218,10 +218,10 @@ export default {
                     h: api.winHeight
                 },
                 animation: {
-					type: 'movein',
-					subType: 'from_right',
-					duration: 300
-				}
+                    type: 'movein',
+                    subType: 'from_right',
+                    duration: 300
+                }
             })
         },
         // token失效的情况弹出登陆窗口
@@ -268,10 +268,6 @@ body,
     -webkit-box-flex: 1;
     -webkit-flex: 1;
     flex: 1;
-}
-
-.flex-con {
-    overflow: auto;
 }
 
 /*footer*/
@@ -325,7 +321,7 @@ header {
     min-height: 44px;
     line-height: 44px;
 
-    .title-ctn {
+    .inner {
         height: 44px;
         position: relative;
     }

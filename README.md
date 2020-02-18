@@ -29,7 +29,7 @@
 
 ## 简介
 
-APICloud+VueCLI3 完美结合的开发框架，快速构建apicloud APP
+APICloud+VueCLI3 完美结合的模块化开发框架，快速构建apicloud APP
 
 使用rem适配移动端各种设备
 
@@ -49,13 +49,13 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 1. 创建APICloud项目（获取appId）
 
-2. 从 https://github.com/yl1033669613/apicloud_vuecli3_project 克隆或下载项目到本地
+2. 从 `https://github.com/yl1033669613/apicloud_vuecli3_project` 克隆或下载项目到本地
 
-3. 请将项目中publish文件夹下config.xml文件里的appId改为您项目的appId(重要)
+3. 请将项目中`publish`文件夹下`config.xml`文件里的appId改为您项目的appId(重要)
 
-4. npm install （安装依赖）
+4. `npm install` （安装依赖）
 
-5. npm run serve （运行开发模式同样会输出编译代码到dist）
+5. `npm run serve` （运行开发模式同样会输出编译代码到dist）
 
     可以在浏览器中调试（模块，app接口除外）
 
@@ -65,19 +65,19 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 6. 同步手机
 
-    首先 npm run wifi-start 初始wifi连接
+    首先 `npm run wifi-start` 初始wifi连接
 
-    npm run wifi-sync wifi同步手机
+    `npm run wifi-sync` wifi同步手机
 
-    npm run wifi-log wifi同步输出log信息。
+    `npm run wifi-log` wifi同步输出log信息。
 
     开发模式下仍然编译代码到dist，所以也可以用APICloud Studio 连接手机同步
 
-7. npm run build 输出编译代码到dist 将编译代码上传APICloud，即可打包编译APICloud APP
+7. `npm run build` 输出编译代码到dist将编译代码上传APICloud，即可打包编译APICloud APP
 
 8. 请为您的项目添加以下模块 UIPullRefreshFlash(必须)、UIActionSelector(非必须)、photoBrowser(非必须)
 
-9. app 必须包含根页面（root）作为初始页，默认root页为index，请在编程时确保index页存在，页面名字不可修改
+9. app 必须包含根页面（`root`）作为初始页，默认`root`页为`index`，请在编程时确保`index`页存在，页面名字不可修改
 
 ## css 预编译
 
@@ -87,9 +87,9 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 开发环境下资源引用方式
 
-当你在 JavaScript、CSS 或 *.vue 文件中使用相对路径 (必须以 . 开头) 引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 &lt;img src="...">、css内的background: url(...) 和 CSS @import 的资源 URL 都会被解析为一个模块依赖。
+当你在 `JavaScript`、`CSS` 或 `*.vue` 文件中使用相对路径 (必须以 . 开头) 引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 &lt;img src="...">、css内的background: url(...) 和 CSS @import 的资源 URL 都会被解析为一个模块依赖。
 
-因此此类资源请放在assets文件夹内，在publish下的文件只是简单的复制，请使用编译后的文件关系引用(即实际app内文件引用方式)
+因此此类资源请放在`assets`文件夹内，在`publish`下的文件只是简单的复制，请使用编译后的文件关系引用(即实际app内文件引用方式)
 
 ## 移动端框架
 
@@ -107,9 +107,9 @@ apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(cs
 
 示例[https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example](https://github.com/yl1033669613/apicloud_vuecli3_project/tree/master/example)
 
-## 注意事项
+## 错误&建议
 
-
+欢迎指出错误，提出建议
 
 ## 相关链接
 

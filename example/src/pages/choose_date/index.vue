@@ -16,11 +16,7 @@
         <transition :name="slideAnimate" tag="div">
             <div class="dates-sec clear" :key="isShowing">
                 <div class="row-item">
-                    <div 
-                        class="row-inner-date" 
-                        v-for="(item, index) in dateList" 
-                        :key="index" 
-                        :class="{
+                    <div class="row-inner-date" v-for="(item, index) in dateList" :key="index" :class="{
                             startendactive: item.isStartOrEnd, 
                             active: item.isSelected, 
                             notcurrmonth: !item.isCurrMonthDay, 
@@ -81,7 +77,7 @@ export default {
         this.init()
     },
     computed: {
-        currM () {
+        currM() {
             return (typeof this.currMonth == 'number') ? this.$comm.superZero(this.currMonth + 1) : ''
         },
         safeAreaBott() {
@@ -89,7 +85,7 @@ export default {
         }
     },
     methods: {
-        init () {
+        init() {
             this.currYear = this.nowDate.year
             this.currMonth = this.nowDate.month
             if (!this.isRangDate) { //如果不是日期范围选择 则设置默认选择为当天
@@ -104,7 +100,7 @@ export default {
             }
             this.getDateList()
         },
-        getDateList () { //方法渲染日期列表
+        getDateList() { //方法渲染日期列表
             let dayJs = dayjs().year(this.currYear).month(this.currMonth)
             let monthDayNum = dayJs.daysInMonth() //当前月总天数
             let firstDayWeekIndex = dayJs.date(1).day() //当前月第一天 星期 0为周末
@@ -173,7 +169,7 @@ export default {
             }
         },
         // 月份切换
-        cutMonth (type) {
+        cutMonth(type) {
             if (type == 'prev') {
                 this.currYear = (this.currMonth == 0) ? this.currYear - 1 : this.currYear
                 this.currMonth = (this.currMonth == 0) ? 11 : this.currMonth - 1
@@ -187,7 +183,7 @@ export default {
             this.getDateList()
         },
         // 年份切换
-        cutYear (type) {
+        cutYear(type) {
             if (type == 'prev') {
                 this.currYear--
             } else {
@@ -198,7 +194,7 @@ export default {
             this.getDateList()
         },
         // 选择方法
-        handleSelect (item) {
+        handleSelect(item) {
             let currDateStr = `${item.year}-${this.$comm.superZero(item.month + 1)}-${this.$comm.superZero(item.date)}`
             let dayJsNow = dayjs().year(this.nowDate.year).month(this.nowDate.month).date(this.nowDate.date)
             if (this.isDisabledDate && item.disabled && dayjs(currDateStr).isBefore(dayJsNow, 'date')) return //点击 disabled 的情况
@@ -242,11 +238,11 @@ export default {
             }
             this.getDateList()
         },
-        handleStart (e) {
+        handleStart(e) {
             this.slideX = e.touches[0].clientX
             this.slideY = e.touches[0].clientY
         },
-        handleEnd (e) {
+        handleEnd(e) {
             let endX = e.changedTouches[0].clientX
             let endY = e.changedTouches[0].clientY
             if (Math.abs(endY - this.slideY) < 30) {
@@ -260,7 +256,7 @@ export default {
             this.slideX = 0
             this.slideY = 0
         },
-        dateSelected () {
+        dateSelected() {
             if (!this.isRangDate && !this.selectStart) {
                 this.toast({
                     msg: '请选择日期',

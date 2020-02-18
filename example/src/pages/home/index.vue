@@ -299,7 +299,7 @@ export default {
             }, (ret, err) => {
                 if (ret) {
                     if (ret.value.isRang) {
-                        self[ret.value.strKey] = `${ret.value.start}~${ret.value.end}` 
+                        self[ret.value.strKey] = `${ret.value.start}~${ret.value.end}`
                     } else {
                         self[ret.value.strKey] = ret.value.start
                     }
@@ -468,7 +468,7 @@ export default {
     .btn:active {
         color: #6c8a69;
         border-color: #6c8a69;
-        background: rgba(0, 0, 0, .05   );
+        background: rgba(0, 0, 0, .05);
     }
 }
 
