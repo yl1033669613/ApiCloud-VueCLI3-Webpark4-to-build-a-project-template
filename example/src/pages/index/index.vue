@@ -206,7 +206,8 @@ export default {
                 this.title = this.tabs[idx].name
                 api.setFrameGroupIndex({
                     name: 'group',
-                    index: idx
+                    index: idx,
+                    reload: false
                 })
                 this.resetFrameRect()
             }
