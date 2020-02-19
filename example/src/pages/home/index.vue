@@ -1,5 +1,6 @@
 <template>
 <div class="container">
+    <div class="mask-wt" :class="{pageFadeIn: aniAct}"></div>
     <div class="home-slider" ref="homeSlider"></div>
     <div class="home-content">
         <div class="btn-group line-spt-bott">
@@ -65,8 +66,13 @@
             <div class="area-row">
                 8. 图片查看器，使用photoBrowser模块，可以在common.js里自修改配置
             </div>
-            <div class="img-row">
-                <div class="browser-img" style="background-image: url(https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture)" @click="photoBrowser(0)"></div>
+            <div class="row-ing-wap">
+                <div class="img-row">
+                    <div class="browser-img" style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582098669093&di=4c3a62144d4e32dc0c0864efdeee2f1d&imgtype=0&src=http%3A%2F%2Fimg.jk51.com%2Fimg_jk51%2F90479357.jpeg)" @click="photoBrowser(0)"></div>
+                </div>
+                <div class="img-row">
+                    <div class="browser-img" style="background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582098987302&di=b0f7b454007c927ad3c1611fb86910e9&imgtype=jpg&src=http%3A%2F%2Fimg.qqzhi.com%2Fuploads%2F2018-12-10%2F071555922.jpg)" @click="photoBrowser(1)"></div>
+                </div>
             </div>
         </div>
         <!-- 如果为ios系统在键盘弹出时，将绝对定位底部元素变为无定位元素， 对于ios的妥协办法，防止绝对定位元素在ios上的异常表现 示例 -->
@@ -129,6 +135,7 @@ export default {
     name: 'home',
     data() {
         return {
+            aniAct: false,
             homeData: {},
             slideObj: null,
             date: '',
@@ -144,6 +151,7 @@ export default {
     },
     mounted() {
         const self = this
+        self.aniAct = true
         // 初始化日期监听
         self.listenChooseDateRes()
         // 下拉刷新
@@ -154,6 +162,15 @@ export default {
         self.getHomeData()
     },
     methods: {
+        refreshAni() {
+            this.aniAct = false
+            setTimeout(() => {
+                api.execScript({
+                    name: 'root',
+                    script: '$vm.switchTabAtAniInit()'
+                })
+            }, 0)
+        },
         //首页轮播 需要下拉刷新的页面轮播最好使用原生模块
         initHomeSlide(imgPathArr) {
             const self = this
@@ -337,7 +354,8 @@ export default {
         // 图片查看器
         photoBrowser(idx) {
             let imgArr = [
-                'https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture'
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582098669093&di=4c3a62144d4e32dc0c0864efdeee2f1d&imgtype=0&src=http%3A%2F%2Fimg.jk51.com%2Fimg_jk51%2F90479357.jpeg',
+                'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582098987302&di=b0f7b454007c927ad3c1611fb86910e9&imgtype=jpg&src=http%3A%2F%2Fimg.qqzhi.com%2Fuploads%2F2018-12-10%2F071555922.jpg'
             ]
             let photoBrowser = this.$comm.openPhotoBrowser({
                 images: imgArr,
@@ -463,20 +481,20 @@ export default {
         height: .6rem;
         line-height: .6rem;
         font-size: .24rem;
-        color: #b7c1b6;
+        color: #fff;
         border-radius: .6rem;
-        border: 1px solid #b7c1b6;
+        border: 1px solid #748861;
         padding: 0 .4rem;
         text-align: center;
         transition: all .3s;
         margin-right: .1rem;
         margin-bottom: .2rem;
+        background: #748861;
     }
 
     .btn:active {
-        color: #6c8a69;
-        border-color: #6c8a69;
-        background: rgba(0, 0, 0, .05);
+        border-color: #b7c1b6;
+        background: #b7c1b6;
     }
 }
 
@@ -494,16 +512,22 @@ export default {
     font-size: .24rem;
 }
 
-.img-row {
+.row-ing-wap {
     width: 100%;
-    margin-bottom: .2rem;
     display: flex;
     display: -webkit-flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+
+.img-row {
+    width: 49%;
+    margin-bottom: .1rem;
 }
 
 .browser-img {
     width: 100%;
-    height: 60vw;
+    height: 2.2rem;
     border-radius: 4px;
     background-size: cover;
     background-repeat: no-repeat;

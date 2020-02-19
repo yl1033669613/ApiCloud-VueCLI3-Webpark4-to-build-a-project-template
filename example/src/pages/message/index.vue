@@ -1,5 +1,6 @@
 <template>
 <div class="container">
+    <div class="mask-wt" :class="{pageFadeIn: aniAct}"></div>
     <ul class="list">
         <li class="list-item line-spt-bott" v-for="(item, index) in list" :key="index">
             <div class="left-avatar">
@@ -25,6 +26,7 @@ export default {
     },
     data() {
         return {
+            aniAct: false,
             list: [],
             isLoading: false,
             isLoadEnd: false,
@@ -33,6 +35,7 @@ export default {
     },
     created() {
         const self = this
+        self.aniAct = true
         // 上拉加载
         self.$comm.pullUp(() => {
             if (self.isLoading || self.isLoadEnd) return
@@ -52,6 +55,15 @@ export default {
         self.getList()
     },
     methods: {
+        refreshAni() {
+            this.aniAct = false
+            setTimeout(() => {
+                api.execScript({
+                    name: 'root',
+                    script: '$vm.switchTabAtAniInit()'
+                })
+            }, 0)
+        },
         getList(isPullDown) {
             const self = this
             const arr = [{

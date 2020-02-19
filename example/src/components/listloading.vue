@@ -48,7 +48,7 @@ export default {
 .nodata {
   line-height: 2rem;
   text-align: center;
-  color: #bec0bf;
+  color: #b7c1b6;
   font-size: .3rem;
 }
 
@@ -56,7 +56,7 @@ export default {
   width: 100%;
   text-align: center;
   font-size: .26rem;
-  color: #bec0bf;
+  color: #b7c1b6;
   line-height: .8rem;
 }
 

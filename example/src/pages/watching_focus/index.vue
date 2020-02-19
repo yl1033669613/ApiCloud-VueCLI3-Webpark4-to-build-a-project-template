@@ -1,6 +1,7 @@
 <template>
 <div class="container">
-    <div class="banner" style="background-image: url(https://unsplash.it/900/380/?random)"></div>
+    <div class="mask-wt" :class="{pageFadeIn: aniAct}"></div>
+    <div class="banner" style="background-image: url(https://unsplash.it/700/300/?random)"></div>
     <!-- apicloud里瀑布流布局 方案 -->
     <div class="declare">图片均来自https://unsplash.com/</div>
     <div class="declare small">使用api.imageCache实现图片缓存</div>
@@ -29,6 +30,7 @@ export default {
     },
     data() {
         return {
+            aniAct: false,
             // 列表参数
             list: [],
             isLoadEnd: false,
@@ -44,6 +46,7 @@ export default {
     },
     created() {
         const self = this
+        self.aniAct = true
         //api 初始化
         self.sysW = api.winWidth
         // 上拉加载
@@ -69,6 +72,15 @@ export default {
         self.getList()
     },
     methods: {
+        refreshAni() {
+            this.aniAct = false
+            setTimeout(() => {
+                api.execScript({
+                    name: 'root',
+                    script: '$vm.switchTabAtAniInit()'
+                })
+            }, 0)
+        },
         // 瀑布流
         handleImgLoad(e, item) {
             let currW = e.target.width,

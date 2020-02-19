@@ -4,15 +4,34 @@
     <header class="c-linear-gradient" ref="header">
         <transition name="fade">
             <div class="home-header-inside" v-show="active === 0">
-                <p class="home-header-inside__title">特殊 首页 header</p>
+                <p class="home-header-inside__title">首页</p>
+                <div class="local-btn">
+                    <img src="@/assets/pos_ico.png" alt="">
+                </div>
                 <div class="search-btn">
                     <img src="@/assets/search_cio.png" alt="">
                 </div>
             </div>
         </transition>
+        <transition name="fade">
+            <div class="home-header-inside" v-show="active === 1">
+                <p class="home-header-inside__title">新闻</p>
+                <div class="search-btn" @click="menuVis = !menuVis">
+                    <img src="@/assets/cate_ico.png" alt="">
+                </div>
+                <transition name="fadeRight">
+                    <ul class="menu animated" v-if="menuVis">
+                        <li :class="{active: newsAct === 0}" @click="switchNewsType(0)"><span>财经</span></li>
+                        <li :class="{active: newsAct === 1}" @click="switchNewsType(1)"><span>军事</span></li>
+                        <li :class="{active: newsAct === 2}" @click="switchNewsType(2)"><span>体育</span></li>
+                        <li :class="{active: newsAct === 3}" @click="switchNewsType(3)"><span>娱乐</span></li>
+                    </ul>
+                </transition>
+            </div>
+        </transition>
         <div class="title-ctn">
             <transition-group name="fade">
-                <span class="title" v-for="(item, idx) in tabs" :key="`${idx}_fade`" v-show="idx!== 0 && active === idx">{{item.name}}</span>
+                <span class="title" v-for="(item, idx) in tabs" :key="`${idx}_fade`" v-show="idx!== 0 && idx!== 1 && active === idx">{{item.name}}</span>
             </transition-group>
         </div>
     </header>
@@ -36,41 +55,49 @@ export default {
     data() {
         return {
             active: 0, //底部nav bar active
+            isTapBottBar: false,
             title: '首页', //底部nav bar 对应标题
             // 底部nav bar 数组 于上面 footer item 对应
             tabs: [{
                     page: 'home',
                     name: '首页',
                     normal: './image/tabbar/1.png',
-                    active: './image/tabbar/1_ac.png'
+                    active: './image/tabbar/1_ac.png',
+                    notFirst: true
                 },
                 {
                     page: 'find',
-                    name: '发现',
+                    name: '新闻',
                     normal: './image/tabbar/2.png',
-                    active: './image/tabbar/2_ac.png'
+                    active: './image/tabbar/2_ac.png',
+                    notFirst: false
                 },
                 {
                     page: 'watching_focus',
                     name: '看点',
                     normal: './image/tabbar/3.png',
-                    active: './image/tabbar/3_ac.png'
+                    active: './image/tabbar/3_ac.png',
+                    notFirst: false
                 },
                 {
                     page: 'message',
                     name: '消息',
                     normal: './image/tabbar/4.png',
-                    active: './image/tabbar/4_ac.png'
+                    active: './image/tabbar/4_ac.png',
+                    notFirst: false
                 },
                 {
                     page: 'profile',
                     name: '我的',
                     normal: './image/tabbar/5.png',
-                    active: './image/tabbar/5_ac.png'
+                    active: './image/tabbar/5_ac.png',
+                    notFirst: false
                 }
             ],
             //登录状态
-            tokenInvalid: false
+            tokenInvalid: false,
+            menuVis: false,
+            newsAct: 0
         }
     },
     computed: {
@@ -165,7 +192,7 @@ export default {
             for (let i = 0, len = tabs.length; i < len; i++) {
                 frames.push({
                     name: tabs[i].page,
-                    url: './' + tabs[i].page + '.html',
+                    url: `widget://${tabs[i].page}.html`,
                     bgColor: '#ffffff',
                     bounces: true,
                     vScrollBarEnabled: false,
@@ -178,9 +205,7 @@ export default {
                 x: 0,
                 y: self.$refs.header.offsetHeight,
                 w: api.winWidth,
-                h: api.winHeight -
-                    self.$refs.header.offsetHeight -
-                    self.$refs.footer.offsetHeight
+                h: api.winHeight - self.$refs.header.offsetHeight - self.$refs.footer.offsetHeight
             }
             self.$comm.resizeFrame('group', 0)
             api.openFrameGroup({
@@ -191,10 +216,16 @@ export default {
                 index: self.active,
                 frames: frames
             }, (ret, err) => {
-                if (this.active != ret.index) {
-                    this.active = ret.index
-                    this.title = this.tabs[ret.index].name
-                    this.resetFrameRect()
+                if (self.isTapBottBar) {
+                    self.isTapBottBar = false
+                } else {
+                    if (self.active !== ret.index) {
+                        self.active = ret.index
+                        self.title = self.tabs[ret.index].name
+                        if (!self.tabs[self.active].notFirst) {
+                            self.tabs[self.active].notFirst = true
+                        }
+                    }
                 }
             })
         },
@@ -203,14 +234,35 @@ export default {
             let idx = parseInt(index)
             if (this.active != idx) {
                 this.active = idx
+                this.isTapBottBar = true
                 this.title = this.tabs[idx].name
+                if (!this.tabs[idx].notFirst) {
+                    this.tabs[idx].notFirst = true
+                    api.setFrameGroupIndex({
+                        name: 'group',
+                        index: this.active
+                    })
+                } else {
+                    api.execScript({
+                        name: 'root',
+                        frameName: this.tabs[idx].page,
+                        script: '$vm.refreshAni()'
+                    })
+                }
+            }
+        },
+        switchTabAtAniInit() {
+            setTimeout(() => {
                 api.setFrameGroupIndex({
                     name: 'group',
-                    index: idx,
-                    reload: false
+                    index: this.active
                 })
-                this.resetFrameRect()
-            }
+                api.execScript({
+                    name: 'root',
+                    frameName: this.tabs[this.active].page,
+                    script: '$vm.aniAct = true'
+                })
+            }, 100)
         },
         //重新设置frame rect
         resetFrameRect() {
@@ -223,9 +275,7 @@ export default {
                         x: 0,
                         y: self.$refs.header.offsetHeight,
                         w: api.winWidth,
-                        h: api.winHeight -
-                            self.$refs.header.offsetHeight -
-                            self.$refs.footer.offsetHeight
+                        h: api.winHeight - self.$refs.header.offsetHeight - self.$refs.footer.offsetHeight
                     }
                 })
             })
@@ -278,6 +328,17 @@ export default {
         // root 页获取用户信息
         getProfile() {
             // 这里获取用户信息1212121
+        },
+        // 切换新闻类型
+        switchNewsType (type) {
+            if (this.newsAct !== type) {
+                this.newsAct = type
+                api.execScript({
+                    name: 'root',
+                    frameName: 'find',
+                    script: `$vm.switchNewsType(${type})`
+                })
+            }
         }
     }
 }
@@ -290,6 +351,7 @@ body,
     margin: 0;
     height: 100vh;
     overflow: hidden;
+    background: #f8f8f8;
 }
 
 .flex-wrap {
@@ -312,8 +374,7 @@ body,
 /*footer*/
 
 #footer {
-    background-color: #f7f7f7;
-    font-size: 0.2rem;
+    background-color: #f8f8f8;
     padding: 0.1rem 0 0 0;
     box-sizing: border-box;
     position: fixed;
@@ -383,6 +444,7 @@ header {
 .home-header-inside {
     height: 44px;
     padding: 0 .2rem;
+    padding-right: 0;
     box-sizing: border-box;
     position: absolute;
     left: 0;
@@ -393,35 +455,37 @@ header {
     .home-header-inside__title {
         color: #fff;
         text-align: left;
-        font-size: .26rem;
+        font-size: 19px;
         position: relative;
         padding-left: .2rem;
-        padding-right: 44px;
+        padding-right: 88px;
 
         &::before {
             content: '';
             position: absolute;
-            left: .1rem;
+            left: 0;
             top: 0;
             bottom: 0;
             margin: auto 0;
             height: 40%;
-            width: 2px;
+            width: 3px;
             background: #fff;
-            border-radius: 2px;
+            border-radius: 3px;
         }
     }
 
-    .search-btn {
+    .search-btn,
+    .local-btn {
         position: absolute;
         right: 0;
         top: 0;
-        width: 50px;
+        width: 44px;
         height: 100%;
-        transition: all .2s;
+        transition: all .1s;
+        z-index: 11;
 
         &:active {
-            background: rgba(0, 0, 0, .08)
+            background: rgba(0, 0, 0, .05)
         }
 
         img {
@@ -434,6 +498,42 @@ header {
             bottom: 0;
             display: block;
             margin: auto;
+        }
+    }
+
+    .local-btn {
+        right: 44px;
+    }
+
+    .menu {
+        z-index: 10;
+        position: absolute;
+        right: 44px;
+        top: 0;
+        line-height: 44px;
+        color: #fff;
+        font-size: .26rem;
+        width: 4rem;
+        display: flex;
+
+        li {
+            width: 1rem;
+            text-align: center;
+            transition: all .1s;
+            font-weight: bold;
+
+            span {
+                transition: all .3s;
+                display: block;
+            }
+
+            &.active span{
+                transform: scale3d(1.2, 1.2, 1.2);
+            }
+
+            &:active {
+                background: rgba(0, 0, 0, .05)
+            }
         }
     }
 }

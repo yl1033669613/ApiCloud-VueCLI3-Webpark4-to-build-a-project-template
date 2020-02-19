@@ -209,13 +209,104 @@ label>* {
 
 /*渐变*/
 .c-linear-gradient {
-    background-image: linear-gradient(90deg, #7d8971, #dacab1);
+    background-image: linear-gradient(90deg, #748861, #dacab1);
     background-blend-mode: normal, normal;
 }
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity .15s;
-  }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .2s;
+}
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+    {
     opacity: 0;
-  }
+}
+
+.mask-wt {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    background: #fff;
+    z-index: 100000;
+}
+
+// page fade
+.pageFadeIn {
+    -webkit-animation-name: pageFadeIn;
+    animation-name: pageFadeIn;
+    -webkit-animation-duration: .6s;
+    animation-duration: .6s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+@-webkit-keyframes pageFadeIn {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        z-index: -10000;
+    }
+}
+
+@keyframes pageFadeIn {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        z-index: -10000;
+    }
+}
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.fadeRight-enter-active,
+.fadeRight-leave-active {
+    transition: all .5s ease;
+}
+
+.fadeRight-enter,
+.fadeRight-leave-to
+
+/* .fadeRight-leave-active below version 2.1.8 */
+    {
+    opacity: 0;
+    transform: translateX(8%);
+}

@@ -1,5 +1,6 @@
 <template>
 <div class="container">
+    <div class="mask-wt" :class="{pageFadeIn: aniAct}"></div>
     <div class="profile-top c-linear-gradient">
         <div class="base-info">
             <div class="avatar">
@@ -11,6 +12,10 @@
         </div>
     </div>
     <div class="card-group">
+        <div class="card no-pad-img">
+            <span v-if="!imgLoadFinished">加载中...</span>
+            <img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg" alt="">
+        </div>
         <div class="spt">· 信息 ·</div>
         <div class="card bg-grd-1">
             <p class="title">GITHUB</p>
@@ -25,7 +30,8 @@
         </div>
         <div class="spt">· 简介 ·</div>
         <div class="card bg-grd-1">
-            <p class="title">APICloud+VueCLI3 完美结合的模块化开发框架，快速构建apicloud APP</p>
+            <p class="title">apicloud_vuecli3_project</p>
+            <p>APICloud+VueCLI3 完美结合的模块化开发框架，快速构建apicloud APP</p>
         </div>
         <div class="card bg-grd-2">
             <p class="title">技术栈</p>
@@ -61,8 +67,15 @@
 <script>
 export default {
     name: 'profile',
+    data () {
+        return {
+            aniAct: false,
+            imgLoadFinished: false
+        }
+    },
     mounted() {
         const self = this
+        self.aniAct = true
         self.$comm.pullDown(() => {
             self.showProgress('请稍候...')
             setTimeout(() => {
@@ -70,6 +83,20 @@ export default {
                 api.refreshHeaderLoadDone()
             }, 1000)
         })
+    },
+    methods: {
+        refreshAni() {
+            this.aniAct = false
+            setTimeout(() => {
+                api.execScript({
+                    name: 'root',
+                    script: '$vm.switchTabAtAniInit()'
+                })
+            }, 0)
+        },
+        loadImg () {
+            this.imgLoadFinished = true
+        }
     }
 }
 </script>
@@ -141,6 +168,7 @@ export default {
     line-height: .4rem;
     margin-bottom: .5rem;
     word-break: break-all;
+    position: relative;
 
     i {
         font-style: italic;
@@ -169,6 +197,36 @@ export default {
     .title {
         font-size: .28rem;
         font-weight: bold;
+    }
+
+    &.no-pad-img {
+        padding: 0;
+        min-height: calc((100vw - 0.4rem) * 0.5625);
+        transition: all .3s;
+        background: #a0a7ba;
+        position: relative;
+
+        img {
+            transition: all .6s;
+            opacity: 0;
+            width: 100%;
+            display: block;
+            border-radius: .3rem;
+        }
+
+        span {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            transform: translate3d(0, -50%, 0);
+            display: block;
+            font-style: .22rem;
+            color: #fff;
+            text-align: center;
+            opacity: .5;
+        }
     }
 
     .padd-l {

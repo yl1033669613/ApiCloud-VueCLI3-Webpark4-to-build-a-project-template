@@ -206,13 +206,11 @@ export default function () {
 			let headerName = pageOpt.headerName ? pageOpt.headerName : 'page_header'
 			param.pageName = pageOpt.name
 			let wins = api.windows()
-			for (let i = 0; i < wins.length; i++) {
-				if (wins[i].name == pageOpt.name) {
-					// 如果页面已打开则先关闭页面再打开
-					api.closeWin({
-						name: pageOpt.name
-					})
-				}
+			if (wins.some((a) => a.name === pageOpt.name)) {
+				// 如果页面已打开则先关闭页面再打开
+				api.closeWin({
+					name: pageOpt.name
+				})
 			}
 			api.openWin({
 				name: pageOpt.name, //窗口页面
@@ -500,18 +498,18 @@ export default function () {
 		 */
 		fnImageCache(opt) {
 			const self = this
-			let currArr = opt.datas
-			let key = opt.imgKey
-			let count = 0
-			let timeout = opt.timeout || 30000
 			return new Promise((resolve, reject) => {
+				let currArr = opt.datas
+				let key = opt.imgKey
+				let count = 0
+				let timeout = opt.timeout || 30000
 				let loadDone = () => { // 缓存完成执行
 					if (count === currArr.length) {
 						resolve(currArr)
 					}
 				}
 				if (currArr && currArr.length) {
-					currArr.forEach((a) => {
+					currArr.forEach((a, i) => {
 						let currUrl = ''
 						let itemType = typeof a
 						if (itemType === 'string') {
@@ -529,7 +527,7 @@ export default function () {
 							}, timeout)
 							api.imageCache({
 								url: currUrl,
-								thumbnail: api.systemType === 'ios' ? false : true // ios关闭缩略图否则会影响ios 滚动性能
+								thumbnail: false
 							}, (ret, err) => {
 								// 如果缓存超时则不执行缓存超时之后的回调
 								if (timer) {
@@ -537,11 +535,11 @@ export default function () {
 									timer = null
 									if (ret.url) {
 										if (itemType === 'string') {
-											a = ret.url
+											currArr[i] = ret.url
 										} else {
 											a[key] = ret.url
 										}
-									};
+									}
 									count++
 									loadDone()
 								}
