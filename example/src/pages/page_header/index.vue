@@ -15,7 +15,8 @@ export default {
         return {
             pageName: '',
             title: '',
-            back: true
+            back: true,
+            webUrl: ''
         }
     },
     mounted() {
@@ -24,8 +25,23 @@ export default {
         self.title = pageParam.title || ''
         self.back = pageParam.back || true
         self.pageName = pageParam.pageName
+        self.webUrl = pageParam.webUrl
         setTimeout(() => {
-            self.$comm.openFrame(pageParam.pageName, pageParam)
+            if (self.webUrl) {
+                api.openFrame({
+                    name: `${pageParam.pageName}_frame`,
+                    url: self.webUrl,
+                    bgColor: '#ffffff',
+                    rect: {
+                        x: 0,
+                        y: document.querySelector('header').offsetHeight,
+                        width: api.winWidth,
+                        height: 'auto'
+                    }
+                })
+            } else {
+                self.$comm.openFrame(pageParam.pageName, pageParam)
+            }
             // 窗口尺寸变化是调整frame布局
             self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)

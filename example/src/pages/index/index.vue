@@ -4,7 +4,7 @@
     <header class="c-linear-gradient" ref="header">
         <transition name="fade">
             <div class="home-header-inside" v-show="active === 0">
-                <p class="home-header-inside__title">首页</p>
+                <p class="home-header-inside__title">{{tabs[0].name}}</p>
                 <div class="local-btn">
                     <img src="@/assets/pos_ico.png" alt="">
                 </div>
@@ -15,23 +15,31 @@
         </transition>
         <transition name="fade">
             <div class="home-header-inside" v-show="active === 1">
-                <p class="home-header-inside__title">新闻</p>
+                <p class="home-header-inside__title">{{tabs[1].name}}</p>
                 <div class="search-btn" @click="menuVis = !menuVis">
                     <img src="@/assets/cate_ico.png" alt="">
                 </div>
                 <transition name="fadeRight">
                     <ul class="menu animated" v-if="menuVis">
                         <li :class="{active: newsAct === 0}" @click="switchNewsType(0)"><span>财经</span></li>
-                        <li :class="{active: newsAct === 1}" @click="switchNewsType(1)"><span>军事</span></li>
-                        <li :class="{active: newsAct === 2}" @click="switchNewsType(2)"><span>体育</span></li>
-                        <li :class="{active: newsAct === 3}" @click="switchNewsType(3)"><span>娱乐</span></li>
+                        <li :class="{active: newsAct === 1}" @click="switchNewsType(1)"><span>科技</span></li>
+                        <li :class="{active: newsAct === 2}" @click="switchNewsType(2)"><span>数码</span></li>
+                        <li :class="{active: newsAct === 3}" @click="switchNewsType(3)"><span>旅游</span></li>
                     </ul>
                 </transition>
             </div>
         </transition>
+        <transition name="fade">
+            <div class="home-header-inside" v-show="active === 2">
+                <p class="home-header-inside__title">{{tabs[2].name}}<span class="web-sit">unsplash.com</span></p>
+                <div class="search-btn" @click="backTop('photos')">
+                    <img src="@/assets/back_top.png" class="size-ct" alt="">
+                </div>
+            </div>
+        </transition>
         <div class="title-ctn">
             <transition-group name="fade">
-                <span class="title" v-for="(item, idx) in tabs" :key="`${idx}_fade`" v-show="idx!== 0 && idx!== 1 && active === idx">{{item.name}}</span>
+                <span class="title" v-for="(item, idx) in tabs" :key="`${idx}_fade`" v-show="(idx === 3 || idx === 4) && active === idx">{{item.name}}</span>
             </transition-group>
         </div>
     </header>
@@ -66,15 +74,15 @@ export default {
                     notFirst: true
                 },
                 {
-                    page: 'find',
+                    page: 'news',
                     name: '新闻',
                     normal: './image/tabbar/2.png',
                     active: './image/tabbar/2_ac.png',
                     notFirst: false
                 },
                 {
-                    page: 'watching_focus',
-                    name: '看点',
+                    page: 'photos',
+                    name: 'Photos',
                     normal: './image/tabbar/3.png',
                     active: './image/tabbar/3_ac.png',
                     notFirst: false
@@ -96,7 +104,7 @@ export default {
             ],
             //登录状态
             tokenInvalid: false,
-            menuVis: false,
+            menuVis: true,
             newsAct: 0
         }
     },
@@ -327,18 +335,25 @@ export default {
         },
         // root 页获取用户信息
         getProfile() {
-            // 这里获取用户信息1212121
+            // 这里获取用户信息
         },
         // 切换新闻类型
-        switchNewsType (type) {
+        switchNewsType(type) {
             if (this.newsAct !== type) {
                 this.newsAct = type
                 api.execScript({
                     name: 'root',
-                    frameName: 'find',
+                    frameName: 'news',
                     script: `$vm.switchNewsType(${type})`
                 })
             }
+        },
+        backTop(frameName) {
+            api.execScript({
+                name: 'root',
+                frameName: frameName,
+                script: '$vm.backTop()'
+            })
         }
     }
 }
@@ -474,6 +489,19 @@ header {
         }
     }
 
+    .web-sit {
+        display: inline-block;
+        line-height: 12px;
+        vertical-align: middle;
+        padding: 2px 6px;
+        border-radius: 2px;
+        background: rgba(0, 0, 0, .1);
+        font-size: 9px;
+        margin-left: .1rem;
+        font-style: italic;
+        color: #ffdce2;
+    }
+
     .search-btn,
     .local-btn {
         position: absolute;
@@ -498,6 +526,11 @@ header {
             bottom: 0;
             display: block;
             margin: auto;
+
+            &.size-ct {
+                width: 22px;
+                height: 22px;
+            }
         }
     }
 
@@ -527,8 +560,8 @@ header {
                 display: block;
             }
 
-            &.active span{
-                transform: scale3d(1.2, 1.2, 1.2);
+            &.active span {
+                transform: scale3d(1.25, 1.25, 1.25);
             }
 
             &:active {

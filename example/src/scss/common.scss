@@ -240,30 +240,36 @@ label>* {
 .pageFadeIn {
     -webkit-animation-name: pageFadeIn;
     animation-name: pageFadeIn;
-    -webkit-animation-duration: .6s;
-    animation-duration: .6s;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
 }
 
 @-webkit-keyframes pageFadeIn {
-    from {
+    0% {
         opacity: 1;
     }
 
-    to {
+    90% {
         opacity: 0;
+    }
+
+    100% {
         z-index: -10000;
     }
 }
 
 @keyframes pageFadeIn {
-    from {
+    0% {
         opacity: 1;
     }
 
-    to {
+    90% {
         opacity: 0;
+    }
+
+    100% {
         z-index: -10000;
     }
 }
@@ -299,7 +305,7 @@ label>* {
 
 .fadeRight-enter-active,
 .fadeRight-leave-active {
-    transition: all .5s ease;
+    transition: all .4s ease;
 }
 
 .fadeRight-enter,

@@ -2,7 +2,7 @@
 <header class="c-linear-gradient">
     <div class="inner">
         <a class="back" :back="back" @click="closeWin"></a>
-        <span class="title">{{title}}</span>
+        <span class="title text-ellipsis">{{title}}</span>
     </div>
     <slot></slot>
 </header>
@@ -49,6 +49,7 @@ header {
         font-size: 19px;
         color: #fff;
         height: 100%;
+        max-width: 70%;
     }
 
     .title-img {
