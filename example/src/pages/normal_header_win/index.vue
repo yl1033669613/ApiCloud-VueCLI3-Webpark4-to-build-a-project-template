@@ -47,10 +47,10 @@ export default {
     },
     methods: {
         openFramePop() {
-            this.$comm.openPopFrame('tmp_pop', {
-                title: 'frame 弹窗'
+            this.$comm.openPopFrame('confirm_pop', {
+                content: 'frame 弹窗'
             })
-        },
+        }
     }
 }
 </script>
@@ -118,6 +118,6 @@ p {
     line-height: 1rem;
     font-size: .3rem;
     color: #fff;
-    background: #748f5a;
+    background: #94a585;
 }
 </style>

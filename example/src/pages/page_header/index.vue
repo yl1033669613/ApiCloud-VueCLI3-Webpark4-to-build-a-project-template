@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <navbar :title="title" :back="back"></navbar>
+    <navbar :title="title" :isWeb="!!webUrl" :back="back"></navbar>
 </div>
 </template>
 

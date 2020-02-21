@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <navbar :class="[isPhotoset ? 'black-bg-header' : 'red-bg-header', 'bott-border']" :title="title" :back="back"></navbar>
+    <navbar :class="[isPhotoset ? 'black-bg-header' : 'red-bg-header', 'bott-border']" :isWeb="!!webUrl" :title="title" :back="back"></navbar>
 </div>
 </template>
 

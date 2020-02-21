@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'GenJyuuGothic-Bold';
+    src: url('/fonts/GenJyuuGothic-Bold.ttf');
+}
+
 html,
 h1,
 h2,
@@ -27,7 +32,7 @@ td {
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
+    font-family: "GenJyuuGothic-Bold", "Microsoft YaHei", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
 }
 
 * {
@@ -224,54 +229,6 @@ label>* {
 /* .fade-leave-active below version 2.1.8 */
     {
     opacity: 0;
-}
-
-.mask-wt {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    background: #fff;
-    z-index: 100000;
-}
-
-// page fade
-.pageFadeIn {
-    -webkit-animation-name: pageFadeIn;
-    animation-name: pageFadeIn;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-}
-
-@-webkit-keyframes pageFadeIn {
-    0% {
-        opacity: 1;
-    }
-
-    90% {
-        opacity: 0;
-    }
-
-    100% {
-        z-index: -10000;
-    }
-}
-
-@keyframes pageFadeIn {
-    0% {
-        opacity: 1;
-    }
-
-    90% {
-        opacity: 0;
-    }
-
-    100% {
-        z-index: -10000;
-    }
 }
 
 @-webkit-keyframes fadeIn {

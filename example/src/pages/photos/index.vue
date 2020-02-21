@@ -1,6 +1,5 @@
 <template>
-<div class="container">
-    <div class="mask-wt" :class="{pageFadeIn: aniAct}"></div>
+<div class="container" :class="{fadeIn: aniAct}">
     <div class="banner" style="background-image: url(https://unsplash.it/700/310/?random)"></div>
     <!-- apicloud里瀑布流布局 方案 -->
     <div class="declare">Photos for everyone ~</div>
@@ -134,7 +133,7 @@ export default {
             }, (res, err) => {
                 if (res) {
                     for (let i = 0; i < res.length; i++) {
-                        res[i].picUrl = res[i].urls.small
+                        res[i].picUrl = res[i].urls.regular
                     }
                     let list = res
                     if (list.length === 0) {
@@ -178,6 +177,7 @@ export default {
 
 <style lang="scss">
 .container {
+    opacity: 0;
     padding-top: .2rem;
 }
 
@@ -248,6 +248,7 @@ export default {
     line-height: 22px;
     font-size: 13px;
     word-break: break-all;
+    letter-spacing: 1px;
 }
 
 .water-fall-ctn .item .bott-info .auth-name {
@@ -255,6 +256,7 @@ export default {
     font-size: 10px;
     color: #999;
     padding-bottom: 3px;
+    letter-spacing: 1px;
 }
 
 /*瀑布流结束*/
@@ -264,6 +266,7 @@ export default {
     font-size: .32rem;
     font-weight: bold;
     color: #ceb081;
+    letter-spacing: 1px;
 
     &.small {
         padding: 0 .3rem .3rem .3rem;

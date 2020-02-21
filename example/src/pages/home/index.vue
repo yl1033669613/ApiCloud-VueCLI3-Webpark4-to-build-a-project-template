@@ -1,31 +1,30 @@
 <template>
-<div class="container">
-    <div class="mask-wt" :class="{pageFadeIn: aniAct}"></div>
+<div class="container" :class="{fadeIn: aniAct}">
     <div class="home-slider" ref="homeSlider"></div>
     <div class="home-content">
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                1. app退出示例，关闭frameGroup打开登陆页
+                <span class="sei-no">1. </span>app退出示例，关闭frameGroup打开登陆页
             </div>
-            <div class="btn" @click="logOut">退出</div>
+            <div class="btn" @click="$comm.openPopFrame('confirm_pop', {content: '确认退出', script: '$vm.logOut()', frameName: frameName})">退出</div>
         </div>
         <!-- app 清除缓存 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                2. 清除app缓存
+                <span class="sei-no">2. </span>清除app缓存
             </div>
-            <div class="btn" @click="clearCache">清除缓存</div>
+            <div class="btn" @click="$comm.openPopFrame('confirm_pop', {content: '是否清除缓存?', script: '$vm.clearCache()', frameName: frameName})">清除缓存</div>
         </div>
         <div class="btn-group line-spt-bott">
             <!-- 打开带透明蒙层的 frame 弹窗 -->
             <div class="area-row">
-                3. 打开带透明蒙层的frame弹窗（当页面有frame弹窗时先关闭frame弹窗再关闭页面）
+                <span class="sei-no">3. </span>打开带透明蒙层的frame弹窗（当页面有frame弹窗时先关闭frame弹窗再关闭页面）
             </div>
             <div class="btn" @click="openFramePop">frame 弹窗</div>
         </div>
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                4. 公共头部和特殊头部页面的实现
+                <span class="sei-no">4. </span>公共头部和特殊头部页面的实现
             </div>
             <!-- 打开普通 header 的 window -->
             <div class="btn" @click="openWin('normal_header_win', '普通win')">普通win</div>
@@ -35,28 +34,28 @@
         <!-- 一个选择日期的例子 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                5. 一个选择日期的例子
+                <span class="sei-no">5. </span>一个选择日期的例子
             </div>
             <div class="btn" @click="openDateSelect('date', true, false)">日期选择</div>
             <div class="btn" @click="openDateSelect('date', true, false, '2019-12-12')">有初始日期的日期选择</div>
             <div class="btn" @click="openDateSelect('date', true, false, '2019-12-12', '2019-12-22')">有初始日期和结束日期的日期选择</div>
             <div class="btn" @click="openDateSelect('date', false, false, currDate)">单个日期选择</div>
             <div class="btn" @click="openDateSelect('date', false, true)">禁用日期</div>
-            <div class="date-row">Date: {{date || '--'}}</div>
+            <div class="date-row ft-italic">Date: {{date || '--'}}</div>
         </div>
         <!-- 一个选择省市区的例子 使用 UIActionSelector -->
         <!-- 可以在common.js 里自定义UIActionSelector 的样式 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                6. 一个选择省市区的例子，使用模块UIActionSelector，可以在common.js里自定义UIActionSelector的样式
+                <span class="sei-no">6. </span>一个选择省市区的例子，使用模块UIActionSelector，可以在common.js里自定义UIActionSelector的样式
             </div>
             <div class="btn" @click="openAreaPicker()">省市区选择</div>
-            <div class="area-row">Area: {{area || '--'}}</div>
+            <div class="area-row ft-italic">Area: {{area || '--'}}</div>
         </div>
         <!-- 上拉加载下拉刷新 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                7. 上拉加载下拉刷新示例
+                <span class="sei-no">7. </span>上拉加载下拉刷新示例
             </div>
             <div class="btn" @click="switchTab(1)">上拉加载下拉刷新</div>
         </div>
@@ -64,7 +63,7 @@
         <!-- 可以在common.js 里自修改配置 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                8. 图片查看器，使用photoBrowser模块，可以在common.js里自修改配置
+                <span class="sei-no">8. </span>图片查看器，使用photoBrowser模块，可以在common.js里自修改配置
             </div>
             <div class="row-ing-wap">
                 <div class="img-row">
@@ -78,21 +77,21 @@
         <!-- 如果为ios系统在键盘弹出时，将绝对定位底部元素变为无定位元素， 对于ios的妥协办法，防止绝对定位元素在ios上的异常表现 示例 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                9. ios绝对定位底部的元素键盘弹出示例
+                <span class="sei-no">9. </span>ios绝对定位底部的元素键盘弹出示例
             </div>
             <div class="btn" @click="openWin('example_fixed_bottom', '绝对定位底部的元素')">查看示例</div>
         </div>
         <!-- 瀑布流布局实例 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                10. 瀑布流布局、图片缓存示例
+                <span class="sei-no">10. </span>瀑布流布局、图片缓存示例
             </div>
             <div class="btn" @click="switchTab(2)">查看示例</div>
         </div>
         <!-- 动态授权实例 targetSdkVersion >= 23 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                11. 动态授权实例<br> 在Android上使用动态权限，要求APP编译的目标SDK（即targetSdkVersion）为23及以上（对应为android6.0及以上系统）
+                <span class="sei-no">11. </span>动态授权实例<br> 在Android上使用动态权限，要求APP编译的目标SDK（即targetSdkVersion）为23及以上（对应为android6.0及以上系统）
                 <br> (如果已经获取到了相机权限请先在系统设置里关闭)
                 <br><br> 如何自定义编译targetSdkVersion值以及使用动态动态权限：
 
@@ -103,18 +102,18 @@
         <!-- 图片编辑、裁剪示例 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                12. 图片编辑、裁剪示例<br> 使用模块 FNImageClip 裁剪图片
+                <span class="sei-no">12. </span>图片编辑、裁剪示例<br> 使用模块 FNImageClip 裁剪图片
             </div>
             <div class="btn" @click="editPicExample()">编辑图片</div>
             <div class="area-row">
                 <img :src="editResult" v-if="editResult" class="edit-res-pic" alt="">
-                <span v-else>请选择图片进行编辑</span>
+                <span class="ft-italic" v-else>请选择图片进行编辑</span>
             </div>
         </div>
         <!-- 图片 路径 -->
         <div class="btn-group line-spt-bott">
             <div class="area-row">
-                13. 开发环境下资源引用方式
+                <span class="sei-no">13. </span>开发环境下资源引用方式
                 <br>
                 当你在 JavaScript、CSS 或 *.vue 文件中使用相对路径 (必须以 . 开头) 引用一个静态资源时，该资源将会被包含进入 webpack 的依赖图中。在其编译过程中，所有诸如 &lt;img src="...">、css内的background: url(...) 和 CSS @import 的资源 URL 都会被解析为一个模块依赖。
                 <br>
@@ -123,7 +122,7 @@
         </div>
         <div class="btn-group">
             <div class="area-row">
-                14. 页面头部(除去状态栏)默认高度为44px
+                <span class="sei-no">14. </span>页面头部(除去状态栏)默认高度为 44px
             </div>
         </div>
     </div>
@@ -147,6 +146,9 @@ export default {
     computed: {
         currDate() {
             return new Date().format('yyyy-MM-dd')
+        },
+        frameName() {
+            return api.frameName
         }
     },
     mounted() {
@@ -254,7 +256,7 @@ export default {
             // self.$comm.ajax({url: 'xxx', data: {values: {}}}).then().catch()
             setTimeout(() => {
                 self.hideProgress()
-                var slideData = ['./image/slide1.png', './image/slide2.png', './image/slide3.png']
+                var slideData = ['./image/slide3.png', './image/slide2.png', './image/slide1.png']
                 api.refreshHeaderLoadDone()
                 if (self.slideObj) {
                     self.slideObj.reloadData({
@@ -270,33 +272,25 @@ export default {
         // 退出登录
         logOut() {
             const self = this
-            api.confirm({
-                title: '提示',
-                msg: '登出提示',
-                buttons: ['确定', '取消']
-            }, (ret, err) => {
-                if (ret.buttonIndex == 1) {
-                    self.rmStorage('token')
-                    api.execScript({
-                        name: 'root',
-                        script: '$vm.openLoginWhenTokenInvalid()'
-                    })
-                    api.closeToWin({
-                        name: 'root',
-                        animation: {
-                            type: "movein",
-                            subType: "from_left",
-                            duration: 300
-                        }
-                    })
+            self.rmStorage('token')
+            api.execScript({
+                name: 'root',
+                script: '$vm.openLoginWhenTokenInvalid()'
+            })
+            api.closeToWin({
+                name: 'root',
+                animation: {
+                    type: "movein",
+                    subType: "from_left",
+                    duration: 300
                 }
             })
         },
         // 打开一个新的frame 弹窗
         openFramePop() {
             // 打开 frame 弹窗 第二个参数为所传参数
-            this.$comm.openPopFrame('tmp_pop', {
-                title: 'frame 弹窗'
+            this.$comm.openPopFrame('confirm_pop', {
+                content: 'frame 弹窗'
             })
         },
         //日期选择 参数一 选择日期的标识， 参数二 是否选择日期区间
@@ -368,38 +362,41 @@ export default {
         },
         // 清除缓存
         clearCache() {
-            api.confirm({
-                title: '提示',
-                msg: '是否清除缓存？',
-                buttons: ['确定', '取消']
-            }, (ret, err) => {
-                if (ret.buttonIndex === 1) {
-                    api.clearCache(() => {
-                        api.toast({
-                            msg: '清除完成'
-                        })
-                    })
-                }
+            const self = this
+            self.showProgress('请稍后...')
+            api.clearCache(() => {
+                self.hideProgress()
+                api.toast({
+                    msg: '清除完成'
+                })
             })
         },
         // 动态权限实例
         dynamicPermissionsCase() {
             const self = this
             let perm = 'camera'
-            self.$comm.testAndReqPermission(perm).then(res => {
-                alert('已允许打开相机，请前往 设置>应用>权限管理 关闭后重试')
-                api.getPicture({
-                    sourceType: 'camera',
-                    encodingType: 'jpg',
-                    mediaValue: 'pic',
-                    destinationType: 'url',
-                    quality: 100,
-                    saveToPhotoAlbum: false
-                }, (ret, err) => {
-                    if (ret) {
-                        console.log(JSON.stringify(ret))
-                    }
+            let resultList = api.hasPermission({
+                list: [perm]
+            })
+            if (resultList[0].granted) {
+                self.$comm.openPopFrame('confirm_pop', {
+                    content: '已允许打开相机权限，请前往 设置>应用>权限管理 关闭后重试',
+                    showCancel: false
                 })
+            } else {
+                self.$comm.testAndReqPermission(perm).then(res => {
+                    self.premToOpenCamera()
+                })
+            }
+        },
+        premToOpenCamera() {
+            api.getPicture({
+                sourceType: 'camera',
+                encodingType: 'jpg',
+                mediaValue: 'pic',
+                destinationType: 'url',
+                quality: 100,
+                saveToPhotoAlbum: false
             })
         },
         // 图片选择 前往裁剪并获取输出图片显示
@@ -457,6 +454,7 @@ export default {
 
 <style lang="scss">
 .container {
+    opacity: 0;
     text-align: center;
 }
 
@@ -483,18 +481,19 @@ export default {
         font-size: .24rem;
         color: #fff;
         border-radius: .6rem;
-        border: 1px solid #748861;
-        padding: 0 .4rem;
+        border: 1px solid #94a585;
+        padding: 0 .3rem;
         text-align: center;
         transition: all .3s;
         margin-right: .1rem;
         margin-bottom: .2rem;
-        background: #748861;
+        background: #94a585;
+        letter-spacing: 1px;
     }
 
     .btn:active {
-        border-color: #b7c1b6;
-        background: #b7c1b6;
+        border-color: #748861;
+        background: #748861;
     }
 }
 
@@ -506,10 +505,13 @@ export default {
 
 .area-row {
     width: 100%;
-    line-height: .6rem;
+    line-height: .5rem;
     text-align: left;
     margin: .2rem 0;
-    font-size: .24rem;
+    font-size: .26rem;
+    color: #666b62;
+    letter-spacing: 1px;
+    word-break: break-all;
 }
 
 .row-ing-wap {
@@ -537,5 +539,17 @@ export default {
 
 .edit-res-pic {
     border-radius: 4px;
+}
+
+.sei-no {
+    font-size: .28rem;
+    font-weight: bold;
+    color: #748861;
+    font-style: italic;
+}
+
+.ft-italic {
+    color: #a1a59e;
+    font-style: italic;
 }
 </style>

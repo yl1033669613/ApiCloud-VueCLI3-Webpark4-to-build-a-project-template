@@ -1,6 +1,5 @@
 <template>
-<div class="container">
-    <div class="mask-wt" :class="{pageFadeIn: aniAct}"></div>
+<div class="container" :class="{fadeIn: aniAct}">
     <div class="back-top" @click="backTop()" :style="{opacity: !isTop && !isScrolling ? 1 : .4}">
         <img src="@/assets/back_top_news.png" alt="">
     </div>
@@ -270,6 +269,7 @@ export default {
 
 <style lang="scss">
 .container {
+    opacity: 0;
     padding-top: .2rem;
 }
 
@@ -288,6 +288,7 @@ export default {
             font-size: .28rem;
             transition: all .2s;
             margin-bottom: .1rem;
+            letter-spacing: 1px;
         }
 
         &:active .title {
@@ -299,6 +300,7 @@ export default {
         }
 
         .info {
+            letter-spacing: 1px;
             font-size: .2rem;
             color: #bbb;
             display: flex;

@@ -1,7 +1,7 @@
 <template>
 <header class="c-linear-gradient">
     <div class="inner">
-        <a class="back" :back="back" @click="closeWin"></a>
+        <a class="back" :class="{webback: isWeb}" :back="back" @click="closeWin"></a>
         <span class="title text-ellipsis">{{title}}</span>
     </div>
     <slot></slot>
@@ -18,6 +18,10 @@ export default {
         back: {
             type: Boolean,
             default: true
+        },
+        isWeb: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {
@@ -69,12 +73,19 @@ header {
     .back {
         position: absolute;
         left: 0;
-        padding-left: 0.9rem;
         top: 0;
-        width: 28px;
+        display: block;
+        padding-left: 0.9rem;
         height: 44px;
-        background: url(../assets/back_white.png) no-repeat center center;
+        background-image: url(../assets/back_white.png);
+        background-repeat: no-repeat;
         background-size: 8px 14px;
+        background-position: .22rem center;
+
+        &.webback {
+            background-image: url(../assets/page_close.png);
+            background-size: 14px 14px;
+        }
     }
 }
 </style>

@@ -64,4 +64,8 @@
 
     <preference name="customRefreshHeader" value="UIPullRefreshFlash"/>
 
+	<feature name="bMap">
+		<param name="android_api_key" value="wHGZZfRThnesKGrFYXGBSfK87wtdGevl" />
+		<param name="ios_api_key" value="ty4YsxvyVn4qziymfVq2IZlRqz8vFpWy" />
+	</feature>
 </widget>

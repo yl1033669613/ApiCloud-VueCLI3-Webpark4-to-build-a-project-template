@@ -5,10 +5,10 @@
         <transition name="fade">
             <div class="home-header-inside" v-show="active === 0">
                 <p class="home-header-inside__title">{{tabs[0].name}}</p>
-                <div class="local-btn">
+                <div class="local-btn" @click="$comm.openWin({name: 'my_pos', pageParam: {title: '我的位置'}})">
                     <img src="@/assets/pos_ico.png" alt="">
                 </div>
-                <div class="search-btn">
+                <div class="search-btn" @click="$comm.openWin({name: 'home_search', pageParam: {title: '搜索·百度', webUrl: 'https://www.baidu.com/'}})">
                     <img src="@/assets/search_cio.png" alt="">
                 </div>
             </div>
@@ -88,8 +88,8 @@ export default {
                     notFirst: false
                 },
                 {
-                    page: 'message',
-                    name: '消息',
+                    page: 'life',
+                    name: '生活',
                     normal: './image/tabbar/4.png',
                     active: './image/tabbar/4_ac.png',
                     notFirst: false
@@ -325,6 +325,9 @@ export default {
                 setTimeout(() => {
                     self.active = 0
                     self.title = self.tabs[self.active].name
+                    self.tabs.forEach((a) => {
+                        a.notFirst = false
+                    })
                     // 退出登录 则关闭framegroup
                     api.closeFrameGroup({
                         name: 'group'
@@ -483,9 +486,9 @@ header {
             bottom: 0;
             margin: auto 0;
             height: 40%;
-            width: 3px;
+            width: 4px;
             background: #fff;
-            border-radius: 3px;
+            border-radius: 1px;
         }
     }
 
@@ -528,8 +531,8 @@ header {
             margin: auto;
 
             &.size-ct {
-                width: 22px;
-                height: 22px;
+                width: 23px;
+                height: 23px;
             }
         }
     }

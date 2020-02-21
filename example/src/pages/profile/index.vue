@@ -1,6 +1,5 @@
 <template>
-<div class="container">
-    <div class="mask-wt" :class="{pageFadeIn: aniAct}"></div>
+<div class="container" :class="{fadeIn: aniAct}">
     <div class="profile-top c-linear-gradient">
         <div class="base-info">
             <div class="avatar">
@@ -13,7 +12,9 @@
     </div>
     <div class="card-group">
         <div class="card no-pad-img">
-            <span v-if="!imgLoadFinished">加载中...</span>
+            <span v-if="!imgLoadFinished">
+                <loading color="#ffffff"></loading>
+            </span>
             <img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg" alt="">
         </div>
         <div class="spt">· 信息 ·</div>
@@ -65,9 +66,13 @@
 </template>
 
 <script>
+import Loading from '../../components/loading'
 export default {
     name: 'profile',
-    data () {
+    components: {
+        Loading
+    },
+    data() {
         return {
             aniAct: false,
             imgLoadFinished: false
@@ -94,7 +99,7 @@ export default {
                 })
             }, 0)
         },
-        loadImg () {
+        loadImg() {
             this.imgLoadFinished = true
         }
     }
@@ -102,6 +107,10 @@ export default {
 </script>
 
 <style lang="scss">
+.container {
+    opacity: 0;
+}
+
 .profile-top {
     padding: .3rem .3rem;
     box-sizing: border-box;
@@ -225,7 +234,7 @@ export default {
             font-style: .22rem;
             color: #fff;
             text-align: center;
-            opacity: .5;
+            opacity: .8;
         }
     }
 
