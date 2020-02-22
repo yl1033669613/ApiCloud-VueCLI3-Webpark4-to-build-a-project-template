@@ -7,7 +7,16 @@
     </div>
     <div class="bott-area">
         <div class="shadow-top"></div>
-        <div class="my-pos-txt">我的位置</div>
+        <div class="btn-pos">
+            <div class="inner" @click="posCenter">
+                <img src="@/assets/pos_map_center.png" alt="">
+            </div>
+        </div>
+        <div class="my-pos-txt">
+            <div class="midd">
+                {{areaData.country || '--'}} {{areaData.address}} {{areaData.sematicDescription}} <span v-if="areaData">当前位置</span>
+            </div>
+        </div>
     </div>
 </div>
 </template>
@@ -24,7 +33,7 @@ export default {
             map: null,
             lon: 0,
             lat: 0,
-            areaData: ''
+            areaData: {}
         }
     },
     created() {
@@ -56,27 +65,38 @@ export default {
                     x: 0,
                     y: 0,
                     w: api.frameWidth,
-                    h: api.frameHeight - 100
+                    h: api.frameHeight - 80
                 },
                 center: {
                     lon: self.lon,
                     lat: self.lat
                 },
-                zoomLevel: 15,
+                zoomLevel: 18,
                 fixedOn: api.frameName
             }, (ret) => {
                 if (ret.status) {
-                    self.map.setShowMapPoi({
-                        showMapPoi: true
-                    })
-                    self.map.setOverlook({
-                        degree: -30
-                    })
                     self.map.setScaleBar({
                         show: true,
                         position: {
                             x: 10,
-                            y: 10
+                            y: api.frameHeight - 130
+                        }
+                    })
+                    self.map.setOverlook({
+                        degree: -45
+                    })
+                    self.map.setBuilding({
+                        building: true
+                    })
+                    self.map.addAnnotations({
+                        annotations: [{
+                            id: 1,
+                            lon: self.lon,
+                            lat: self.lat
+                        }]
+                    }, function (ret) {
+                        if (ret) {
+                            alert(ret.id)
                         }
                     })
                 }
@@ -106,9 +126,16 @@ export default {
             }, (ret, err) => {
                 if (ret && ret.status) {
                     self.areaData = ret
-                    alert(ret.sematicDescription)
                 } else {
                     alert(JSON.stringify(err))
+                }
+            })
+        },
+        posCenter() {
+            this.map.setCenter({
+                coords: {
+                    lon: this.lon,
+                    lat: this.lat
                 }
             })
         }
@@ -119,7 +146,8 @@ export default {
 <style lang="scss">
 .container {
     position: relative;
-    background-color: #a0a7ba;
+    background-image: linear-gradient(90deg, rgba(139, 167, 111, 0.9), rgba(217, 201, 175, .9));
+    background-blend-mode: normal, normal;
     height: 100vh;
 }
 
@@ -129,24 +157,77 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 100px;
+    height: 80px;
     padding: 0 .2rem;
+    display: flex;
 
     .shadow-top {
         position: absolute;
-        top: -100px;
-        height: 100px;
+        top: -80px;
+        height: 80px;
         left: 0;
         width: 100%;
         z-index: 1;
         box-shadow: 0 .2rem .3rem rgba(0, 0, 0, .3);
     }
 
+    .btn-pos {
+        width: 50px;
+        height: 100%;
+        position: relative;
+
+        .inner {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
+            background: rgba(255, 255, 255, .8);
+            margin-top: 20px;
+
+            img {
+                width: 70%;
+                height: 70%;
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                top: 0;
+                margin: auto;
+            }
+        }
+    }
+
     .my-pos-txt {
-        line-height: 50px;
+        line-height: 26px;
         font-weight: bold;
         color: #fff;
         letter-spacing: 1px;
+        font-size: 15px;
+        position: relative;
+        width: calc(100% - 50px);
+
+        span {
+            font-size: 7px;
+            line-height: 11px;
+            margin-left: 5px;
+            color: #6c8851;
+            font-weight: normal;
+            background: rgba(255, 255, 255, .6);
+            display: inline-block;
+            vertical-align: top;
+            padding: 3px 6px;
+            border-radius: 2px;
+            font-style: italic;
+        }
+
+        .midd {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translate3d(0, -50%, 0);
+            width: 100%;
+        }
     }
 }
 
@@ -155,7 +236,7 @@ export default {
     top: 0;
     left: 0;
     right: 0;
-    bottom: 100px;
+    bottom: 80px;
     background: #d6c4a9;
     z-index: 100;
 

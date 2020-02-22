@@ -82,11 +82,11 @@ html {
     background: #fff;
     box-sizing: border-box;
     padding-bottom: 1.2rem;
-    border-radius: .5rem;
+    border-radius: .4rem;
     box-shadow: 0 0 .6rem rgba(0, 0, 0, .5);
 
     .pop-head {
-        border-radius: 0.5rem;
+        border-radius: 0.4rem;
         background-color: #fff;
     }
 

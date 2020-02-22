@@ -55,7 +55,7 @@ export default {
         })
         // 下拉刷新
         self.$comm.pullDown(() => {
-            if (self.isLoading) {
+            if (self.isLoading || self.currLoadNum !== 0) {
                 api.refreshHeaderLoadDone()
                 return
             } // 正在加载时阻阻止继续加载
@@ -115,7 +115,6 @@ export default {
                 item.finish = true // 设置图片渲染完成 可以显示图片 opacity -> 1
             }
             this.startIndex = this.list.length // 设置下次图片显示的起始位置
-            this.hideProgress()
         },
         getList(isPullDown) {
             const self = this
@@ -125,7 +124,6 @@ export default {
                 url: 'https://api.unsplash.com/photos?client_id=0464ed919d50eefa66b4675c8747a8d24ae63af6632397d464338958ef48dbb4&per_page=20&page=' + self.page,
                 method: 'get',
                 timeout: 30,
-                dataType: '',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
@@ -136,9 +134,6 @@ export default {
                         res[i].picUrl = res[i].urls.regular
                     }
                     let list = res
-                    if (list.length === 0) {
-                        self.hideProgress()
-                    }
                     if (isPullDown) {
                         api.refreshHeaderLoadDone()
                     }
@@ -147,7 +142,7 @@ export default {
                     self.$comm.fnImageCache({
                         datas: list,
                         imgKey: 'picUrl',
-                        timeout: 20000
+                        timeout: 60000
                     }).then(ret => {
                         self.isLoading = false
                         for (let v = 0; v < ret.length; v++) {
@@ -160,7 +155,6 @@ export default {
                     self.page++
                 } else {
                     self.isLoading = false
-                    self.hideProgress()
                     api.refreshHeaderLoadDone()
                     console.log(JSON.stringify(err))
                 }
