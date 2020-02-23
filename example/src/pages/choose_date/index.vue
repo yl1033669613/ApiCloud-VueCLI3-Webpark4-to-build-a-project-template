@@ -2,11 +2,11 @@
 <div class="container">
     <div class="date-selset-container" @touchstart="handleStart" @touchend="handleEnd">
         <div class="row-year-txt">
-            <span class="arrow" @click="cutMonth('prev')"><img src="@/assets/prev.png" alt=""></span>
+            <span class="arrow left-ds" @click="cutMonth('prev')"><img src="@/assets/prev.png" alt=""></span>
             <span class="arrow year-swt" @click="cutYear('prev')"><img src="@/assets/dub_prev.png" alt=""></span>
             <span>{{currYear}}-{{currM}}</span>
             <span class="arrow year-swt" @click="cutYear('next')"><img src="@/assets/dub_next.png" alt=""></span>
-            <span class="arrow" @click="cutMonth('next')"><img src="@/assets/next.png" alt=""></span>
+            <span class="arrow right-ds" @click="cutMonth('next')"><img src="@/assets/next.png" alt=""></span>
         </div>
         <div class="row-item weeks">
             <div class="row-inner-date" v-for="(item, index) in weekTxt" :key="item">
@@ -367,7 +367,7 @@ export default {
 
         .arrow {
             display: block;
-            width: 1rem;
+            width: .52rem;
             height: 100%;
             position: relative;
         }
@@ -381,14 +381,14 @@ export default {
             height: .25rem;
             position: absolute;
             top: 0;
-            right: 0;
             bottom: 0;
-            left: 0;
             margin: auto;
         }
 
         .arrow.year-swt img {
             width: .24rem;
+            left: 0;
+            right: 0;
         }
     }
 
@@ -572,5 +572,13 @@ export default {
 
 .dates-items-ctn {
     padding: 0 .1rem;
+}
+
+.left-ds img{
+    left: .2rem;
+}
+
+.right-ds img{
+    right: .2rem;
 }
 </style>

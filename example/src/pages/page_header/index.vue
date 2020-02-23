@@ -37,6 +37,11 @@ export default {
                         y: document.querySelector('header').offsetHeight,
                         width: api.winWidth,
                         height: 'auto'
+                    },
+                    progress: {
+                        type: 'page',
+                        color: '#a0a7ba',
+                        height: 2
                     }
                 })
             } else {

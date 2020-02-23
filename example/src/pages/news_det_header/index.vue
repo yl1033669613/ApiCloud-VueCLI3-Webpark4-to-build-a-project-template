@@ -39,6 +39,11 @@ export default {
                     y: document.querySelector('header').offsetHeight,
                     width: api.winWidth,
                     height: 'auto'
+                },
+                progress: {
+                    type: 'page',
+                    color: '#a0a7ba',
+                    height: 2
                 }
             })
             // 窗口尺寸变化是调整frame布局
@@ -53,7 +58,7 @@ export default {
     height: 100%;
     width: 100%;
 
-    .red-bg-header{
+    .red-bg-header {
         background: #ff3333 !important;
     }
 
@@ -63,7 +68,8 @@ export default {
 
     .bott-border {
         position: relative;
-        &::after{
+
+        &::after {
             content: '';
             position: absolute;
             display: block;
