@@ -455,7 +455,7 @@ export default {
     }
 
     .startendactive span {
-        background: #b7c1b6;
+        background: #94a585;
         color: #fff;
     }
 
@@ -551,7 +551,7 @@ export default {
     span {
         border-radius: 4px 4px 0 0;
         display: block;
-        background: #b7c1b6;
+        background: #94a585;
         height: 1rem;
         letter-spacing: 2px;
     }

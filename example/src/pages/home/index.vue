@@ -120,16 +120,10 @@
                 因此此类资源请放在assets文件夹内，在publish下的文件只是简单的复制，请使用编译后的文件关系引用(即实际app内文件引用方式)
             </div>
         </div>
-        <div class="btn-group line-spt-bott">
+        <div class="btn-group">
             <div class="area-row">
                 <span class="sei-no">14. </span>页面头部(除去状态栏)默认高度为 44px
             </div>
-        </div>
-        <div class="btn-group">
-            <div class="area-row">
-                <span class="sei-no">15. </span>卡片左右切换
-            </div>
-            <div class="btn" @click="$comm.openWin({name: 'switching_page', pageParam: {title: 'switching'}})">查看示例</div>
         </div>
     </div>
 </div>

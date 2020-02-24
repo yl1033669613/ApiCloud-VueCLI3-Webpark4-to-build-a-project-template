@@ -104,7 +104,7 @@ export default {
             ],
             //登录状态
             tokenInvalid: false,
-            menuVis: true,
+            menuVis: false,
             newsAct: 0
         }
     },

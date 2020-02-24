@@ -1,6 +1,11 @@
 <template>
 <div class="container" :class="{fadeIn: aniAct}">
-    <div class="banner" style="background-image: url(https://unsplash.it/700/310/?random)"></div>
+    <div class="banner">
+        <span v-if="!imgLoadFinished">
+            <loading color="#ffffff"></loading>
+        </span>
+        <img src="https://unsplash.it/700/310/?random" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg" alt="">
+    </div>
     <!-- apicloud里瀑布流布局 方案 -->
     <div class="declare">Photos for everyone ~</div>
     <div class="declare small">图片数据均来自https://unsplash.com/</div>
@@ -22,10 +27,12 @@
 
 <script>
 import Listloading from '../../components/listloading'
+import Loading from '../../components/loading'
 export default {
     name: 'photos',
     components: {
-        Listloading
+        Listloading,
+        Loading
     },
     data() {
         return {
@@ -40,7 +47,8 @@ export default {
             rightH: 0,
             sysW: 0, // 当前设备屏幕宽度
             currLoadNum: 0, // 剩余需加载图片数量
-            startIndex: 0 // 图片显示的起始位置 默认0
+            startIndex: 0, // 图片显示的起始位置 默认0
+            imgLoadFinished: false
         }
     },
     created() {
@@ -164,6 +172,9 @@ export default {
             api.pageUp({
                 top: true
             })
+        },
+        loadImg() {
+            this.imgLoadFinished = true
         }
     }
 }
@@ -273,11 +284,33 @@ export default {
 
 .banner {
     margin: 0 .2rem;
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 3.12rem;
+    height: 3.1849rem;
     border-radius: .2rem;
-    background-color: #eacdd2;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
+    background: #eacdd2;
+    position: relative;
+
+    img {
+        transition: all .6s;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        border-radius: .2rem;
+    }
+
+    span {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        transform: translate3d(0, -50%, 0);
+        display: block;
+        font-style: .22rem;
+        color: #fff;
+        text-align: center;
+        opacity: .8;
+    }
 }
 </style>

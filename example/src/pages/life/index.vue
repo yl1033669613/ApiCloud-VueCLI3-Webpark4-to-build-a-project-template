@@ -47,15 +47,40 @@
                 </div>
             </div>
         </div>
+        <div class="view-img">
+            <span v-if="!imgLoadFinished">
+                <loading color="#ffffff"></loading>
+            </span>
+            <img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg(false)" alt="">
+        </div>
+        <div class="links-sec" @click="$comm.openWin({name: 'switching_page', headerName: 'switching_page_header', pageParam: {title: '网易新闻·卡片'}})">
+            <div class="more" @click.stop="toNewsPage"><img src="@/assets/more.png" alt=""></div>
+            <div class="btn-news">NEWS</div>
+        </div>
+        <div class="links-sec game" @click="$comm.openWin({name: 'game_det', headerName: 'game_det_header', pageParam: {title: 'COCOS CREATOR GAMES'}})">
+            <div class="btn-news">GAME</div>
+        </div>
+        <div class="right-camera" @click="openCamera">
+            <img src="@/assets/camera.png" alt="">
+        </div>
+        <div class="view-img bgc-unpl">
+            <span v-if="!imgLoadFinished1">
+                <loading color="#ffffff"></loading>
+            </span>
+            <img src="https://unsplash.it/960/540/?random" :style="{opacity: imgLoadFinished1 ? 1 : 0}" @load="loadImg(true)" alt="">
+        </div>
     </div>
 </div>
 </template>
 
 <script>
 import sloarToLunar from '../../libs/gc2lc'
+import Loading from '../../components/loading'
 export default {
     name: 'life',
-
+    components: {
+        Loading
+    },
     data() {
         return {
             aniAct: false,
@@ -76,7 +101,9 @@ export default {
             },
             timer: null,
             areaData: {},
-            weatherData: {}
+            weatherData: {},
+            imgLoadFinished: false,
+            imgLoadFinished1: false
         }
     },
     created() {
@@ -196,6 +223,31 @@ export default {
                     console.log(JSON.stringify(ret))
                 }
             })
+        },
+        loadImg(isun) {
+            if (isun) {
+                this.imgLoadFinished1 = true
+            } else {
+                this.imgLoadFinished = true
+            }
+        },
+        openCamera() {
+            this.$comm.testAndReqPermission('camera').then(res => {
+                api.getPicture({
+                    sourceType: 'camera',
+                    encodingType: 'jpg',
+                    mediaValue: 'pic',
+                    destinationType: 'url',
+                    quality: 100,
+                    saveToPhotoAlbum: false
+                })
+            })
+        },
+        toNewsPage() {
+            api.execScript({
+                name: 'root',
+                script: '$vm.switchTab(' + 1 + '); $vm.menuVis = true'
+            })
         }
     }
 }
@@ -215,7 +267,7 @@ export default {
 }
 
 .date-area {
-    margin: 0 .1rem;
+    margin: 0 .2rem;
 
     .hour-txt {
         width: 60%;
@@ -227,9 +279,9 @@ export default {
         color: #965456;
         font-weight: 1000;
         font-size: 1.1rem;
-        border-radius: .1rem 0 0 0;
         box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
         text-shadow: 0 4px 6px rgba(0, 0, 0, .4);
+        border-radius: .35rem;
     }
 
     .second {
@@ -240,177 +292,297 @@ export default {
         font-size: 1.6rem;
         text-align: center;
         color: #fff;
-        font-weight: bold;
 
         .inner {
             height: 100%;
             background-image: linear-gradient(90deg, #ebced3, #a0a7ba);
             background-blend-mode: normal, normal;
             box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
+            border-radius: .35rem;
         }
     }
+}
 
-    .date-info {
-        margin-top: .2rem;
-        width: 100%;
-        background-image: linear-gradient(90deg, #dad3ae, rgba(140, 167, 114, 0.9));
+.date-info {
+    margin-top: .3rem;
+    width: 100%;
+    background-image: linear-gradient(90deg, #e6dba4, rgba(140, 167, 114, 0.9));
+    box-sizing: border-box;
+    padding: .2rem;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
+    border-radius: .35rem;
+
+    .world-date {
+        padding-left: 1.85rem;
+        height: 1.2rem;
         box-sizing: border-box;
-        padding: .2rem;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
-
-        .world-date {
-            padding-left: 1.85rem;
-            height: 1.2rem;
-            box-sizing: border-box;
-            position: relative;
-            display: flex;
-            letter-spacing: 1px;
-
-            .ctn-right {
-                width: 100%;
-            }
-
-            .gc-day {
-                position: absolute;
-                left: 0;
-                top: 0;
-                line-height: 1.2rem;
-                width: 1.6rem;
-                border-radius: .1rem;
-                color: #7d8971;
-                height: 1.2rem;
-                text-align: center;
-                background: rgba(255, 255, 255, .3);
-                font-size: .75rem;
-            }
-
-            .gc-year-month {
-                color: #fff;
-                width: 100%;
-                box-sizing: border-box;
-                padding-left: .6rem;
-                font-size: .235rem;
-                line-height: .4rem;
-                vertical-align: top;
-                display: inline-block;
-                font-weight: 1000;
-                position: relative;
-                margin-top: .1rem;
-
-                img {
-                    height: .35rem;
-                    width: .35rem;
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    margin: auto 0;
-                }
-            }
-
-            .lc-date {
-                padding-left: .6rem;
-                position: relative;
-                line-height: .4rem;
-                padding-top: .2rem;
-                padding-bottom: .1rem;
-
-                .lc-day {
-                    color: #7d8971;
-                    font-size: .22rem;
-                    font-weight: 1000;
-                    margin-right: .2rem;
-                }
-
-                .lc-year {
-                    color: #fff;
-                    font-size: .18rem;
-                }
-
-                .lc-ico {
-                    height: .35rem;
-                    width: .35rem;
-                    position: absolute;
-                    top: .1rem;
-                    bottom: 0;
-                    left: 0;
-                    margin: auto 0;
-                }
-            }
-        }
-    }
-
-    .date-weather {
-        margin-top: .2rem;
-        padding: .2rem;
-        background: #ccc;
-        box-sizing: border-box;
-        width: 100%;
-        border-radius: 0 0 .1rem .1rem;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, .3);
-        background-image: linear-gradient(90deg, #8790a8, rgba(153, 82, 88, .1));
-        background-blend-mode: normal, normal;
         position: relative;
-        transition: all .1s;
+        display: flex;
+        letter-spacing: 1px;
 
-        &:active {
-            transform: scale(.98);
+        .ctn-right {
+            width: 100%;
+        }
+    }
+
+    .gc-day {
+        position: absolute;
+        left: 0;
+        top: 0;
+        line-height: 1.2rem;
+        width: 1.6rem;
+        color: #7d8971;
+        height: 1.2rem;
+        text-align: center;
+        background: rgba(255, 255, 255, .3);
+        font-size: .75rem;
+        border-radius: .2rem;
+        font-weight: bold;
+    }
+
+    .gc-year-month {
+        color: #fff;
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: .6rem;
+        font-size: .22rem;
+        line-height: .4rem;
+        vertical-align: top;
+        display: inline-block;
+        font-weight: 1000;
+        position: relative;
+        margin-top: .1rem;
+
+        img {
+            height: .35rem;
+            width: .35rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            margin: auto 0;
+        }
+    }
+
+    .lc-date {
+        padding-left: .6rem;
+        position: relative;
+        line-height: .4rem;
+        padding-top: .2rem;
+        padding-bottom: .1rem;
+
+        .lc-day {
+            color: #7d8971;
+            font-size: .2rem;
+            font-weight: 1000;
+            margin-right: .2rem;
         }
 
-        .more {
+        .lc-year {
+            color: #fff;
+            font-size: .16rem;
+            font-weight: 1000;
+        }
+
+        .lc-ico {
+            height: .35rem;
+            width: .35rem;
             position: absolute;
-            top: .2rem;
-            right: .2rem;
+            top: .1rem;
+            bottom: 0;
+            left: 0;
+            margin: auto 0;
+        }
+    }
+}
+
+.date-weather {
+    margin-top: .3rem;
+    padding: .2rem;
+    background: #ccc;
+    box-sizing: border-box;
+    width: 100%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
+    background-image: linear-gradient(90deg, #7b88ad, rgba(153, 82, 88, .3));
+    background-blend-mode: normal, normal;
+    position: relative;
+    transition: all .1s;
+    letter-spacing: 1px;
+    border-radius: .35rem;
+
+    &:active {
+        transform: scale(.98);
+    }
+
+    .more {
+        position: absolute;
+        top: .2rem;
+        right: .2rem;
+        width: .4rem;
+        height: .4rem;
+    }
+
+    .loc-txt {
+        line-height: .4rem;
+        font-size: .22rem;
+        color: #fff;
+
+        img {
+            width: .2rem;
+            height: .2rem;
+            vertical-align: middle;
+            margin-top: -2px;
+        }
+    }
+}
+
+.weather-ctn {
+    position: relative;
+    padding-right: 1.6rem;
+
+    .cond-icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+
+    .right {
+        height: 1.4rem;
+        color: #fff;
+
+        .now-whr-desc {
+            font-size: .35rem;
+            font-weight: bold;
+            margin-bottom: .06rem;
+        }
+
+        .now-tmp {
+            font-size: .26rem;
+            line-height: .4rem;
+        }
+
+        .ut-txt {
+            font-style: italic;
+        }
+    }
+}
+
+.view-img {
+    margin-top: .3rem;
+    border-radius: .35rem;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
+    width: 100%;
+    min-height: calc((100vw - 0.4rem) * 0.5625);
+    background: #939cb6;
+    position: relative;
+
+    &.bgc-unpl {
+        background: #c9c36c;
+    }
+
+    img {
+        transition: all .6s;
+        opacity: 0;
+        width: 100%;
+        display: block;
+        border-radius: .3rem;
+    }
+
+    span {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        transform: translate3d(0, -50%, 0);
+        display: block;
+        font-style: .22rem;
+        color: #fff;
+        text-align: center;
+        opacity: .8;
+    }
+}
+
+.links-sec {
+    margin-top: .3rem;
+    padding-top: 33%;
+    background-image: linear-gradient(90deg, #748861, #dacab1);
+    background-blend-mode: normal, normal;
+    position: relative;
+    width: 33%;
+    border-radius: .35rem;
+    color: #fff;
+    font-size: .5rem;
+    font-weight: 1000;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
+    margin-right: .2rem;
+    transition: all .1s;
+    letter-spacing: 1px;
+
+    &:active {
+        transform: scale(.98);
+    }
+
+    &.game {
+        background-image: linear-gradient(90deg, #995258, #a0a7ba);
+        background-blend-mode: normal, normal;
+    }
+
+    .btn-news {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .more {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: .4rem;
+        height: .4rem;
+        padding: .2rem;
+        box-sizing: content-box;
+        z-index: 10;
+
+        img {
+            display: block;
             width: .4rem;
             height: .4rem;
         }
+    }
+}
 
-        .loc-txt {
-            line-height: .4rem;
-            font-size: .22rem;
-            color: #fff;
+.right-camera {
+    margin-top: .3rem;
+    padding-top: 33%;
+    width: calc(100% - 66% - .4rem);
+    background-image: linear-gradient(90deg, #d8cab0, #ebced3);
+    background-blend-mode: normal, normal;
+    position: relative;
+    border-radius: .35rem;
+    transition: all .1s;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
 
-            img {
-                width: .2rem;
-                height: .2rem;
-                vertical-align: middle;
-                margin-top: -2px;
-            }
-        }
+    &:active {
+        transform: scale(.98);
     }
 
-    .weather-ctn {
-        position: relative;
-        padding-right: 1.6rem;
-
-        .cond-icon {
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 1.4rem;
-            height: 1.4rem;
-        }
-
-        .right {
-            height: 1.4rem;
-            color: #fff;
-
-            .now-whr-desc {
-                font-size: .3rem;
-                font-weight: bold;
-                margin-bottom: .1rem;
-                padding-top: .1rem;
-            }
-
-            .now-tmp {
-                font-size: .22rem;
-                line-height: .4rem;
-            }
-
-            .ut-txt {
-                font-style: italic;
-            }
-        }
+    img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        width: 50%;
     }
 }
 
@@ -418,7 +590,7 @@ export default {
     display: inline-block;
     border-radius: .2rem;
     background: rgba(0, 0, 0, .1);
-    padding: 0 .15rem;
+    padding: 0 .2rem;
     height: .4rem;
 }
 </style>

@@ -26,6 +26,7 @@ export default {
     },
     methods: {
         closeWin() {
+            this.$emit('tapback')
             api.closeWin()
         }
     }
