@@ -111,7 +111,6 @@ export default {
         const self = this
         self.aniAct = true
         self.listenPageScroll()
-        //api 初始化
         // 上拉加载
         self.$comm.pullUp(() => {
             if (self.isLoading || self.isLoadEnd) return
@@ -252,7 +251,7 @@ export default {
                 self.isTop = !ret.scrolled
             })
         },
-        toDet (item) {
+        toDet(item) {
             this.$comm.openWin({
                 name: 'news_det',
                 headerName: 'news_det_header',
@@ -368,7 +367,8 @@ export default {
     }
 }
 
-.list-bottom-tri {
+.list-bottom-tri,
+.list-bott-one-pic {
     flex-direction: column;
 
     .img-wrap {
@@ -394,30 +394,11 @@ export default {
     }
 }
 
-.list-bott-one-pic {
-    flex-direction: column;
-
-    .img-wrap {
-        display: flex;
-        margin: .1rem 0;
-
-        .img-ctn {
-            width: 100%;
-            height: 50vw;
-            border-radius: 3px;
-            background: #e8ebe6;
-        }
-
-        .img {
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
-            border-radius: 3px;
-        }
-    }
+.list-bott-one-pic .img-wrap .img-ctn {
+    width: 100%;
+    height: 50vw;
+    border-radius: 3px;
+    background: #e8ebe6;
 }
 
 .list-col-xs-4 {

@@ -1,6 +1,7 @@
 <template>
 <!-- 这是app启动的root页面 必须命名为index -->
 <div id="wrap" class="flex-wrap flex-vertical" @touchmove="handleRootPageScoll($event)">
+    <!-- 根页面头部，单独样式，请使用<header>标签 -->
     <header ref="header">
         <div class="inner">
             <span class="title" v-for="(item, idx) in tabs" :key="idx" v-show="active === idx">{{item.name}}</span>
@@ -63,7 +64,7 @@ export default {
         self.checkLoginState((state) => {
             if (state) {
                 self.tokenInvalid = false
-                api.setStatusBarStyle({
+                api.setStatusBarStyle({ // 请根据app设计合理设置状态栏对比色
                     style: 'light'
                 })
                 //通过setTimeout将js放到最后执行 保证能获取到header高度
@@ -76,7 +77,7 @@ export default {
         })
     },
     methods: {
-        // 禁止根页面滚动
+        // 根页面不需要滚动禁止根页面滚动
         handleRootPageScoll(e) {
             e.preventDefault()
         },
@@ -146,6 +147,7 @@ export default {
                     overScrollMode: 'scrolls'
                 })
             }
+            // 设置frameGroup位置
             let rect = {
                 x: 0,
                 y: self.$refs.header.offsetHeight,
@@ -154,7 +156,7 @@ export default {
                     self.$refs.header.offsetHeight -
                     self.$refs.footer.offsetHeight
             }
-            self.$comm.resizeFrame('group', 0)
+            self.$comm.resizeFrame('group', 0) // 监听root页窗口变化，从而重新设置frameGroup的高度
             api.openFrameGroup({
                 name: 'group',
                 scrollEnabled: false,
@@ -164,7 +166,7 @@ export default {
                 frames: frames
             })
         },
-        // root 页底部nav 切换
+        // root 页底部tab切换
         switchTab(index) {
             let idx = parseInt(index)
             if (this.active != idx) {
@@ -177,7 +179,7 @@ export default {
                 this.resetFrameRect()
             }
         },
-        //重新设置frame rect
+        //重新设置frameGroup的位置
         resetFrameRect() {
             const self = this
             self.$nextTick(() => {
@@ -315,7 +317,7 @@ body,
 // root header
 header {
     text-align: center;
-    background: #b7c1b6;
+    background: #748f5a;
     position: relative;
     height: auto;
     min-height: 44px;

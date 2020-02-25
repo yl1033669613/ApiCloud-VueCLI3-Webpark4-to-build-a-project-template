@@ -6,19 +6,20 @@
             <div class="area-row">
                 1. app退出示例，关闭frameGroup打开登陆页
             </div>
+            <!-- 退出示例，通过在root（index）页打开frame来实现。因此退出登录时需要先返回到root（index）页-->
             <div class="btn" @click="logOut">退出</div>
         </div>
         <div class="btn-group line-spt-bott">
             <div class="area-row">
                 2. 公共头部和特殊头部页面的实现
             </div>
-            <!-- 打开普通 header 的 window -->
-            <div class="btn" @click="openWin('normal_header_win', '普通win')">普通win</div>
-            <!-- 打开特殊 header 的 window， 特殊的header需要自定义 -->
-            <div class="btn" @click="openSpecialHeaderWin('special_header_win', 'special_header', '特殊win')">特殊win</div>
+            <!-- 打开普通头部导航的window -->
+            <div class="btn" @click="openWin()">普通win</div>
+            <!-- 打开特殊头部导航的 window， 特殊的头部导航需要自定义 -->
+            <div class="btn" @click="openSpecialHeaderWin()">特殊win</div>
         </div>
         <div class="btn-group line-spt-bott">
-            <!-- 打开带透明蒙层的 frame 弹窗 -->
+            <!-- 打开带透明蒙层的 frame 弹窗，样式需自定义 -->
             <div class="area-row">
                 3. 打开带透明蒙层的frame弹窗（当页面有frame弹窗时先关闭frame弹窗再关闭页面）
             </div>
@@ -36,7 +37,7 @@ export default {
     },
     mounted() {
         const self = this
-        // 下拉刷新
+        // 下拉刷新 使用模块：UIPullRefreshFlash
         self.$comm.pullDown(() => {
             self.showProgress('请稍候...')
             setTimeout(() => {
@@ -44,24 +45,27 @@ export default {
                 api.refreshHeaderLoadDone()
             }, 1000)
         })
+        self.$comm.pullUp(() => {
+            // 上拉加载 监听页面触底实际 scrolltobottom
+        })
     },
     methods: {
-        // 打开普通的win
-        openWin(pageName, title) {
+        // 打开普通头部导航的 window, 普通头部导航默认使用公共导航 page_header
+        openWin() {
             this.$comm.openWin({
-                name: pageName,
+                name: 'normal_header_win',
                 pageParam: {
-                    title: title
+                    title: '普通win'
                 }
             })
         },
-        // 打开特殊header 的 win
-        openSpecialHeaderWin(name, headerName, title) {
+        // 打开特殊头部导航的 window
+        openSpecialHeaderWin() {
             this.$comm.openWin({
-                name: name,
-                headerName: headerName,
+                name: 'special_header_win', // 实际主体 name
+                headerName: 'special_header', // 需要传特殊头部导航页面name
                 pageParam: {
-                    title: title
+                    title: '特殊win'
                 }
             })
         },
@@ -74,11 +78,12 @@ export default {
                 buttons: ['确定', '取消']
             }, (ret, err) => {
                 if (ret.buttonIndex == 1) {
-                    self.rmStorage('token')
-                    api.execScript({
+                    self.rmStorage('token') // 退出清空登录授权
+                    api.execScript({ // 打开登录窗口 也可以不用打开直接回到首页
                         name: 'root',
                         script: '$vm.openLoginWhenTokenInvalid()'
                     })
+                    // 关闭页面并回到root 页
                     api.closeToWin({
                         name: 'root',
                         animation: {

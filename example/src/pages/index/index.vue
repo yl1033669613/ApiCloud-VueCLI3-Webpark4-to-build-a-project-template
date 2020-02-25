@@ -126,7 +126,7 @@ export default {
         self.checkLoginState((state) => {
             if (state) {
                 self.tokenInvalid = false
-                api.setStatusBarStyle({
+                api.setStatusBarStyle({ // 请根据app设计合理设置状态栏对比色
                     style: 'light'
                 })
                 //通过setTimeout将js放到最后执行 保证能获取到header高度
@@ -139,7 +139,7 @@ export default {
         })
     },
     methods: {
-        // 禁止根页面滚动
+        // 根页面不需要滚动禁止根页面滚动
         handleRootPageScoll(e) {
             e.preventDefault()
         },
@@ -209,13 +209,14 @@ export default {
                     overScrollMode: 'scrolls'
                 })
             }
+            // 设置frameGroup位置
             let rect = {
                 x: 0,
                 y: self.$refs.header.offsetHeight,
                 w: api.winWidth,
                 h: api.winHeight - self.$refs.header.offsetHeight - self.$refs.footer.offsetHeight
             }
-            self.$comm.resizeFrame('group', 0)
+            self.$comm.resizeFrame('group', 0) // 监听root页窗口变化，从而重新设置frameGroup的高度
             api.openFrameGroup({
                 name: 'group',
                 scrollEnabled: true,
@@ -237,7 +238,7 @@ export default {
                 }
             })
         },
-        // root 页底部nav 切换
+        // root 页底部tab切换
         switchTab(index) {
             let idx = parseInt(index)
             if (this.active != idx) {

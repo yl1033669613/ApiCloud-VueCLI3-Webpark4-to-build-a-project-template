@@ -6,6 +6,7 @@
             <div class="area-row">
                 <span class="sei-no">1. </span>app退出示例，关闭frameGroup打开登陆页
             </div>
+            <!-- 退出示例，通过在root（index）页打开frame来实现。因此退出登录时需要先返回到root（index）页-->
             <div class="btn" @click="$comm.openPopFrame('confirm_pop', {content: '确认退出', script: '$vm.logOut()', frameName: frameName})">退出</div>
         </div>
         <!-- app 清除缓存 -->
@@ -16,7 +17,7 @@
             <div class="btn" @click="$comm.openPopFrame('confirm_pop', {content: '是否清除缓存?', script: '$vm.clearCache()', frameName: frameName})">清除缓存</div>
         </div>
         <div class="btn-group line-spt-bott">
-            <!-- 打开带透明蒙层的 frame 弹窗 -->
+            <!-- 打开带透明蒙层的 frame 弹窗，样式需自定义 -->
             <div class="area-row">
                 <span class="sei-no">3. </span>打开带透明蒙层的frame弹窗（当页面有frame弹窗时先关闭frame弹窗再关闭页面）
             </div>
@@ -26,9 +27,9 @@
             <div class="area-row">
                 <span class="sei-no">4. </span>公共头部和特殊头部页面的实现
             </div>
-            <!-- 打开普通 header 的 window -->
+            <!-- 打开普通头部导航的window -->
             <div class="btn" @click="openWin('normal_header_win', '普通win')">普通win</div>
-            <!-- 打开特殊 header 的 window， 特殊的header需要自定义 -->
+            <!-- 打开特殊头部导航的 window， 特殊的头部导航需要自定义 -->
             <div class="btn" @click="openSpecialHeaderWin('special_header_win', 'special_header', '特殊win')">特殊win</div>
         </div>
         <!-- 一个选择日期的例子 -->
@@ -231,7 +232,7 @@ export default {
             })
             return UIScrollPicture
         },
-        // 打开普通的win
+        // 打开普通头部导航的window
         openWin(pageName, title) {
             this.$comm.openWin({
                 name: pageName,
@@ -240,7 +241,7 @@ export default {
                 }
             })
         },
-        // 打开特殊header 的 win
+        // 打开特殊头部导航的的window
         openSpecialHeaderWin(name, headerName, title) {
             this.$comm.openWin({
                 name: name,
@@ -272,11 +273,12 @@ export default {
         // 退出登录
         logOut() {
             const self = this
-            self.rmStorage('token')
-            api.execScript({
+            self.rmStorage('token') // 退出清空登录授权
+            api.execScript({ // 打开登录窗口 也可以不用打开直接回到首页
                 name: 'root',
                 script: '$vm.openLoginWhenTokenInvalid()'
             })
+            // 关闭页面并回到root 页
             api.closeToWin({
                 name: 'root',
                 animation: {
@@ -332,7 +334,6 @@ export default {
                 datas: 'widget://res/city.json',
                 col: 3
             }, (ret) => {
-                // console.log(JSON.stringify(ret))
                 if (ret.eventType == 'ok') {
                     self.area = `${ret.level1}/${ret.level2}/${ret.level3}`
                 }
@@ -411,40 +412,41 @@ export default {
                 },
                 buttons: ['相机', '图片库']
             }, (ret, err) => {
-                if (ret) {
-                    if (ret.buttonIndex === 3) return
-                    let type = 'camera'
-                    if (ret.buttonIndex === 2) {
-                        type = 'library'
-                    }
-                    self.$comm.testAndReqPermission(type === 'camera' ? 'camera' : 'photos').then((res) => {
-                        api.getPicture({
-                            sourceType: type,
-                            encodingType: 'jpg',
-                            mediaValue: 'pic',
-                            destinationType: 'url',
-                            quality: 100,
-                            saveToPhotoAlbum: false
-                        }, (ret, err) => {
-                            if (ret.data) {
-                                self.$comm.openWin({
-                                    name: 'edit_img',
-                                    headerName: 'edit_img_header',
-                                    pageParam: {
-                                        title: '图片编辑',
-                                        winName: api.winName,
-                                        frameName: api.frameName,
-                                        path: ret.data,
-                                        clipH: 200,
-                                        clipW: 200
-                                    }
-                                })
-                            }
-                        })
-                    })
+                if (ret.buttonIndex === 3) return
+                let type = 'camera'
+                if (ret.buttonIndex === 2) {
+                    type = 'library'
                 }
+                self.$comm.testAndReqPermission(type === 'camera' ? 'camera' : 'photos').then((res) => {
+                    api.getPicture({
+                        sourceType: type,
+                        encodingType: 'jpg',
+                        mediaValue: 'pic',
+                        destinationType: 'url',
+                        quality: 100,
+                        saveToPhotoAlbum: false
+                    }, (ret, err) => {
+                        if (ret.data) {
+                            self.$comm.openWin({
+                                name: 'edit_img',
+                                headerName: 'edit_img_header',
+                                pageParam: {
+                                    title: '图片编辑',
+                                    winName: api.winName,
+                                    frameName: api.frameName,
+                                    path: ret.data,
+                                    clipH: 200,
+                                    clipW: 200
+                                }
+                            })
+                        } else {
+                            console.log(JSON.stringify(err))
+                        }
+                    })
+                })
             })
         },
+        // 获取图片编辑之后的路径
         getEditResult(path) {
             this.editResult = path
         }

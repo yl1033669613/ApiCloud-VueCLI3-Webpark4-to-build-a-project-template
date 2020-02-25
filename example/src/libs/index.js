@@ -5,6 +5,7 @@ import { storage } from './utils'
 const BASE_API_URL = 'http://localhost:8080' //接口 base url
 const RESOURCE_URL = 'http://localhost:8080/resource' //资源 base url
 
+// doc
 const winDoc = window.document
 
 export default function () {
@@ -199,6 +200,7 @@ export default function () {
 		 * @param {String} pageOpt.name 打开窗口主frame html文件名 实际窗口名
 		 * @param {String} pageOpt.headerName 打开窗口头部所在页面的文件名 默认为 header 可以不传
 		 * @param {Object} pageOpt.pageParam 传递的额外参数
+		 * @param {Object} option 打开页面的参数
 		 */
 		openWin(pageOpt, option) {
 			let opt = option || {}
@@ -228,9 +230,9 @@ export default function () {
 				animation: opt.animation || {
 					type: 'movein', //动画类型（详见动画类型常量）
 					subType: 'from_right', //动画子类型（详见动画子类型常量）
-					duration: 300 //动画过渡时间，默认300毫秒
+					duration: 400 //动画过渡时间，默认300毫秒
 				},
-				scrollEnabled: false
+				scrollEnabled: opt.scrollEnabled || false  // 打开的window通常禁止滚动， 确保在弹窗键盘时ios等设备不必要的滚动
 			})
 		},
 		/**
@@ -243,7 +245,7 @@ export default function () {
 			let option = opt || {}
 			let y = 0
 			let header = winDoc.querySelector('header')
-			if (header) {
+			if (header) { // 判断所在window是否存在头部导航 如果存在则设置frame的坐标y的位置
 				y = header.offsetHeight
 			}
 			api.openFrame({
@@ -287,21 +289,21 @@ export default function () {
 				rect: rect,
 				animation: {
 					type: 'fade', //动画类型（详见动画类型常量）
-					duration: 200 //动画过渡时间，默认300毫秒
+					duration: 300
 				},
 				reload: true
 			})
 			this.resizeFrame(name, 1)
 		},
 		/**
-		 * 操作系统返回时，先检查是否有frame弹窗并关闭之后再关闭页面 
+		 * 操作系统返回时，先检查是否有frame弹窗并关闭之后再关闭页面 请参考page_header.html
 		 */
-		keyBackToClosePop () {
+		keyBackToClosePop() {
 			const frames = api.frames()
 			let popFrames = frames.filter(a => /_POPWIN/.test(a.name))
 			if (popFrames.length) {
 				let revArr = popFrames.reverse()
-				api.closeFrame({name: revArr[0].name})
+				api.closeFrame({ name: revArr[0].name })
 				return false
 			} else {
 				return true
@@ -402,7 +404,7 @@ export default function () {
 				callBack()
 			})
 		},
-		//下拉刷新
+		//下拉刷新 使用模块：UIPullRefreshFlash
 		pullDown(callBack, bgColor) {
 			api.setCustomRefreshHeaderInfo({
 				bgColor: bgColor || '#2b2c30',
@@ -478,7 +480,7 @@ export default function () {
 		},
 		// 打开一个图片查看器
 		openPhotoBrowser(opt, cb) {
-			const photoBrowser = api.require('photoBrowser');
+			const photoBrowser = api.require('photoBrowser')
 			photoBrowser.open({
 				images: opt.images || [],
 				placeholderImg: 'widget://res/placeH_pic.png',
@@ -550,7 +552,7 @@ export default function () {
 						}
 					})
 				} else {
-					reject({errMsg: '缓存图片为空', opt: opt})
+					reject({ errMsg: '缓存图片为空', opt: opt })
 				}
 			})
 		},

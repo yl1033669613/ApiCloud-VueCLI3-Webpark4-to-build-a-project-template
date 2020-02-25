@@ -2,7 +2,7 @@
 <div class="photo-switching-container" ref="photoSC" @touchstart.prevent="_touchstartHandle($event)" @touchmove.prevent="_touchmoveHandle($event)" @touchend.prevent="_touchendHandle($event)">
     <div class="rotate-content animated" v-for="(item, index) in curr" :key="index" :style="item.zIndex == 1 ? frontStyle : backStyle" v-show="!item.isloadingBack">
         <div class="back-photo-mask" v-if="item.zIndex == 0" :style="{opacity: opacity}"></div>
-        <slot :photo="item"></slot>
+        <slot :item="item"></slot>
         <div class="loading-card" v-if="item.isLoading">
             <slot name="loading"></slot>
         </div>
@@ -23,6 +23,11 @@ export default {
         photos: {
             type: Array,
             default: []
+        },
+        // 切换剩余多少张时开始预加载后续的列表
+        remaining: {
+            type: Number,
+            default: 2
         }
     },
     data() {
@@ -84,7 +89,7 @@ export default {
 
         this.currTotal = this.photos
 
-        if (this.photos.length <= 1) {
+        if (this.photos.length <= this.remaining) {
             this._turnToTheEnd()
         }
 
@@ -199,7 +204,7 @@ export default {
         _touchendHandle(e) {
             this.isTouch = false
             if (Math.abs(this.angle) >= 6 && !this.curr[0].isLoading) {
-                if (this.startIdx >= this.currTotal.length - 1) {
+                if (this.startIdx >= this.currTotal.length - this.remaining) {
                     this._turnToTheEnd()
                 }
                 this.isTurnPhoto = true

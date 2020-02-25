@@ -69,7 +69,7 @@ export default {
             display: block;
             left: 0;
             bottom: 0;
-            background: rgba(255, 255, 255, .1);
+            background: rgba(255, 255, 255, .2);
             height: 1px;
             width: 100%;
         }

@@ -1,22 +1,10 @@
 html,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
 div,
 body,
 dl,
 dd,
 ul,
 ol,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
 p,
 form,
 input,
@@ -27,7 +15,6 @@ td {
     margin: 0;
     padding: 0;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    font-family: "Microsoft YaHei", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
 }
 
 * {
@@ -50,8 +37,9 @@ table {
 }
 
 ol,
-ul {
-    list-style: none outside none
+ul,
+li {
+    list-style: none outside none;
 }
 
 em,
@@ -71,6 +59,10 @@ textarea {
     outline: none;
     border: 0;
     text-decoration: none;
+}
+
+a {
+    display: inline-block;
 }
 
 html,
@@ -103,21 +95,13 @@ body {
     font-size: .28rem;
 }
 
-li {
-    list-style: none;
-}
-
-a {
-    text-decoration: none;
-    display: inline-block;
-}
-
-
 /*fastclick.js 下设置label内任何元素 pointer-events: none; 针对ios系统使用fastclick.js去除300ms延迟导致对单选以及多选框选择异常************************************************* */
 
 label>* {
     pointer-events: none;
 }
+
+/* ---- */
 
 .pull-left {
     float: left !important;
@@ -159,26 +143,27 @@ label>* {
     -webkit-box-orient: vertical;
 }
 
-/*图片等比例缩放,占满宽高,取中间显示*/
-
-.img-cover {
-    background-position: center;
-    background-size: cover !important;
-    background-repeat: no-repeat;
+@media (print),
+(prefers-reduced-motion: reduce) {
+    .animated {
+        -webkit-animation-duration: 1ms !important;
+        animation-duration: 1ms !important;
+        -webkit-transition-duration: 1ms !important;
+        transition-duration: 1ms !important;
+        -webkit-animation-iteration-count: 1 !important;
+        animation-iteration-count: 1 !important;
+    }
 }
 
-
-/*等比例缩放,宽高至少占满一边,显示全部*/
-
-.img-contain {
-    background-position: center;
-    background-size: contain !important;
-    background-repeat: no-repeat;
-}
-
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
     transition: opacity .15s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+    {
     opacity: 0;
 }

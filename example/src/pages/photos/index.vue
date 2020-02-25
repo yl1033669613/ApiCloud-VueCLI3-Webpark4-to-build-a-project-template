@@ -6,9 +6,9 @@
         </span>
         <img src="https://unsplash.it/700/310/?random" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg" alt="">
     </div>
-    <!-- apicloud里瀑布流布局 方案 -->
     <div class="declare">Photos for everyone ~</div>
     <div class="declare small">图片数据均来自https://unsplash.com/</div>
+    <!-- apicloud里瀑布流布局 方案 -->
     <!-- 瀑布流 -->
     <div class="water-fall-ctn" :style="{height: (leftH >= rightH ? leftH : rightH) + 'px' }">
         <div class="item" hover-class="btn-scale-hover" v-for="(item, i) in list" :key="i" :class="[item.isLeft ? 'isleft' : 'isright', item.finish ? 'isShow' : '']" :style="{height: (item.imgHeight + 45) + 'px', top: item.top + 'px'}">

@@ -145,16 +145,16 @@ export default {
     display: flex;
     display: -webkit-flex;
     justify-content: space-between;
-}
 
-.clip-handle-bar .btn {
-    padding: 0 .4rem;
-    color: #fff;
-    font-size: .26rem;
-    transition: all .2s;
-}
+    .btn {
+        padding: 0 .4rem;
+        color: #fff;
+        font-size: .26rem;
+        transition: all .2s;
+    }
 
-.clip-handle-bar .btn:active {
-    background: rgba(0, 0, 0, .1)
+    .btn:active {
+        background: rgba(0, 0, 0, .1)
+    }
 }
 </style>

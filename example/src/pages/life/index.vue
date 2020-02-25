@@ -53,7 +53,7 @@
             </span>
             <img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg(false)" alt="">
         </div>
-        <div class="links-sec" @click="$comm.openWin({name: 'switching_page', headerName: 'switching_page_header', pageParam: {title: '网易新闻·卡片'}})">
+        <div class="links-sec" @click="$comm.openWin({name: 'switching_news', headerName: 'switching_news_header', pageParam: {title: '网易新闻·卡片'}})">
             <div class="more" @click.stop="toNewsPage"><img src="@/assets/more.png" alt=""></div>
             <div class="btn-news">NEWS</div>
         </div>
@@ -119,6 +119,7 @@ export default {
         self.initTime()
     },
     methods: {
+        // 初始话日期
         initDate() {
             let currFt = new Date().format('yyyy-MM-dd').split('-')
             this.dateObj.year = currFt[0]
@@ -127,6 +128,7 @@ export default {
             this.dateObj = Object.assign(this.dateObj, sloarToLunar(...currFt))
 
         },
+        // 初始化时间
         initTime() {
             const self = this
             let createDate = () => {
@@ -151,6 +153,7 @@ export default {
             self.timer = setInterval(createDate, 1000)
 
         },
+        // 初始化地图
         initMap() {
             const self = this
             self.$comm.testAndReqPermission('location').then((res) => {
@@ -195,6 +198,7 @@ export default {
                 }
             })
         },
+        // 获取位置信息
         getlocaArea() {
             const self = this
             self.map.getNameFromCoords({
@@ -211,6 +215,7 @@ export default {
                 }
             })
         },
+        // 获取天气信息 和风天气
         getWeather(loca) {
             const self = this
             api.ajax({
@@ -224,6 +229,7 @@ export default {
                 }
             })
         },
+        // 图片加载完成回调
         loadImg(isun) {
             if (isun) {
                 this.imgLoadFinished1 = true

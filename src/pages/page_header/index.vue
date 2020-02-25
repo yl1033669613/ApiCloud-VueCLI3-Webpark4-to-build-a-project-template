@@ -26,10 +26,10 @@ export default {
         self.pageName = pageParam.pageName
         setTimeout(() => {
             self.$comm.openFrame(pageParam.pageName, pageParam)
-            // 窗口尺寸变化是调整frame布局
+            // 窗口尺寸变化时调整frame布局
             self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
-        // 当页面有frame弹窗时先关闭frame弹窗再关闭页面
+        // 当页面有frame弹窗时先关闭frame弹窗再关闭页面， 需监听系统返回事件
         api.addEventListener({
             name: 'keyback'
         }, () => {

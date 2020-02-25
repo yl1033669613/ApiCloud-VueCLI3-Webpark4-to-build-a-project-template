@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         closeWin() {
-            this.$emit('tapback')
+            this.$emit('tapback') // 返回时，分发点击返回按钮事件，用于在关闭窗口时触发一些函数
             api.closeWin()
         }
     }
