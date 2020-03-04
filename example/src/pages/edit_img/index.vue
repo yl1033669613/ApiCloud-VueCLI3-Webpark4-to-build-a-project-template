@@ -83,7 +83,7 @@ export default {
                     if (ret.buttonIndex === 2) {
                         type = 'library'
                     }
-                    self.$comm.testAndReqPermission(type === 'camera' ? 'camera' : 'photos', (res) => {
+                    self.$comm.testAndReqPermission(type === 'camera' ? 'camera' : 'photos').then((res) => {
                         api.getPicture({
                             sourceType: type,
                             encodingType: 'jpg',
