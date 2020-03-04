@@ -40,9 +40,10 @@ export default {
                     },
                     progress: {
                         type: 'page',
-                        color: '#a0a7ba',
+                        color: '#1ed4cb',
                         height: 2
-                    }
+                    },
+                    overScrollMode: 'scrolls'
                 })
             } else {
                 self.$comm.openFrame(pageParam.pageName, pageParam)

@@ -1,8 +1,8 @@
 <template>
 <div class="photo-switching-container" ref="photoSC" @touchstart.prevent="_touchstartHandle($event)" @touchmove.prevent="_touchmoveHandle($event)" @touchend.prevent="_touchendHandle($event)">
     <div class="rotate-content animated" v-for="(item, index) in curr" :key="index" :style="item.zIndex == 1 ? frontStyle : backStyle" v-show="!item.isloadingBack">
-        <div class="back-photo-mask" v-if="item.zIndex == 0" :style="{opacity: opacity}"></div>
         <slot :item="item"></slot>
+        <div class="back-photo-mask" v-if="item.zIndex == 0" :style="{opacity: opacity}"></div>
         <div class="loading-card" v-if="item.isLoading">
             <slot name="loading"></slot>
         </div>
@@ -483,6 +483,7 @@ export default {
     height: 100%;
     background: rgba(0, 0, 0, .6);
     border-radius: .3rem;
+    z-index: 1;
 }
 
 .loading-card {
