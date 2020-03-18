@@ -31,7 +31,7 @@
         </div>
         <div class="spt">· 简介 ·</div>
         <div class="card bg-grd-1">
-            <p class="title">apicloud_vuecli3_project</p>
+            <p class="title">APICloud + VueCLI3 = APP</p>
             <p>APICloud+VueCLI3 完美结合的模块化开发框架，快速构建apicloud APP</p>
         </div>
         <div class="card bg-grd-2">
