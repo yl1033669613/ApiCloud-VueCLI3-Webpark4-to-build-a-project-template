@@ -33,7 +33,7 @@
                 {{areaData.province || '--'}} {{areaData.city}} {{areaData.district}}
             </div>
             <div class="weather-ctn">
-                <img :src="'./image/cond-icon-heweather/'+ weatherData.cond_code +'.png'" class="cond-icon" alt="">
+                <img v-if="weatherData.cond_code" :src="'./image/cond-icon-heweather/'+ weatherData.cond_code +'.png'" class="cond-icon" alt="">
                 <div class="right">
                     <div class="now-whr-desc">
                         {{weatherData.cond_txt || '--'}}
@@ -51,7 +51,9 @@
             <span v-if="!imgLoadFinished">
                 <loading color="#ffffff"></loading>
             </span>
-            <img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg(false)" alt="">
+            <transition name="fade">
+                <img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture" v-show="imgLoadFinished" @load="loadImg(false)" alt="">
+            </transition>
         </div>
         <div class="links-sec" @click="$comm.openWin({name: 'switching_news', headerName: 'switching_news_header', pageParam: {title: '网易新闻·卡片'}})">
             <div class="more" @click.stop="toNewsPage"><img src="@/assets/more.png" alt=""></div>
@@ -67,7 +69,9 @@
             <span v-if="!imgLoadFinished1">
                 <loading color="#ffffff"></loading>
             </span>
-            <img src="https://unsplash.it/960/540/?random" :style="{opacity: imgLoadFinished1 ? 1 : 0}" @load="loadImg(true)" alt="">
+            <transition name="fade">
+                <img src="https://unsplash.it/960/540/?random" v-show="imgLoadFinished1" @load="loadImg(true)" alt="">
+            </transition>
         </div>
     </div>
 </div>
@@ -109,14 +113,13 @@ export default {
     created() {
         const self = this
         self.aniAct = true
-        self.initMap()
-        // 下拉刷新
-        self.$comm.pullDown(() => {
-            self.showProgress('请稍后...')
-            self.initMap()
-        })
         self.initDate()
         self.initTime()
+        self.initMap()
+
+        self.$comm.pullDown(() => {
+            self.getLoac()
+        })
     },
     methods: {
         // 初始话日期
@@ -133,17 +136,17 @@ export default {
             const self = this
             let createDate = () => {
                 let date = new Date()
-                self.dateObj.second = self.$comm.superZero(date.getSeconds())
+                self.dateObj.second = self.superZero(date.getSeconds())
                 let curH = date.getHours()
                 let curMin = date.getMinutes()
                 let currYear = date.getFullYear()
                 let curMonth = date.getMonth() + 1
                 let currDate = date.getDate()
                 if (parseInt(self.dateObj.min) !== curMin) {
-                    self.dateObj.min = self.$comm.superZero(curMin)
+                    self.dateObj.min = self.superZero(curMin)
                 }
                 if (parseInt(self.dateObj.hour) !== curH) {
-                    self.dateObj.hour = self.$comm.superZero(curH)
+                    self.dateObj.hour = self.superZero(curH)
                 }
                 if (parseInt(self.dateObj.day) !== currDate || parseInt(self.dateObj.month) !== curMonth || parseInt(self.dateObj.year) !== currYear) {
                     self.initDate()
@@ -153,24 +156,19 @@ export default {
             self.timer = setInterval(createDate, 1000)
 
         },
-        // 初始化地图
+        // 初始化地图 ios 端只能在云编译下使用定位功能
         initMap() {
             const self = this
-            self.$comm.testAndReqPermission('location').then((res) => {
-                self.map = api.require('bMap')
-                if (api.systemType === 'ios') {
-                    self.map.initMapSDK((ret) => {
-                        if (ret.status) {
-                            self.getLoac()
-                        }
-                    })
-                } else {
-                    self.getLoac()
-                }
-            }).catch(err => {
-                api.refreshHeaderLoadDone()
-                self.hideProgress()
-            })
+            self.map = api.require('bMap')
+            if (api.systemType === 'ios') {
+                self.map.initMapSDK((ret) => {
+                    if (ret.status) {
+                        self.getLoac()
+                    }
+                })
+            } else {
+                self.getLoac()
+            }
         },
         refreshAni() {
             this.aniAct = false
@@ -183,6 +181,33 @@ export default {
         },
         getLoac() {
             const self = this
+            let resultList = api.hasPermission({
+                list: ['location']
+            })
+            if (resultList[0].granted) {
+                self.bMapGetLoc()
+            } else{
+                api.confirm({
+                    title: '提示',
+                    msg: 'APP 需要获取您的位置信息'
+                }, (ret, err) => {
+                    if (ret.buttonIndex === 2) {
+                        self.$comm.testAndReqPermission('location').then((res) => {
+                            self.bMapGetLoc()
+                        }).catch(err => {
+                            console.log(JSON.stringify(err))
+                            api.refreshHeaderLoadDone()
+                            self.hideProgress()
+                        })
+                    } else {
+                        api.refreshHeaderLoadDone()
+                        self.hideProgress()
+                    }
+                })
+            }
+        },
+        bMapGetLoc() {
+            const self = this
             self.map.getLocation({
                 accuracy: '10m'
             }, (ret, err) => {
@@ -193,14 +218,14 @@ export default {
                 } else {
                     api.refreshHeaderLoadDone()
                     self.hideProgress()
-                    console.log(JSON.stringify(err))
-                    self.toast('获取位置失败，请检查是否开启定位。')
+                    self.toast('获取位置失败，请检查是否开启定位')
                 }
             })
         },
         // 获取位置信息
         getlocaArea() {
             const self = this
+            self.showProgress('请稍后...')
             self.map.getNameFromCoords({
                 lon: self.lon,
                 lat: self.lat
@@ -212,6 +237,7 @@ export default {
                     self.getWeather(ret.city)
                 } else {
                     console.log(JSON.stringify(err))
+                    self.toast('获取位置失败')
                 }
             })
         },
@@ -283,7 +309,7 @@ export default {
         line-height: 2rem;
         text-align: center;
         color: #965456;
-        font-weight: 1000;
+        font-weight: bold;
         font-size: 1.1rem;
         box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
         text-shadow: 0 4px 6px rgba(0, 0, 0, .4);
@@ -355,7 +381,7 @@ export default {
         line-height: .4rem;
         vertical-align: top;
         display: inline-block;
-        font-weight: 1000;
+        font-weight: bold;
         position: relative;
         margin-top: .1rem;
 
@@ -380,14 +406,14 @@ export default {
         .lc-day {
             color: #7d8971;
             font-size: .2rem;
-            font-weight: 1000;
+            font-weight: bold;
             margin-right: .2rem;
         }
 
         .lc-year {
             color: #fff;
             font-size: .16rem;
-            font-weight: 1000;
+            font-weight: bold;
         }
 
         .lc-ico {
@@ -489,9 +515,8 @@ export default {
     }
 
     img {
-        transition: all .6s;
-        opacity: 0;
         width: 100%;
+        height: 100%;
         display: block;
         border-radius: .3rem;
     }
@@ -521,7 +546,7 @@ export default {
     border-radius: .35rem;
     color: #fff;
     font-size: .5rem;
-    font-weight: 1000;
+    font-weight: bold;
     box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
     margin-right: .2rem;
     transition: all .1s;
@@ -594,9 +619,6 @@ export default {
 
 .dark-bg {
     display: inline-block;
-    border-radius: .2rem;
-    background: rgba(0, 0, 0, .1);
-    padding: 0 .2rem;
     height: .4rem;
 }
 </style>

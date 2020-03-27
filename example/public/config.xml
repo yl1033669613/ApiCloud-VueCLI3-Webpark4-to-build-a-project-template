@@ -4,13 +4,17 @@
 
     <description></description>
 
-    <author email="developer@apicloud.com" href="http://www.apicloud.com"></author>
+    <author email="1033669613@qq.com" href="https://github.com/yl1033669613/apicloud_vuecli_app"></author>
 
     <content src="index.html" />
 
     <access origin="*" />
 
 	<preference name="userAgent" value="APICloud" />
+
+	<preference name="useWKWebView" value="true" />
+	
+	<preference name="WKWebViewRecoveryMode" value="true" />
 
     <preference name="pageBounce" value="false"/>
 

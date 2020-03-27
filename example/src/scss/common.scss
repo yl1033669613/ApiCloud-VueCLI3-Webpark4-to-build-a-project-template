@@ -1,3 +1,7 @@
+html {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 html,
 div,
 body,
@@ -197,7 +201,7 @@ label>* {
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity .2s;
+    transition: opacity .4s;
 }
 
 .fade-enter,
@@ -250,4 +254,9 @@ label>* {
     animation-duration: 1s;
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
+}
+
+// 禁止元素过渡效果
+.transition-none {
+    transition: none!important;
 }

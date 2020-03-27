@@ -20,8 +20,10 @@
                     </div>
                 </div>
                 <div class="right">
-                    <div class="pic-view" :class="{fadeIn: item.isload}" :style="{backgroundImage: 'url('+ item.casheRes[0] +')'}">
-                    </div>
+                    <transition name="fade">
+                        <div class="pic-view" v-show="item.isload" :style="{backgroundImage: 'url('+ item.casheRes[0] +')'}">
+                        </div>
+                    </transition>
                 </div>
             </li>
             <!-- list type 1 -->
@@ -30,9 +32,11 @@
                     <div class="title text-ellipsis2">{{item.title}}</div>
                     <div class="img-wrap">
                         <div class="list-col-xs-4" v-for="(itm, i) in item.casheRes" :key="i">
-                            <div class="img-ctn">
-                                <div class="img" :class="{fadeIn: item.isload}" :style="{backgroundImage: 'url('+ itm +')'}"></div>
-                            </div>
+                            <transition name="fade">
+                                <div class="img-ctn">
+                                    <div class="img" v-show="item.isload" :style="{backgroundImage: 'url('+ itm +')'}"></div>
+                                </div>
+                            </transition>
                         </div>
                     </div>
                 </div>
@@ -60,7 +64,9 @@
                     <div class="title text-ellipsis2">{{item.title}}</div>
                     <div class="img-wrap">
                         <div class="img-ctn">
-                            <div class="img" :class="{fadeIn: item.isload}" :style="{backgroundImage: 'url('+ item.casheRes[0] +')'}"></div>
+                            <transition name="fade">
+                                <div class="img" :class="{fadeIn: item.isload}" :style="{backgroundImage: 'url('+ item.casheRes[0] +')'}"></div>
+                            </transition>
                         </div>
                     </div>
                 </div>
@@ -227,7 +233,8 @@ export default {
         listenPageScroll() {
             const self = this
             window.addEventListener('scroll', () => {
-                if (document.documentElement.scrollTop > 0) {
+                let scTop = document.documentElement.scrollTop || window.pageYOffset
+                if (scTop > 0) {
                     if (self.isTop) self.isTop = false
                 } else {
                     if (!self.isTop) self.isTop = true
@@ -355,8 +362,6 @@ export default {
         margin-bottom: .1rem;
 
         .pic-view {
-            opacity: 0;
-            transition: opacity 1s;
             width: 100%;
             height: 100%;
             border-radius: 3px;
@@ -383,7 +388,6 @@ export default {
         }
 
         .img {
-            opacity: 0;
             width: 100%;
             height: 100%;
             background-size: cover;

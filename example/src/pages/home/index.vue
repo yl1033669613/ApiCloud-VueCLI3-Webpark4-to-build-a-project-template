@@ -96,7 +96,7 @@
                 <br> (如果已经获取到了相机权限请先在系统设置里关闭)
                 <br><br> 如何自定义编译targetSdkVersion值以及使用动态动态权限：
 
-                <br> 请参考 https://community.apicloud.com/bbs/thread-110959-1-2.html
+                <br> 请参考 <span class="link" @click="openWeb('https://community.apicloud.com/bbs/thread-110959-1-2.html', 'WKWebView的使用介绍')">https://community.apicloud.com/bbs/thread-110959-1-2.html</span>
             </div>
             <div class="btn" @click="dynamicPermissionsCase()">打开相机</div>
         </div>
@@ -121,9 +121,16 @@
                 因此此类资源请放在assets文件夹内，在publish下的文件只是简单的复制，请使用编译后的文件关系引用(即实际app内文件引用方式)
             </div>
         </div>
-        <div class="btn-group">
+        <div class="btn-group line-spt-bott">
             <div class="area-row">
                 <span class="sei-no">14. </span>页面头部(除去状态栏)默认高度为 44px
+            </div>
+        </div>
+        <div class="btn-group line-spt-bott">
+            <div class="area-row">
+                <span class="sei-no">15. </span>使用WKWebview
+                <br>
+                关于WKWebView的使用介绍<span class="link" @click="openWeb('https://community.apicloud.com/bbs/thread-151904-1-1.html', 'WKWebView的使用介绍')">https://community.apicloud.com/bbs/thread-151904-1-1.html</span>
             </div>
         </div>
     </div>
@@ -254,7 +261,7 @@ export default {
         //首页requset
         getHomeData() {
             const self = this
-            // self.$comm.ajax({url: 'xxx', data: {values: {}}}).then().catch()
+            // self.ajax({url: 'xxx', data: {values: {}}}).then().catch()
             setTimeout(() => {
                 self.hideProgress()
                 var slideData = ['./image/slide3.png', './image/slide2.png', './image/slide1.png']
@@ -381,7 +388,7 @@ export default {
             })
             if (resultList[0].granted) {
                 self.$comm.openPopFrame('confirm_pop', {
-                    content: '已允许打开相机权限，请前往 设置>应用>权限管理 关闭后重试',
+                    content: api.systemType === 'ios' ? '已允许打开相机权限，请前往 设置>隐私>定位服务 关闭后重试' : '已允许打开相机权限，请前往 设置>应用>权限管理 关闭后重试',
                     showCancel: false
                 })
             } else {
@@ -449,6 +456,9 @@ export default {
         // 获取图片编辑之后的路径
         getEditResult(path) {
             this.editResult = path
+        },
+        openWeb(url, title) {
+            this.$comm.openWin({name: title, pageParam: {title: title, webUrl: url}})
         }
     }
 }
@@ -540,6 +550,7 @@ export default {
 }
 
 .edit-res-pic {
+    width: 100%;
     border-radius: 4px;
 }
 
@@ -553,5 +564,11 @@ export default {
 .ft-italic {
     color: #a1a59e;
     font-style: italic;
+}
+
+.link {
+    color: #9db189;
+    font-style: italic;
+    text-decoration: underline;
 }
 </style>

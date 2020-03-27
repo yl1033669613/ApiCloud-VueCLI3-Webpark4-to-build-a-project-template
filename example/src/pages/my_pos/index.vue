@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <div class="loading-ctn">
+    <div class="loading-ctn" @click="getLoac">
         <div class="load-inner">
             <loading color="#ffffff" loadingText="加载中..."></loading>
         </div>
@@ -45,18 +45,16 @@ export default {
     methods: {
         initMap() {
             const self = this
-            self.$comm.testAndReqPermission('location').then((res) => {
-                self.map = api.require('bMap')
-                if (api.systemType === 'ios') {
-                    self.map.initMapSDK((ret) => {
-                        if (ret.status) {
-                            self.getLoac()
-                        }
-                    })
-                } else {
-                    self.getLoac()
-                }
-            })
+            self.map = api.require('bMap')
+            if (api.systemType === 'ios') {
+                self.map.initMapSDK((ret) => {
+                    if (ret.status) {
+                        self.getLoac()
+                    }
+                })
+            } else {
+                self.getLoac()
+            }
         },
         openMap() {
             const self = this
@@ -104,6 +102,30 @@ export default {
         },
         getLoac() {
             const self = this
+            let resultList = api.hasPermission({
+                list: ['location']
+            })
+            if (resultList[0].granted) {
+                self.bMapGetLoc()
+            } else{
+                api.confirm({
+                    title: '提示',
+                    msg: 'APP 需要获取您的位置信息'
+                }, (ret, err) => {
+                    if (ret.buttonIndex === 2) {
+                        self.$comm.testAndReqPermission('location').then((res) => {
+                            self.bMapGetLoc()
+                        }).catch(err => {
+                            console.log(JSON.stringify(err))
+                            self.hideProgress()
+                        })
+                    }
+                })
+            }
+            
+        },
+        bMapGetLoc() {
+            const self = this
             self.map.getLocation({
                 accuracy: '10m'
             }, (ret, err) => {
@@ -146,7 +168,7 @@ export default {
 <style lang="scss">
 .container {
     position: relative;
-    background-image: linear-gradient(90deg, rgba(139, 167, 111, 0.9), rgba(217, 201, 175, .9));
+    background-color:  rgba(140, 168, 113, 0.8);
     background-blend-mode: normal, normal;
     height: 100vh;
 }

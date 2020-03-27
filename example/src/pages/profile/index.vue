@@ -15,12 +15,14 @@
             <span v-if="!imgLoadFinished">
                 <loading color="#ffffff"></loading>
             </span>
-            <img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg" alt="">
+            <transition name="fade">
+                <img src="https://uploadbeta.com/api/pictures/random/?key=BingEverydayWallpaperPicture" v-show="imgLoadFinished" @load="loadImg" alt="">
+            </transition>
         </div>
         <div class="spt">· 信息 ·</div>
         <div class="card bg-grd-1">
             <p class="title">GITHUB</p>
-            <i>https://github.com/yl1033669613</i>
+            <i class="link" @click="openWeb('https://github.com/yl1033669613/apicloud_vuecli_app', 'apicloud_vuecli_app')">https://github.com/yl1033669613/apicloud_vuecli_app</i>
         </div>
         <div class="card bg-grd-2">
             <p class="title">邮箱</p>
@@ -41,7 +43,7 @@
         <div class="card bg-grd-3">
             <p class="title">如何使用</p>
             <p class="padd-l"><span>1.</span>创建APICloud项目（获取appId）</p>
-            <p class="padd-l"><span>2.</span>从 https://github.com/yl1033669613/apicloud_vuecli3_project 克隆或下载项目到本地</p>
+            <p class="padd-l"><span>2.</span>从 https://github.com/yl1033669613/apicloud_vuecli_app 克隆或下载项目到本地</p>
             <p class="padd-l"><span>3.</span>请将项目中publish文件夹下config.xml文件里的appId改为您项目的appId(重要)</p>
             <p class="padd-l"><span>4.</span>npm install （安装依赖）</p>
             <p class="padd-l"><span>5.</span>npm run serve （运行开发模式同样会输出编译代码到dist）</p>
@@ -59,7 +61,7 @@
         </div>
         <div class="card bg-grd-1">
             <p class="title">app 最佳实例</p>
-            项目下example文件夹
+            <i class="link" @click="openWeb('https://github.com/yl1033669613/apicloud_vuecli_app', 'apicloud_vuecli_example')">https://github.com/yl1033669613/apicloud_vuecli_example/tree/master/example</i>
         </div>
     </div>
 </div>
@@ -101,6 +103,9 @@ export default {
         },
         loadImg() {
             this.imgLoadFinished = true
+        },
+        openWeb(url, title) {
+            this.$comm.openWin({name: title, pageParam: {title: title, webUrl: url}})
         }
     }
 }
@@ -216,8 +221,6 @@ export default {
         position: relative;
 
         img {
-            transition: all .6s;
-            opacity: 0;
             width: 100%;
             display: block;
             border-radius: .3rem;
@@ -247,6 +250,10 @@ export default {
             left: 0;
             top: 0;
         }
+    }
+
+    .link {
+        text-decoration: underline;
     }
 }
 </style>

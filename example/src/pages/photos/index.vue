@@ -4,21 +4,27 @@
         <span v-if="!imgLoadFinished">
             <loading color="#ffffff"></loading>
         </span>
-        <img src="https://unsplash.it/700/310/?random" :style="{opacity: imgLoadFinished ? 1 : 0}" @load="loadImg" alt="">
+        <transition name="fade">
+            <img src="https://unsplash.it/700/310/?random" v-show="imgLoadFinished" @load="loadImg" alt="">
+        </transition>
     </div>
     <div class="declare">Photos for everyone ~</div>
     <div class="declare small">图片数据均来自https://unsplash.com/</div>
     <!-- apicloud里瀑布流布局 方案 -->
     <!-- 瀑布流 -->
     <div class="water-fall-ctn" :style="{height: (leftH >= rightH ? leftH : rightH) + 'px' }">
-        <div class="item" hover-class="btn-scale-hover" v-for="(item, i) in list" :key="i" :class="[item.isLeft ? 'isleft' : 'isright', item.finish ? 'isShow' : '']" :style="{height: (item.imgHeight + 45) + 'px', top: item.top + 'px'}">
-            <div class="inner" @click="$comm.openWin({name: 'photos_det', pageParam: {title: 'Photos', data: item}})">
-                <img :src="item.picUrl" class="el-img" @load="handleImgLoad($event, item)" :style="{height: item.imgHeight + 'px'}" @error="handleImgLoadErr($event, item)" alt="">
-                <div class="bott-info">
-                    <div class="info-desc text-ellipsis">{{item.alt_description || item.description || 'No desc'}}</div>
-                    <div class="auth-name text-ellipsis">author: {{item.user.username}}</div>
+        <div class="item" v-for="(item, i) in list" :key="'water_fall' + i" :class="[item.isLeft ? 'isleft' : 'isright']" :style="{height: (item.imgHeight + 45) + 'px', top: item.top + 'px'}">
+            <transition name="fadeImg">
+                <div class="transition-ctn" v-show="item.finish">
+                    <div class="inner" @click="$comm.openWin({name: 'photos_det', pageParam: {title: 'Photos', data: item}})">
+                        <img :src="item.picUrl" class="el-img" @load="handleImgLoad($event, item)" :style="{height: item.imgHeight + 'px'}" @error="handleImgLoadErr($event, item)" alt="">
+                        <div class="bott-info">
+                            <div class="info-desc text-ellipsis">{{item.alt_description || item.description || 'No desc'}}</div>
+                            <div class="auth-name text-ellipsis">author: {{item.user.username}}</div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </transition>
         </div>
     </div>
     <listloading :loadend="isLoadEnd" :nodata="list.length === 0"></listloading>
@@ -50,6 +56,15 @@ export default {
             startIndex: 0, // 图片显示的起始位置 默认0
             imgLoadFinished: false
         }
+    },
+    computed: {
+        currSysType() {
+			if (api) {
+				return api.systemType
+			} else {
+				return 'none'
+			}
+		}
     },
     created() {
         const self = this
@@ -120,9 +135,10 @@ export default {
                     item.top = this.rightH
                     this.rightH = this.rightH + item.imgHeight + 57
                 }
-                item.finish = true // 设置图片渲染完成 可以显示图片 opacity -> 1
+                item.finish = true // 设置图片渲染完成 可以显示图片
             }
             this.startIndex = this.list.length // 设置下次图片显示的起始位置
+            this.$foceUpdate()
         },
         getList(isPullDown) {
             const self = this
@@ -200,8 +216,11 @@ export default {
     padding: 0 6px;
     top: 0;
     left: 0;
-    opacity: 0;
-    transition: opacity 0.3s;
+
+    .transition-ctn {
+        width: 100%;
+        height: 100%;
+    }
 }
 
 /*整体左边距为6px*/
@@ -224,6 +243,9 @@ export default {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     transition: transform 0.1s;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .water-fall-ctn .item .inner:active {
@@ -291,8 +313,6 @@ export default {
     position: relative;
 
     img {
-        transition: all .6s;
-        opacity: 0;
         width: 100%;
         height: 100%;
         display: block;
@@ -312,5 +332,18 @@ export default {
         text-align: center;
         opacity: .8;
     }
+}
+
+.fadeImg-enter-active,
+.fadeImg-leave-active {
+    transition: opacity 1s;
+}
+
+.fadeImg-enter,
+.fadeImg-leave-to
+
+/* .fadeImg-leave-active below version 2.1.8 */
+    {
+    opacity: 0;
 }
 </style>

@@ -85,7 +85,7 @@ export default {
     },
     computed: {
         currM() {
-            return (typeof this.currMonth === 'number') ? this.$comm.superZero(this.currMonth + 1) : ''
+            return (typeof this.currMonth === 'number') ? this.superZero(this.currMonth + 1) : ''
         },
         safeAreaBott() {
             let bottH = 0
@@ -159,7 +159,7 @@ export default {
                 let currDayJs = dayJs.date(i)
                 let obj = {
                     // 日期显示文字 type String
-                    dateTxt: this.$comm.superZero(i),
+                    dateTxt: this.superZero(i),
                     // 是否为选中状态
                     isSelected: checkIsSelected(currDayJs),
                     // 是否为起始日期
@@ -197,7 +197,7 @@ export default {
             for (let i = 1; i < 7 - lastDayWeekIndex; i++) { //可能需要显示的下一月的开头日期对象
                 let dayJsNext = dayjs().year(this.currMonth == 11 ? this.currYear + 1 : this.currYear).month(this.currMonth == 11 ? 0 : this.currMonth + 1).date(i)
                 let obj = {
-                    dateTxt: this.$comm.superZero(i),
+                    dateTxt: this.superZero(i),
                     isSelected: checkIsSelected(dayJsNext),
                     isStart: checkIsStart(dayJsNext),
                     isEnd: checkIsEnd(dayJsNext),
@@ -237,7 +237,7 @@ export default {
         },
         // 选择方法
         handleSelect(item) {
-            let currDateStr = `${item.year}-${this.$comm.superZero(item.month + 1)}-${this.$comm.superZero(item.date)}`
+            let currDateStr = `${item.year}-${this.superZero(item.month + 1)}-${this.superZero(item.date)}`
             let dayJsNow = dayjs().year(this.nowDate.year).month(this.nowDate.month).date(this.nowDate.date)
             if (item.disabled) return //点击 disabled 的情况
             if (!this.isRangDate) { //非日期范围选择
