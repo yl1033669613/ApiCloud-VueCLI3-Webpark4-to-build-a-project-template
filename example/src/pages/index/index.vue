@@ -119,6 +119,7 @@ export default {
         }
     },
     mounted() {
+        alert(window.navigator.userAgent.toLowerCase())
         const self = this
         // 初始监听app 退出
         self.ExitApp()
