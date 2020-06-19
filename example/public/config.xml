@@ -10,6 +10,8 @@
 
     <access origin="*" />
 
+	<preference name="forbiddenSchemes" value="*" />
+
 	<preference name="userAgent" value="APICloud" />
 
 	<preference name="useWKWebView" value="true" />

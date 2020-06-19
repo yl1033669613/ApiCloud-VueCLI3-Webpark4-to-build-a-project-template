@@ -1,5 +1,5 @@
 <template>
-<div class="photo-switching-container" ref="photoSC" @touchstart.prevent="_touchstartHandle($event)" @touchmove.prevent="_touchmoveHandle($event)" @touchend.prevent="_touchendHandle($event)">
+<div class="photo-switching-container" ref="photoSC" @touchstart="_touchstartHandle($event)" @touchmove.prevent="_touchmoveHandle($event)" @touchend="_touchendHandle($event)">
     <div class="rotate-content animated" v-for="(item, index) in curr" :key="index" :style="item.zIndex == 1 ? frontStyle : backStyle" v-show="!item.isloadingBack">
         <slot :item="item"></slot>
         <div class="back-photo-mask" v-if="item.zIndex == 0" :style="{opacity: opacity}"></div>

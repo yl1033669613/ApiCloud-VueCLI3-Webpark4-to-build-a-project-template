@@ -1,6 +1,6 @@
 <template>
 <div class="container">
-    <navbar :class="[isPhotoset ? 'black-bg-header' : 'red-bg-header', 'bott-border']" :isWeb="!!webUrl" :title="title" :back="back"></navbar>
+    <navbar :class="[isPhotoset ? 'black-bg-header' : 'red-bg-header', 'bott-border']" :isWeb="!!webUrl" :title="title" :back="back" @tapback="tabBackHandle"></navbar>
 </div>
 </template>
 
@@ -49,6 +49,24 @@ export default {
             // 窗口尺寸变化是调整frame布局
             self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
+        api.setStatusBarStyle({
+            style: 'light'
+        })
+        api.addEventListener({
+            name: 'keyback'
+        }, (ret, err) => {
+            api.setStatusBarStyle({
+                style: 'dark'
+            })
+            api.closeWin()
+        })
+    },
+    methods: {
+        tabBackHandle() {
+            api.setStatusBarStyle({
+                style: 'dark'
+            })
+        }
     }
 }
 </script>
