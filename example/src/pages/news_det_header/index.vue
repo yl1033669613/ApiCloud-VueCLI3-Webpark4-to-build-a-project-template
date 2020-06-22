@@ -28,6 +28,7 @@ export default {
         self.pageName = pageParam.pageName
         self.webUrl = pageParam.webUrl
         self.isPhotoset = pageParam.isPhotoset
+        self.fromCard = !!pageParam.fromCard
         setTimeout(() => {
             api.openFrame({
                 name: `${pageParam.pageName}_frame`,
@@ -49,23 +50,29 @@ export default {
             // 窗口尺寸变化是调整frame布局
             self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
-        api.setStatusBarStyle({
-            style: 'light'
-        })
-        api.addEventListener({
-            name: 'keyback'
-        }, (ret, err) => {
+        if (self.fromCard) {
             api.setStatusBarStyle({
-                style: 'dark'
+                style: 'light'
             })
-            api.closeWin()
-        })
+            api.addEventListener({
+                name: 'keyback'
+            }, (ret, err) => {
+                if (self.fromCard) {
+                    api.setStatusBarStyle({
+                        style: 'dark'
+                    })
+                }
+                api.closeWin()
+            })
+        }
     },
     methods: {
         tabBackHandle() {
-            api.setStatusBarStyle({
-                style: 'dark'
-            })
+            if (this.fromCard) {
+                api.setStatusBarStyle({
+                    style: 'dark'
+                })
+            }
         }
     }
 }

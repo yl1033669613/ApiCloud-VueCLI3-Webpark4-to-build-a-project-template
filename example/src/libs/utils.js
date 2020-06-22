@@ -6,7 +6,11 @@
 
 const storage = {
 	set(key, value) {
-		api.setPrefs({ key, value })
+		let val = value
+		if (value && typeof value === 'object') {
+			val = JSON.stringify(value)
+		} 
+		api.setPrefs({ key, val })
 	},
 
 	get(key) {

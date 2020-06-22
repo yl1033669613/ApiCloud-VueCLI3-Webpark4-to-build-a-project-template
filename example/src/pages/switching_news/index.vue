@@ -95,7 +95,8 @@ export default {
                 pageParam: {
                     title: item.title,
                     webUrl: (item.skipType && item.skipType === 'photoset') ? item.skipURL : item.url,
-                    isPhotoset: item.skipType && item.skipType === 'photoset'
+                    isPhotoset: item.skipType && item.skipType === 'photoset',
+                    fromCard: true
                 }
             })
         },
