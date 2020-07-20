@@ -27,7 +27,7 @@ export default function () {
 
 	//时间格式化
 	Date.prototype.format = function (format) {
-		var o = {
+		let o = {
 			'M+': this.getMonth() + 1, //month
 			'd+': this.getDate(), //day
 			'h+': this.getHours(), //hour
@@ -38,7 +38,7 @@ export default function () {
 		}
 		if (/(y+)/.test(format)) format = format.replace(RegExp.$1,
 			(this.getFullYear() + '').substr(4 - RegExp.$1.length));
-		for (var k in o)
+		for (let k in o)
 			if (new RegExp('(' + k + ')').test(format))
 				format = format.replace(RegExp.$1,
 					RegExp.$1.length == 1 ? o[k] :
