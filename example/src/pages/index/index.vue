@@ -212,11 +212,14 @@ export default {
             // 设置frameGroup位置
             let rect = {
                 x: 0,
-                y: self.$refs.header.offsetHeight,
-                w: api.winWidth,
-                h: api.winHeight - self.$refs.header.offsetHeight - self.$refs.footer.offsetHeight
+                y: 0,
+                w: 'auto',
+                h: 'auto',
+                marginLeft: 0,
+                marginRight: 0,
+                marginTop: self.$refs.header.offsetHeight,
+                marginBottom: self.$refs.footer.offsetHeight
             }
-            self.$comm.resizeFrame('group', 0) // 监听root页窗口变化，从而重新设置frameGroup的高度
             api.openFrameGroup({
                 name: 'group',
                 scrollEnabled: true,
@@ -282,9 +285,13 @@ export default {
                     name: 'group',
                     rect: {
                         x: 0,
-                        y: self.$refs.header.offsetHeight,
-                        w: api.winWidth,
-                        h: api.winHeight - self.$refs.header.offsetHeight - self.$refs.footer.offsetHeight
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto',
+                        marginLeft: 0,
+                        marginRight: 0,
+                        marginTop: self.$refs.header.offsetHeight,
+                        marginBottom: self.$refs.footer.offsetHeight
                     }
                 })
             })

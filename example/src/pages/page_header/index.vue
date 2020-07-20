@@ -34,9 +34,13 @@ export default {
                     bgColor: '#ffffff',
                     rect: {
                         x: 0,
-                        y: document.querySelector('header').offsetHeight,
-                        width: api.winWidth,
-                        height: 'auto'
+                        y: 0,
+                        width: 'auto',
+                        height: 'auto',
+                        marginTop: document.querySelector('header').offsetHeight,
+                        marginBottom: 0,
+                        marginLeft: 0,
+                        marginRight: 0
                     },
                     progress: {
                         type: 'page',
@@ -48,8 +52,6 @@ export default {
             } else {
                 self.$comm.openFrame(pageParam.pageName, pageParam)
             }
-            // 窗口尺寸变化时调整frame布局
-            self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
         // 当页面有frame弹窗时先关闭frame弹窗再关闭页面， 需监听系统返回事件
         api.addEventListener({

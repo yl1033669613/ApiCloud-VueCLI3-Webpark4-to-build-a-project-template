@@ -34,9 +34,13 @@ export default {
                 overScrollMode: 'scrolls',
                 rect: {
                     x: 0,
-                    y: document.querySelector('header').offsetHeight,
-                    width: api.winWidth,
-                    height: 'auto'
+                    y: 0,
+                    width: 'auto',
+                    height: 'auto',
+                    marginTop: document.querySelector('header').offsetHeight,
+                    marginBottom: 0,
+                    marginLeft: 0,
+                    marginRight: 0
                 },
                 progress: {
                     type: 'page',
@@ -44,8 +48,6 @@ export default {
                     height: 2
                 }
             })
-            // 窗口尺寸变化是调整frame布局
-            self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
     }
 }

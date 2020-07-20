@@ -26,7 +26,6 @@ export default {
         self.title = pageParam.title
         setTimeout(() => {
             self.$comm.openFrame(pageParam.pageName, pageParam)
-            self.$comm.resizeFrame(pageParam.pageName + '_frame', 2)
         }, 0)
     }
 }
