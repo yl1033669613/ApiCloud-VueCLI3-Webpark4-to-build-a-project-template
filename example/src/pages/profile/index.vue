@@ -33,12 +33,12 @@
         </div>
         <div class="spt">· 简介 ·</div>
         <div class="card bg-grd-1">
-            <p class="title">APICloud + VueCLI3 = APP</p>
-            <p>APICloud+VueCLI3 完美结合的模块化开发框架，快速构建apicloud APP</p>
+            <p class="title">APICloud + VueCLI = APP</p>
+            <p>APICloud+VueCLI 结合的模块化开发框架，快速构建apicloud APP</p>
         </div>
         <div class="card bg-grd-2">
             <p class="title">技术栈</p>
-            apicloud、apicloud模块、vuejs 2.x、VueCLI 3.x、webPark 4、Babel、scss(css预编译)、nodejs、npm
+            apicloud、apicloud模块、vuejs 2.x、VueCLI、webPark 4、Babel、scss(css预编译)、nodejs、npm
         </div>
         <div class="card bg-grd-3">
             <p class="title">如何使用</p>
